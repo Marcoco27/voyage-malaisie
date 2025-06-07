@@ -5,165 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Road-trip Malaisie & Singapour – 31/07 ➜ 20/08 2024</title>
 
-<!-- NOUVEAU : Google Fonts & Font Awesome (pour les icônes) -->
+<!-- Polices & Icônes Externes -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<!-- Leaflet -->
+<!-- Leaflet (pour la carte) -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
-<!-- ============================================= -->
-<!-- === BLOC DE STYLE UNIQUE ET NETTOYÉ ========= -->
-<!-- ============================================= -->
-<style>
-/* ===== Styles Généraux ===== */
-:root {
-  --c1: #006c7e; /* Bleu-vert principal */
-  --c2: #f8f9fa; /* Fond clair */
-  --c3: #ff914d; /* Orange accent */
-  --c4: #333;    /* Texte principal */
-  --c5: #e9ecef; /* Bordures légères */
-  font-family: 'Poppins', "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-weight: 300;
-  font-size: 16px;
-}
-html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--c2); color: var(--c4); line-height: 1.6; }
-h1, h2, h3, .main-nav a, strong { font-weight: 500; }
-h2 { color: var(--c1); margin: 3rem 0 1.5rem; font-size: 1.8rem; text-align: center; font-weight: 700; }
-section { padding: 1rem 1rem 2rem; }
-footer { font-size: .9rem; color: #666; text-align: center; padding: 3rem 1rem; border-top: 1px solid var(--c5); margin-top: 2rem;}
+<!-- NOUVEAU : Lien vers votre fichier de styles personnel -->
+<link rel="stylesheet" href="style.css">
 
-/* ===== Animations ===== */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.fade-in {
-  animation: fadeIn 0.8s ease-out forwards;
-}
-
-/* CORRECTION : Style pour les titres avec icône (déplacé ici) */
-.title-with-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 3rem; /* On applique la marge au conteneur, pas au titre seul */
-}
-
-.title-icon {
-  width: 40px; /* Vous pouvez changer cette taille */
-  height: 40px;
-}
-
-/* On s'assure que le titre à l'intérieur n'a plus ses propres marges */
-.title-with-icon h2 {
-  margin: 0; 
-}
-
-
-/* ===== Header "Héroïque" ===== */
-.hero-header {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('https://images.unsplash.com/photo-1598948416752-3d829c34c1f8?w=1200&auto=format&fit=crop&q=60');
-  background-size: cover; background-position: center; color: #fff; text-align: center;
-  padding: 3rem 1rem;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  min-height: 350px; 
-}
-.hero-header h1 {
-  margin: 0 0 1.5rem 0; font-size: 2.2rem;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-  font-weight: 700; animation: fadeIn 1s 0.2s ease-out forwards; opacity: 0;
-}
-
-/* ===== Menu de Navigation ===== */
-.main-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
-  align-items: center;
-}
-.main-nav a {
-  color: #fff; background: rgba(0, 108, 126, 0.8); padding: 0.8rem 1.5rem;
-  margin: 0;
-  text-decoration: none; border-radius: 30px; transition: all 0.3s;
-  display: block;
-  min-width: 220px;
-  opacity: 0;
-  animation: fadeIn 0.8s ease-out forwards;
-}
-.main-nav a:first-child { animation-delay: 0.4s; }
-.main-nav a:last-child { animation-delay: 0.6s; }
-.main-nav a:hover { background-color: var(--c3); transform: translateY(-3px) scale(1.05); }
-
-/* CORRECTION : Style pour les liens du tableau (déplacé ici depuis le body) */
-.table-link {
-  color: var(--c1);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-.table-link:hover {
-  color: var(--c3);
-  text-decoration: underline;
-}
-
-/* ===== Carte et Itinéraire ===== */
-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-th,td { border: 1px solid var(--c5); padding: .5rem; text-align: center; }
-th { background: var(--c1); color: #fff; font-weight: 500; }
-tr:nth-child(even) td{ background: #fff; } tr:nth-child(odd) td{ background: #fdfdfd; }
-#map { width: 100%; height: 340px; border: 4px solid var(--c1); border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-.error { color:red; font-weight:600; text-align:center; margin:.6rem 0; }
-
-/* ===== Section Notes Interactives ===== */
-#notes-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; }
-.note-card {
-  background: #fff; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-  width: 340px; cursor: pointer; transition: all 0.3s; overflow: hidden;
-  opacity: 0;
-}
-.note-card.visible { animation: fadeIn 0.6s ease-out forwards; }
-.note-card:hover { transform: translateY(-6px); box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
-.card-image { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--c5); }
-.card-header { padding: 1rem 1.2rem; display: flex; justify-content: space-between; align-items: center; }
-.card-header-text h3 { margin: 0; color: var(--c1); font-size: 1.25rem; }
-.card-header-text span { font-size: 0.9rem; color: #666; }
-.card-toggle-icon { font-size: 1.2rem; color: var(--c1); transition: transform 0.4s ease; }
-.note-card.active .card-toggle-icon { transform: rotate(180deg); color: var(--c3); }
-.card-details { padding: 0 1.2rem; max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out, padding 0.5s ease-out; }
-.note-card.active .card-details { max-height: 800px; padding: 1rem 1.2rem; }
-.card-details p { margin: 0.5rem 0 1rem 0; }
-.card-details ul { list-style: none; padding-left: 0; margin: 0.5rem 0 1rem 0; }
-.card-details li { margin-bottom: 0.5rem; }
-.card-details .section-title { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--c1); }
-.card-details i { color: var(--c3); margin-right: 0.7rem; width: 20px; text-align: center; }
-
-/* ===== Bouton Retour en haut ===== */
-#back-to-top-btn {
-  position: fixed; bottom: 20px; right: 20px; background-color: var(--c1); color: white; border: none;
-  border-radius: 50%; width: 50px; height: 50px; font-size: 1.5rem; cursor: pointer; display: none;
-  align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: all 0.3s; opacity: 0; z-index: 1000;
-}
-#back-to-top-btn.show { display: flex; opacity: 1; }
-#back-to-top-btn:hover { background-color: var(--c3); transform: scale(1.1); }
-
-/* ===== Responsive Design ===== */
-@media(min-width:720px) {
-  body { font-size: 17px; }
-  section { padding: 1rem 2rem 2rem; }
-  .hero-header { padding: 4rem 1rem; }
-  .hero-header h1 { font-size: 3.5rem; }
-  .main-nav { flex-direction: row; justify-content: center; width: auto; gap: 1.5rem; }
-  #map { height: 480px; }
-}
-</style>
+<!-- Favicon -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✈️</text></svg>">
 </head>
 
@@ -172,24 +27,28 @@ tr:nth-child(even) td{ background: #fff; } tr:nth-child(odd) td{ background: #fd
 <header class="hero-header">
   <h1>Itinéraire Malaisie & Singapour</h1>
   <nav class="main-nav">
-    <a href="#itineraire">Itinéraire détaillé</a>
-    <a href="#notes">Détails des étapes</a>
+    <a href="#itineraire">Explorer l'itinéraire</a>
+    <a href="#notes">Etapes de l'Aventure</a>
   </nav>
 </header>
 
 <main>
   <section id="itineraire" class="fade-in">
-    <!-- CORRECTION : Le titre de la carte n'a pas besoin d'icône, on garde le h2 simple -->
-    <h2>Carte interactive de l’itinéraire</h2>
+    <!-- Titre de section avec icône -->
+    <div class="title-with-icon">
+        <img src="image-map-itineraire.png" alt="Icône de carte" class="title-icon">
+        <h2>Sur la Route à Travers la Malaisie</h2>
+    </div>
+    
     <div id="map" aria-label="carte interactive"></div>
     <div id="mapError" class="error" style="display:none">
        ⚠️ Impossible d’afficher la carte ; vérifiez votre connexion Internet.
     </div>
     
-    <!-- CORRECTION : Structure HTML nettoyée pour le titre avec icône -->
+    <!-- Titre de section avec icône -->
     <div class="title-with-icon">
         <img src="image-map-itineraire.png" alt="Icône de carte" class="title-icon">
-        <h2>Résumé de l'itinéraire</h2>
+        <h2>Les Etapes du Périple</h2>
     </div>
 
     <table>
@@ -199,11 +58,10 @@ tr:nth-child(even) td{ background: #fff; } tr:nth-child(odd) td{ background: #fd
   </section>
 
   <section id="notes" class="fade-in">
-    <!-- CORRECTION : On peut aussi appliquer le style au titre de cette section pour la cohérence -->
+    <!-- Titre de section avec icône -->
     <div class="title-with-icon">
-        <!-- Vous pouvez utiliser une autre icône si vous le souhaitez -->
         <img src="image-map-itineraire.png" alt="Icône de notes" class="title-icon">
-        <h2>Infos et notes par étape</h2>
+        <h2>L'Aventure en détail</h2>
     </div>
 
     <div id="notes-container">
@@ -218,119 +76,8 @@ tr:nth-child(even) td{ background: #fff; } tr:nth-child(odd) td{ background: #fd
 
 <button id="back-to-top-btn" title="Retour en haut"><i class="fas fa-arrow-up"></i></button>
 
-<!-- Le script reste identique, il n'a pas besoin de modification -->
-<script defer>
-document.addEventListener("DOMContentLoaded", () => {
-  const voyage = [
-     { lieu: "Kuala Lumpur (arrivée)", dates: "31 juil – 03 août", nuits: 3, distance: "—", lat: 3.07823, lon: 101.60376, image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=2064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dw=350", description: "Premiers pas dans la fourmilière urbaine. Un mélange fascinant de modernité et de tradition.", activites: ["Admirer les tours Petronas (de jour et de nuit)", "Se perdre dans le marché de Jalan Alor"], conseil: "Utilisez l'application 'Grab' (équivalent d'Uber) pour vous déplacer facilement et à bon prix." },
-     { lieu: "Cameron Highlands", dates: "03 et 04 août", nuits: 1, distance: "220 km – 3 h 30", lat: 4.471,lon: 101.377, image: "https://images.unsplash.com/photo-1646977804023-a852f96fbdcd?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fENhbWVyb24lMjBIaWdobGFuZHN8ZW58MHx8MHx8fDA%3Dw=350", description: "Superbe ballade au milieu des plantations de thé. Endroit verdoyant très calme et agréable.", activites: ["Visite des plantations de thé", "fraîcheur des montagnes."], conseil: "Prendre une petite laine..." },
-     { lieu: "Taman Negara", dates: "04 – 06 août", nuits: 2, distance: "245 km – 4h à 4h30", lat: 4.37,lon: 102.4, image: "https://images.unsplash.com/photo-1633683935952-ad5b2d927a31?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8VGFtYW4lMjBOZWdhcmF8ZW58MHx8MHx8fDA%3Dw=350", description: "Randonnée dans la plus vieille forêt tropicale du monde !", activites: ["Excursion avec un guide", "Pont suspendu (canopy walk)", "Découverte de la faune et de la flore"], conseil: "Ne pas oublier l'anti-moustique !" },
-     { lieu: "Kuala Besut", dates: "06 – 07 août", nuits: 1, distance: "275 km – 4 h", lat: 5.833,lon: 102.55, image: "https://images.unsplash.com/photo-1609511092514-b07ed4beddc6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bWFsYWlzaWUlMjBiZXN1dHxlbnwwfHwwfHx8MA%3D%3Dw=350", description: "Etape repos et réconfort après la Jungle ;)", activites: ["Grasse matinée", "Plage privée", "Piscine"], conseil: "Reprendre des forces avant de prendre le bateau pour les îles Perhentian." },
-     { lieu: "Îles Perhentian", dates: "07 – 09 août", nuits: 2, distance: "40 min de bateau", lat: 5.914, lon: 102.722, image: "https://images.unsplash.com/photo-1660574026735-04197dcf1f24?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fCVDMyU4RWxlcyUyMFBlcmhlbnRpYW58ZW58MHx8MHx8fDA%3D%3Dw=350", description: "Le paradis sur terre. Des plages de sable blanc, une eau turquoise et une vie marine incroyable.", activites: ["Snorkeling à Turtle Point pour nager avec les tortues", "Randonnée entre Long Beach et Coral Bay", "Excursion en bateau pour voir les requins de récif"], conseil: "Pensez à retirer de l'argent avant d'arriver sur les îles, il n'y a pas de distributeur." },
-     { lieu: "Cherating", dates: "09 – 11 août", nuits: 2, distance: "220 km – 3 h 30", lat: 4.139,lon: 103.392, image: "https://images.unsplash.com/photo-1523340306477-76c135412b28?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8bWFsYWlzaWUlMjBiYWJ5JTIwdHVydGxlfGVufDB8MHwwfHx8MA%3D%3Dw=350", description: "L'une des caractéristiques les plus remarquables de Cherating est sa plage longue et large, bordée de palmiers ondulants qui ajoutent une touche tropicale à ce paysage pittoresque.", activites: ["Sanctuaire des tortues de Cherating", "Plage", "Kayak dans la mangrove"], conseil: "Escale" },
-     { lieu: "Tioman Island", dates: "11 – 12 août", nuits: 1, distance: "155 km – 2h + 1h30 ferry", lat: 2.820, lon: 104.161, image: "https://images.unsplash.com/flagged/photo-1576061798518-fb0500878ba7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fFRpb21hbiUyMElzbGFuZHxlbnwwfDB8MHx8fDA%3D%3Dw=350", description: "Détente, plongée ou snorkeling dans un paradis tropical.", activites: ["Snorkeling", "Plage", "Kiff"], conseil: "Profiter de l'instant présent" },
-     { lieu: "Singapour", dates: "12 – 15 août", nuits: 3, distance: "140 km – 3h30 à 4h30", lat: 1.3521, lon: 103.8198, image: "https://images.unsplash.com/photo-1472148439583-1f4cf81b80e0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fFNpbmdhcG91cnxlbnwwfHwwfHx8MA%3D%3Dw=350", description: "La cité-jardin futuriste. Une propreté impeccable et des attractions de classe mondiale.", activites: ["Assister au spectacle son et lumière de Gardens by the Bay", "Manger dans un 'Hawker Centre' (Lau Pa Sat)", "Explorer le quartier colonial et Marina Bay Sands"], conseil: "Le réseau de métro (MRT) est extrêmement efficace. Achetez une carte 'EZ-Link' pour des trajets illimités." },
-     { lieu: "Melaka", dates: "15 – 17 août", nuits: 2, distance: "240 km – 3h30 à 4h30", lat: 2.1896, lon: 102.2501, image: "https://plus.unsplash.com/premium_photo-1697730170911-9cf912ad3a22?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8TWVsYWthfGVufDB8MHwwfHx8MA%3D%3Dw=350", description: "Découvrir le Stadthuys (place rouge), le marché nocturne de Jonker Walk et faire une croisière fluviale.", activites: ["Explorer le quartier colonial et Marina Bay Sands"], conseil: "Ne pas oublier son parapluie" },
-     { lieu: "Kuala Selangor", dates: "17 – 18 août", nuits: 1, distance: "160 km – 2 h 15", lat: 3.3467, lon: 101.2634, image: "https://images.unsplash.com/photo-1736863929622-97ebe7e2a428?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fEt1YWxhJTIwU2VsYW5nb3IlMjBtYWxhaXNpYXxlbnwwfDB8MHx8fDA%3D%3Dw=350", description: "Une ville de Malaisie, célèbre pour ses paysages et ses lucioles. Vous vivrez une soirée inoubliable !", activites: ["Excursion en barque pour voir le spectacle magique des lucioles (vers 20h)."], conseil: "" },
-     { lieu: "Kuala Lumpur (fin de séjour)", dates: "18 – 20 août", nuits: 2, distance: "85 km – 1 h 15", lat: 3.139, lon: 101.687, image: "https://images.unsplash.com/photo-1598797246294-7620e33a632f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8S3VhbGElMjBMdW1wdXJ8ZW58MHwwfDB8fHwww=350", description: "Découvrez le côté multiculturel de la ville en visitant le marché de nuit de Chinatown ou l'un des nombreux temples.", activites: ["Grimper les marches des Batu Caves" ,"Derniers achats" ,"visite d'un musée ou simplement se reposer avant le retour."], conseil: "Refaire sa valise" },
-  ];
+<!-- NOUVEAU : Lien vers votre fichier de logique JavaScript -->
+<script src="script.js" defer></script>
 
-  try {
-    if (!window.L) { throw "Leaflet non chargé"; }
-    const itineraryBody = document.getElementById("itinerary-body");
-    const notesContainer = document.getElementById("notes-container");
-    const map = L.map("map", { scrollWheelZoom: false });
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18, attribution: "© OpenStreetMap" }).addTo(map);
-    const latlngs = [];
-
-    voyage.forEach((etape, index) => {
-      // 1. Générer le tableau (MODIFIÉ : le nom du lieu est maintenant un lien)
-      const tableRow = `<tr>
-          <td>${etape.dates}</td>
-          <td><a href="#card-${index}" class="table-link">${etape.lieu}</a></td>
-          <td>${etape.nuits}</td>
-          <td>${etape.distance}</td>
-        </tr>`;
-      itineraryBody.innerHTML += tableRow;
-
-      // 2. Générer les cartes interactives (MODIFIÉ : chaque carte a un id unique)
-      const activitesHTML = etape.activites.map(act => `<li><i class="fas fa-camera-retro"></i>${act}</li>`).join('');
-      const conseilHTML = etape.conseil ? `<p><strong class="section-title"><i class="fas fa-lightbulb"></i>Conseil</strong>${etape.conseil}</p>` : '';
-
-      const cardHTML = `
-        <div class="note-card" id="card-${index}">
-          <img src="${etape.image}" alt="Photo de ${etape.lieu}" class="card-image">
-          <div class="card-header">
-            <div class="card-header-text">
-              <h3>${etape.lieu}</h3>
-              <span>${etape.dates}</span>
-            </div>
-            <i class="fas fa-chevron-down card-toggle-icon"></i>
-          </div>
-          <div class="card-details">
-            <p>${etape.description}</p>
-            <strong class="section-title"><i class="fas fa-star"></i>À ne pas manquer</strong>
-            <ul>${activitesHTML}</ul>
-            ${conseilHTML}
-          </div>
-        </div>
-      `;
-      notesContainer.innerHTML += cardHTML;
-      
-      // 3. Mettre à jour la carte Leaflet (inchangé)
-      L.marker([etape.lat, etape.lon]).addTo(map).bindPopup(`<strong>${index + 1}. ${etape.lieu}</strong><br>${etape.dates}`);
-      latlngs.push([etape.lat, etape.lon]);
-    });
-
-    // 4. Activer l'interactivité des cartes (inchangé)
-    const cards = document.querySelectorAll('.note-card');
-    cards.forEach((card, index) => {
-      setTimeout(() => { card.classList.add('visible'); }, index * 150);
-      card.addEventListener('click', (e) => {
-        // Empêche l'ouverture/fermeture si on clique sur un vrai lien dans la carte (futur usage)
-        if (e.target.tagName.toLowerCase() !== 'a') {
-            card.classList.toggle('active');
-        }
-      });
-    });
-
-    // 5. NOUVEAU : Gérer le clic sur les liens du tableau
-    document.querySelectorAll('.table-link').forEach(link => {
-      link.addEventListener('click', (event) => {
-        // On laisse le navigateur gérer le défilement (grâce à href="#...")
-        const targetId = link.getAttribute('href'); // Récupère "#card-2" par exemple
-        const targetCard = document.querySelector(targetId);
-
-        if (targetCard) {
-          // On ferme toutes les autres cartes pour une expérience plus propre
-          document.querySelectorAll('.note-card.active').forEach(activeCard => {
-            if (activeCard.id !== targetCard.id) {
-              activeCard.classList.remove('active');
-            }
-          });
-          // On ouvre la carte ciblée (on utilise .add() pour être sûr qu'elle s'ouvre)
-          targetCard.classList.add('active');
-        }
-      });
-    });
-
-    // 6. Finaliser la carte et le bouton "Retour en haut" (logique déplacée pour plus de clarté)
-    if (latlngs.length > 0) { map.fitBounds(latlngs, { padding: [30, 30] }); }
-    L.polyline(latlngs, { color: "#ff914d", weight: 4, opacity: 0.8 }).addTo(map);
-
-    const backToTopBtn = document.getElementById('back-to-top-btn');
-    window.addEventListener('scroll', () => {
-      backToTopBtn.classList.toggle('show', window.scrollY > 300);
-    });
-    backToTopBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-  } catch (e) {
-    document.getElementById("mapError").style.display = "block";
-    console.error(e);
-  }
-});
-</script>
 </body>
 </html>
