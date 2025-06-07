@@ -36,8 +36,8 @@ footer { font-size: .9rem; color: #666; text-align: center; padding: 3rem 1rem; 
 }
 
 .title-icon {
-  width: 60px;
-  height: 60px;
+  width: 1000px;
+  height: 100px;
 }
 
 /* On s'assure que le titre à l'intérieur n'a plus ses propres marges */
