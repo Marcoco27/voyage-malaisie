@@ -3,55 +3,90 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Road-trip Malaisie & Singapour – 31/07 ➜ 20/08 2024</title>
+    <title>Road-trip Malaisie & Singapour</title>
 
     <!-- Polices & Icônes Externes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Leaflet (Carte) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+
+    <!-- Fichier de style personnel -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Lien vers la bibliothèque Leaflet pour les cartes -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✈️</text></svg>">
 </head>
+
 <body>
-  <main>
-  <section id="itineraire" class="fade-in">
-    <!-- Titre de section avec icône -->
-    <div class="title-with-icon">
-        <img src="image-map-itineraire.png" alt="Icône de carte" class="title-icon">
-        <h2>Carte interactive de l’itinéraire</h2>
-    </div>
-    
-    <div id="map" aria-label="carte interactive"></div>
-    <div id="mapError" class="error" style="display:none">
-       ⚠️ Impossible d’afficher la carte ; vérifiez votre connexion Internet.
-    </div>
-    
-    <!-- Titre de section avec icône -->
-    <div class="title-with-icon">
-        <img src="image-map-itineraire.png" alt="Icône de carte" class="title-icon">
-        <h2>Résumé de l'itinéraire</h2>
-    </div>
 
-    <table>
-      <thead><tr><th>Date 2024</th><th>Lieu</th><th>Nuits</th><th>Distance / durée</th></tr></thead>
-      <tbody id="itinerary-body"></tbody>
-    </table>
-  </section>
+<header class="hero-header">
+    <h1>Itinéraire Malaisie & Singapour</h1>
+    <p class="hero-subtitle">20 jours d'aventure à travers l'Asie du Sud-Est</p>
+    <nav class="main-nav">
+        <a href="#itineraire">Itinéraire détaillé</a>
+        <a href="#notes">Détails des étapes</a>
+    </nav>
+</header>
 
-  <section id="notes" class="fade-in">
-    <!-- Titre de section avec icône -->
-    <div class="title-with-icon">
-        <img src="image-map-itineraire.png" alt="Icône de notes" class="title-icon">
-        <h2>Infos et notes par étape</h2>
-    </div>
+<main>
+    <section id="stats-section" class="fade-in">
+        <div class="stats-container">
+            <div class="stat-box">
+                <span id="stats-days" class="stat-number blue">0</span>
+                <p class="stat-label">Jours</p>
+            </div>
+            <div class="stat-box">
+                <span id="stats-destinations" class="stat-number green">0</span>
+                <p class="stat-label">Destinations</p>
+            </div>
+            <div class="stat-box">
+                <span id="stats-kms" class="stat-number orange">0</span>
+                <p class="stat-label">Kilomètres</p>
+            </div>
+            <div class="stat-box">
+                <span id="stats-transport" class="stat-number purple">0</span>
+                <p class="stat-label">Modes de transport</p>
+            </div>
+        </div>
+    </section>
 
-    <div id="notes-container">
-      <!-- Les cartes interactives seront générées ici par le script -->
-    </div>
-  </section>
+    <section id="itineraire" class="fade-in">
+        <div class="title-with-icon">
+            <img src="image-map-itineraire.png" alt="Icône de carte" class="title-icon">
+            <h2>Carte interactive de l’itinéraire</h2>
+        </div>
+        
+        <div id="map" aria-label="carte interactive"></div>
+        <div id="mapError" class="error" style="display:none">
+           ⚠️ Impossible d’afficher la carte ; vérifiez votre connexion Internet.
+        </div>
+        
+        <div class="title-with-icon">
+            <img src="image-map-itineraire.png" alt="Icône de carte" class="title-icon">
+            <h2>Résumé de l'itinéraire</h2>
+        </div>
+
+        <table>
+          <thead><tr><th>Date 2024</th><th>Lieu</th><th>Nuits</th><th>Distance / durée</th></tr></thead>
+          <tbody id="itinerary-body"></tbody>
+        </table>
+    </section>
+
+    <section id="notes" class="fade-in">
+        <div class="title-with-icon">
+            <img src="image-map-itineraire.png" alt="Icône de notes" class="title-icon">
+            <h2>Infos et notes par étape</h2>
+        </div>
+
+        <div id="notes-container">
+          <!-- Les cartes interactives seront générées ici par le script -->
+        </div>
+    </section>
 </main>
 
 <footer>
@@ -60,7 +95,6 @@
 
 <button id="back-to-top-btn" title="Retour en haut"><i class="fas fa-arrow-up"></i></button>
 
-<!-- Lien vers votre fichier de logique JavaScript -->
 <script src="script.js" defer></script>
 
 </body>
