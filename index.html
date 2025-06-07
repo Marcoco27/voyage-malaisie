@@ -15,8 +15,11 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
+<!-- ============================================= -->
+<!-- === BLOC DE STYLE UNIQUE ET NETTOYÉ ========= -->
+<!-- ============================================= -->
 <style>
-/* ===== Styles Généraux (MODIFIÉS) ===== */
+/* ===== Styles Généraux ===== */
 :root {
   --c1: #006c7e; /* Bleu-vert principal */
   --c2: #f8f9fa; /* Fond clair */
@@ -43,43 +46,72 @@ footer { font-size: .9rem; color: #666; text-align: center; padding: 3rem 1rem; 
   animation: fadeIn 0.8s ease-out forwards;
 }
 
-/* Ceci est un commentaire CSS */
+/* CORRECTION : Style pour les titres avec icône (déplacé ici) */
+.title-with-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 3rem; /* On applique la marge au conteneur, pas au titre seul */
+}
+
+.title-icon {
+  width: 40px; /* Vous pouvez changer cette taille */
+  height: 40px;
+}
+
+/* On s'assure que le titre à l'intérieur n'a plus ses propres marges */
+.title-with-icon h2 {
+  margin: 0; 
+}
+
+
+/* ===== Header "Héroïque" ===== */
 .hero-header {
   background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('https://images.unsplash.com/photo-1598948416752-3d829c34c1f8?w=1200&auto=format&fit=crop&q=60');
   background-size: cover; background-position: center; color: #fff; text-align: center;
-  padding: 3rem 1rem; /* Moins de padding vertical sur mobile pour laisser la place */
+  padding: 3rem 1rem;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   min-height: 350px; 
 }
 .hero-header h1 {
-  margin: 0 0 1.5rem 0; font-size: 2.2rem; /* Titre légèrement plus petit sur mobile */
+  margin: 0 0 1.5rem 0; font-size: 2.2rem;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
   font-weight: 700; animation: fadeIn 1s 0.2s ease-out forwards; opacity: 0;
 }
 
-/* NOUVELLE LOGIQUE POUR LE MENU */
+/* ===== Menu de Navigation ===== */
 .main-nav {
   display: flex;
-  flex-direction: column; /* PAR DÉFAUT : les boutons sont empilés */
-  gap: 1rem; /* Espace entre les boutons empilés */
+  flex-direction: column;
+  gap: 1rem;
   width: 100%;
   align-items: center;
 }
 .main-nav a {
   color: #fff; background: rgba(0, 108, 126, 0.8); padding: 0.8rem 1.5rem;
-  margin: 0; /* On retire les marges horizontales */
+  margin: 0;
   text-decoration: none; border-radius: 30px; transition: all 0.3s;
-  display: block; /* S'assure que le lien prend toute la largeur nécessaire */
-  min-width: 220px; /* Donne une largeur minimale pour un look uniforme */
+  display: block;
+  min-width: 220px;
   opacity: 0;
   animation: fadeIn 0.8s ease-out forwards;
 }
-/* Animation décalée pour chaque bouton */
 .main-nav a:first-child { animation-delay: 0.4s; }
 .main-nav a:last-child { animation-delay: 0.6s; }
-
 .main-nav a:hover { background-color: var(--c3); transform: translateY(-3px) scale(1.05); }
 
+/* CORRECTION : Style pour les liens du tableau (déplacé ici depuis le body) */
+.table-link {
+  color: var(--c1);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.table-link:hover {
+  color: var(--c3);
+  text-decoration: underline;
+}
 
 /* ===== Carte et Itinéraire ===== */
 table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
@@ -99,16 +131,12 @@ tr:nth-child(even) td{ background: #fff; } tr:nth-child(odd) td{ background: #fd
 .note-card.visible { animation: fadeIn 0.6s ease-out forwards; }
 .note-card:hover { transform: translateY(-6px); box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
 .card-image { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--c5); }
-.card-header {
-  padding: 1rem 1.2rem; display: flex; justify-content: space-between; align-items: center;
-}
+.card-header { padding: 1rem 1.2rem; display: flex; justify-content: space-between; align-items: center; }
 .card-header-text h3 { margin: 0; color: var(--c1); font-size: 1.25rem; }
 .card-header-text span { font-size: 0.9rem; color: #666; }
 .card-toggle-icon { font-size: 1.2rem; color: var(--c1); transition: transform 0.4s ease; }
 .note-card.active .card-toggle-icon { transform: rotate(180deg); color: var(--c3); }
-.card-details {
-  padding: 0 1.2rem; max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out, padding 0.5s ease-out;
-}
+.card-details { padding: 0 1.2rem; max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out, padding 0.5s ease-out; }
 .note-card.active .card-details { max-height: 800px; padding: 1rem 1.2rem; }
 .card-details p { margin: 0.5rem 0 1rem 0; }
 .card-details ul { list-style: none; padding-left: 0; margin: 0.5rem 0 1rem 0; }
@@ -118,32 +146,21 @@ tr:nth-child(even) td{ background: #fff; } tr:nth-child(odd) td{ background: #fd
 
 /* ===== Bouton Retour en haut ===== */
 #back-to-top-btn {
-  position: fixed; bottom: 20px; right: 20px;
-  background-color: var(--c1); color: white; border: none;
-  border-radius: 50%; width: 50px; height: 50px;
-  font-size: 1.5rem; cursor: pointer;
-  display: none;
-  align-items: center; justify-content: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  position: fixed; bottom: 20px; right: 20px; background-color: var(--c1); color: white; border: none;
+  border-radius: 50%; width: 50px; height: 50px; font-size: 1.5rem; cursor: pointer; display: none;
+  align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   transition: all 0.3s; opacity: 0; z-index: 1000;
 }
 #back-to-top-btn.show { display: flex; opacity: 1; }
 #back-to-top-btn:hover { background-color: var(--c3); transform: scale(1.1); }
 
-/* ===== Responsive Design (MODIFIÉ) ===== */
+/* ===== Responsive Design ===== */
 @media(min-width:720px) {
   body { font-size: 17px; }
   section { padding: 1rem 2rem 2rem; }
-  
   .hero-header { padding: 4rem 1rem; }
   .hero-header h1 { font-size: 3.5rem; }
-  
-  /* On réaligne le menu horizontalement sur les grands écrans */
-  .main-nav {
-    flex-direction: row;
-    gap: 1.5rem; /* Espace entre les boutons côte à côte */
-  }
-
+  .main-nav { flex-direction: row; gap: 1.5rem; }
   #map { height: 480px; }
 }
 </style>
@@ -151,20 +168,6 @@ tr:nth-child(even) td{ background: #fff; } tr:nth-child(odd) td{ background: #fd
 </head>
 
 <body>
-
-<!-- NOUVEAU : Ajout d'une classe au body pour le style des liens -->
-<style>
-  .table-link {
-    color: var(--c1);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s;
-  }
-  .table-link:hover {
-    color: var(--c3);
-    text-decoration: underline;
-  }
-</style>
 
 <header class="hero-header">
   <h1>Itinéraire Malaisie & Singapour</h1>
@@ -176,13 +179,19 @@ tr:nth-child(even) td{ background: #fff; } tr:nth-child(odd) td{ background: #fd
 
 <main>
   <section id="itineraire" class="fade-in">
+    <!-- CORRECTION : Le titre de la carte n'a pas besoin d'icône, on garde le h2 simple -->
     <h2>Carte interactive de l’itinéraire</h2>
     <div id="map" aria-label="carte interactive"></div>
     <div id="mapError" class="error" style="display:none">
        ⚠️ Impossible d’afficher la carte ; vérifiez votre connexion Internet.
     </div>
     
-    <h2 style="margin-top: 3rem;">Résumé de l'itinéraire</h2>
+    <!-- CORRECTION : Structure HTML nettoyée pour le titre avec icône -->
+    <div class="title-with-icon">
+        <img src="image-map-itineraire.png" alt="Icône de carte" class="title-icon">
+        <h2>Résumé de l'itinéraire</h2>
+    </div>
+
     <table>
       <thead><tr><th>Date 2024</th><th>Lieu</th><th>Nuits</th><th>Distance / durée</th></tr></thead>
       <tbody id="itinerary-body"></tbody>
@@ -190,7 +199,13 @@ tr:nth-child(even) td{ background: #fff; } tr:nth-child(odd) td{ background: #fd
   </section>
 
   <section id="notes" class="fade-in">
-    <h2>Infos et notes par étape</h2>
+    <!-- CORRECTION : On peut aussi appliquer le style au titre de cette section pour la cohérence -->
+    <div class="title-with-icon">
+        <!-- Vous pouvez utiliser une autre icône si vous le souhaitez -->
+        <img src="image-map-itineraire.png" alt="Icône de notes" class="title-icon">
+        <h2>Infos et notes par étape</h2>
+    </div>
+
     <div id="notes-container">
       <!-- Les cartes interactives seront générées ici par le script -->
     </div>
@@ -203,132 +218,21 @@ tr:nth-child(even) td{ background: #fff; } tr:nth-child(odd) td{ background: #fd
 
 <button id="back-to-top-btn" title="Retour en haut"><i class="fas fa-arrow-up"></i></button>
 
+<!-- Le script reste identique, il n'a pas besoin de modification -->
 <script defer>
 document.addEventListener("DOMContentLoaded", () => {
   const voyage = [
-    // Votre tableau de données reste ici, inchangé...
-    // ...
-     {
-      lieu: "Kuala Lumpur (arrivée)",
-      dates: "31 juil – 03 août",
-      nuits: 3,
-      distance: "—",
-      lat: 3.07823, lon: 101.60376,
-      image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=2064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dw=350",
-      description: "Premiers pas dans la fourmilière urbaine. Un mélange fascinant de modernité et de tradition.",
-      activites: ["Admirer les tours Petronas (de jour et de nuit)", "Se perdre dans le marché de Jalan Alor"],
-      conseil: "Utilisez l'application 'Grab' (équivalent d'Uber) pour vous déplacer facilement et à bon prix."
-    },
-    {
-      lieu: "Cameron Highlands",
-      dates: "03 et 04 août",
-      nuits: 1,
-      distance: "220 km – 3 h 30",
-      lat: 4.471,lon: 101.377,
-      image: "https://images.unsplash.com/photo-1646977804023-a852f96fbdcd?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fENhbWVyb24lMjBIaWdobGFuZHN8ZW58MHx8MHx8fDA%3Dw=350",
-      description: "Superbe ballade au milieu des plantations de thé. Endroit verdoyant très calme et agréable.",
-      activites: ["Visite des plantations de thé", "fraîcheur des montagnes."],
-      conseil: "Prendre une petite laine..."
-    },
-    {
-      lieu: "Taman Negara",
-      dates: "04 – 06 août",
-      nuits: 2,
-      distance: "245 km – 4h à 4h30",
-      lat: 4.37,lon: 102.4,
-      image: "https://images.unsplash.com/photo-1633683935952-ad5b2d927a31?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8VGFtYW4lMjBOZWdhcmF8ZW58MHx8MHx8fDA%3Dw=350",
-      description: "Randonnée dans la plus vieille forêt tropicale du monde !",
-      activites: ["Excursion avec un guide", "Pont suspendu (canopy walk)", "Découverte de la faune et de la flore"],
-      conseil: "Ne pas oublier l'anti-moustique !"
-        },
-    {
-      lieu: "Kuala Besut",
-      dates: "06 – 07 août",
-      nuits: 1,
-      distance: "275 km – 4 h",
-      lat: 5.833,lon: 102.55,
-      image: "https://images.unsplash.com/photo-1609511092514-b07ed4beddc6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bWFsYWlzaWUlMjBiZXN1dHxlbnwwfHwwfHx8MA%3D%3Dw=350",
-      description: "Etape repos et réconfort après la Jungle ;)",
-      activites: ["Grasse matinée", "Plage privée", "Piscine"],
-      conseil: "Reprendre des forces avant de prendre le bateau pour les îles Perhentian.",
-         },
-    {
-      lieu: "Îles Perhentian",
-      dates: "07 – 09 août",
-      nuits: 2,
-      distance: "40 min de bateau",
-      lat: 5.914, lon: 102.722,
-      image: "https://images.unsplash.com/photo-1660574026735-04197dcf1f24?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fCVDMyU4RWxlcyUyMFBlcmhlbnRpYW58ZW58MHx8MHx8fDA%3D%3Dw=350",
-      description: "Le paradis sur terre. Des plages de sable blanc, une eau turquoise et une vie marine incroyable.",
-      activites: ["Snorkeling à Turtle Point pour nager avec les tortues", "Randonnée entre Long Beach et Coral Bay", "Excursion en bateau pour voir les requins de récif"],
-      conseil: "Pensez à retirer de l'argent avant d'arriver sur les îles, il n'y a pas de distributeur."
-    },
-    {
-      lieu: "Cherating",
-      dates: "09 – 11 août",
-      nuits: 2,
-      distance: "220 km – 3 h 30",
-      lat: 4.139,lon: 103.392,
-      image: "https://images.unsplash.com/photo-1523340306477-76c135412b28?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8bWFsYWlzaWUlMjBiYWJ5JTIwdHVydGxlfGVufDB8MHwwfHx8MA%3D%3Dw=350",
-      description: "L'une des caractéristiques les plus remarquables de Cherating est sa plage longue et large, bordée de palmiers ondulants qui ajoutent une touche tropicale à ce paysage pittoresque.",
-      activites: ["Sanctuaire des tortues de Cherating", "Plage", "Kayak dans la mangrove"],
-      conseil: "Escale",
-        },
-    {
-      lieu: "Tioman Island",
-      dates: "11 – 12 août",
-      nuits: 1,
-      distance: "155 km – 2h + 1h30 ferry",
-      lat: 2.820, lon: 104.161,
-      image: "https://images.unsplash.com/flagged/photo-1576061798518-fb0500878ba7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fFRpb21hbiUyMElzbGFuZHxlbnwwfDB8MHx8fDA%3D%3Dw=350",
-      description: "Détente, plongée ou snorkeling dans un paradis tropical.",
-      activites: ["Snorkeling", "Plage", "Kiff"],
-      conseil: "Profiter de l'instant présent",
-      },
-    {
-      lieu: "Singapour",
-      dates: "12 – 15 août",
-      nuits: 3,
-      distance: "140 km – 3h30 à 4h30",
-      lat: 1.3521, lon: 103.8198,
-      image: "https://images.unsplash.com/photo-1472148439583-1f4cf81b80e0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fFNpbmdhcG91cnxlbnwwfHwwfHx8MA%3D%3Dw=350",
-      description: "La cité-jardin futuriste. Une propreté impeccable et des attractions de classe mondiale.",
-      activites: ["Assister au spectacle son et lumière de Gardens by the Bay", "Manger dans un 'Hawker Centre' (Lau Pa Sat)", "Explorer le quartier colonial et Marina Bay Sands"],
-      conseil: "Le réseau de métro (MRT) est extrêmement efficace. Achetez une carte 'EZ-Link' pour des trajets illimités."
-    },
-    {
-      lieu: "Melaka",
-      dates: "15 – 17 août",
-      nuits: 2,
-      distance: "240 km – 3h30 à 4h30",
-      lat: 2.1896, lon: 102.2501,
-      image: "https://plus.unsplash.com/premium_photo-1697730170911-9cf912ad3a22?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8TWVsYWthfGVufDB8MHwwfHx8MA%3D%3Dw=350",
-      description: "Découvrir le Stadthuys (place rouge), le marché nocturne de Jonker Walk et faire une croisière fluviale.",
-      activites: ["Explorer le quartier colonial et Marina Bay Sands"],
-      conseil: "Ne pas oublier son parapluie",
-         },
-    {
-      lieu: "Kuala Selangor",
-      dates: "17 – 18 août",
-      nuits: 1,
-      distance: "160 km – 2 h 15",
-      lat: 3.3467, lon: 101.2634,
-      image: "https://images.unsplash.com/photo-1736863929622-97ebe7e2a428?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fEt1YWxhJTIwU2VsYW5nb3IlMjBtYWxhaXNpYXxlbnwwfDB8MHx8fDA%3D%3Dw=350",
-      description: "Une ville de Malaisie, célèbre pour ses paysages et ses lucioles. Vous vivrez une soirée inoubliable !",
-      activites: ["Excursion en barque pour voir le spectacle magique des lucioles (vers 20h)."],
-      conseil: "",
-        },
-    {
-      lieu: "Kuala Lumpur (fin de séjour)",
-      dates: "18 – 20 août",
-      nuits: 2,
-      distance: "85 km – 1 h 15",
-      lat: 3.139, lon: 101.687,
-      image: "https://images.unsplash.com/photo-1598797246294-7620e33a632f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8S3VhbGElMjBMdW1wdXJ8ZW58MHwwfDB8fHwww=350",
-      description: "Découvrez le côté multiculturel de la ville en visitant le marché de nuit de Chinatown ou l'un des nombreux temples.",
-      activites: ["Grimper les marches des Batu Caves" ,"Derniers achats" ,"visite d'un musée ou simplement se reposer avant le retour."],
-      conseil: "Refaire sa valise",
-        },
+     { lieu: "Kuala Lumpur (arrivée)", dates: "31 juil – 03 août", nuits: 3, distance: "—", lat: 3.07823, lon: 101.60376, image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=2064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dw=350", description: "Premiers pas dans la fourmilière urbaine. Un mélange fascinant de modernité et de tradition.", activites: ["Admirer les tours Petronas (de jour et de nuit)", "Se perdre dans le marché de Jalan Alor"], conseil: "Utilisez l'application 'Grab' (équivalent d'Uber) pour vous déplacer facilement et à bon prix." },
+     { lieu: "Cameron Highlands", dates: "03 et 04 août", nuits: 1, distance: "220 km – 3 h 30", lat: 4.471,lon: 101.377, image: "https://images.unsplash.com/photo-1646977804023-a852f96fbdcd?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fENhbWVyb24lMjBIaWdobGFuZHN8ZW58MHx8MHx8fDA%3Dw=350", description: "Superbe ballade au milieu des plantations de thé. Endroit verdoyant très calme et agréable.", activites: ["Visite des plantations de thé", "fraîcheur des montagnes."], conseil: "Prendre une petite laine..." },
+     { lieu: "Taman Negara", dates: "04 – 06 août", nuits: 2, distance: "245 km – 4h à 4h30", lat: 4.37,lon: 102.4, image: "https://images.unsplash.com/photo-1633683935952-ad5b2d927a31?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8VGFtYW4lMjBOZWdhcmF8ZW58MHx8MHx8fDA%3Dw=350", description: "Randonnée dans la plus vieille forêt tropicale du monde !", activites: ["Excursion avec un guide", "Pont suspendu (canopy walk)", "Découverte de la faune et de la flore"], conseil: "Ne pas oublier l'anti-moustique !" },
+     { lieu: "Kuala Besut", dates: "06 – 07 août", nuits: 1, distance: "275 km – 4 h", lat: 5.833,lon: 102.55, image: "https://images.unsplash.com/photo-1609511092514-b07ed4beddc6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bWFsYWlzaWUlMjBiZXN1dHxlbnwwfHwwfHx8MA%3D%3Dw=350", description: "Etape repos et réconfort après la Jungle ;)", activites: ["Grasse matinée", "Plage privée", "Piscine"], conseil: "Reprendre des forces avant de prendre le bateau pour les îles Perhentian." },
+     { lieu: "Îles Perhentian", dates: "07 – 09 août", nuits: 2, distance: "40 min de bateau", lat: 5.914, lon: 102.722, image: "https://images.unsplash.com/photo-1660574026735-04197dcf1f24?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fCVDMyU4RWxlcyUyMFBlcmhlbnRpYW58ZW58MHx8MHx8fDA%3D%3Dw=350", description: "Le paradis sur terre. Des plages de sable blanc, une eau turquoise et une vie marine incroyable.", activites: ["Snorkeling à Turtle Point pour nager avec les tortues", "Randonnée entre Long Beach et Coral Bay", "Excursion en bateau pour voir les requins de récif"], conseil: "Pensez à retirer de l'argent avant d'arriver sur les îles, il n'y a pas de distributeur." },
+     { lieu: "Cherating", dates: "09 – 11 août", nuits: 2, distance: "220 km – 3 h 30", lat: 4.139,lon: 103.392, image: "https://images.unsplash.com/photo-1523340306477-76c135412b28?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8bWFsYWlzaWUlMjBiYWJ5JTIwdHVydGxlfGVufDB8MHwwfHx8MA%3D%3Dw=350", description: "L'une des caractéristiques les plus remarquables de Cherating est sa plage longue et large, bordée de palmiers ondulants qui ajoutent une touche tropicale à ce paysage pittoresque.", activites: ["Sanctuaire des tortues de Cherating", "Plage", "Kayak dans la mangrove"], conseil: "Escale" },
+     { lieu: "Tioman Island", dates: "11 – 12 août", nuits: 1, distance: "155 km – 2h + 1h30 ferry", lat: 2.820, lon: 104.161, image: "https://images.unsplash.com/flagged/photo-1576061798518-fb0500878ba7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fFRpb21hbiUyMElzbGFuZHxlbnwwfDB8MHx8fDA%3D%3Dw=350", description: "Détente, plongée ou snorkeling dans un paradis tropical.", activites: ["Snorkeling", "Plage", "Kiff"], conseil: "Profiter de l'instant présent" },
+     { lieu: "Singapour", dates: "12 – 15 août", nuits: 3, distance: "140 km – 3h30 à 4h30", lat: 1.3521, lon: 103.8198, image: "https://images.unsplash.com/photo-1472148439583-1f4cf81b80e0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fFNpbmdhcG91cnxlbnwwfHwwfHx8MA%3D%3Dw=350", description: "La cité-jardin futuriste. Une propreté impeccable et des attractions de classe mondiale.", activites: ["Assister au spectacle son et lumière de Gardens by the Bay", "Manger dans un 'Hawker Centre' (Lau Pa Sat)", "Explorer le quartier colonial et Marina Bay Sands"], conseil: "Le réseau de métro (MRT) est extrêmement efficace. Achetez une carte 'EZ-Link' pour des trajets illimités." },
+     { lieu: "Melaka", dates: "15 – 17 août", nuits: 2, distance: "240 km – 3h30 à 4h30", lat: 2.1896, lon: 102.2501, image: "https://plus.unsplash.com/premium_photo-1697730170911-9cf912ad3a22?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8TWVsYWthfGVufDB8MHwwfHx8MA%3D%3Dw=350", description: "Découvrir le Stadthuys (place rouge), le marché nocturne de Jonker Walk et faire une croisière fluviale.", activites: ["Explorer le quartier colonial et Marina Bay Sands"], conseil: "Ne pas oublier son parapluie" },
+     { lieu: "Kuala Selangor", dates: "17 – 18 août", nuits: 1, distance: "160 km – 2 h 15", lat: 3.3467, lon: 101.2634, image: "https://images.unsplash.com/photo-1736863929622-97ebe7e2a428?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fEt1YWxhJTIwU2VsYW5nb3IlMjBtYWxhaXNpYXxlbnwwfDB8MHx8fDA%3D%3Dw=350", description: "Une ville de Malaisie, célèbre pour ses paysages et ses lucioles. Vous vivrez une soirée inoubliable !", activites: ["Excursion en barque pour voir le spectacle magique des lucioles (vers 20h)."], conseil: "" },
+     { lieu: "Kuala Lumpur (fin de séjour)", dates: "18 – 20 août", nuits: 2, distance: "85 km – 1 h 15", lat: 3.139, lon: 101.687, image: "https://images.unsplash.com/photo-1598797246294-7620e33a632f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8S3VhbGElMjBMdW1wdXJ8ZW58MHwwfDB8fHwww=350", description: "Découvrez le côté multiculturel de la ville en visitant le marché de nuit de Chinatown ou l'un des nombreux temples.", activites: ["Grimper les marches des Batu Caves" ,"Derniers achats" ,"visite d'un musée ou simplement se reposer avant le retour."], conseil: "Refaire sa valise" },
   ];
 
   try {
