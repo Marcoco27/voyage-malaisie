@@ -71,35 +71,20 @@ h3 { font-size: 1.3rem; margin-bottom: 1rem; }
   background: var(--gradient-main);
   color: white;
   text-align: center;
-  padding: 3rem 1rem;
+  padding: 2rem 1rem;
   position: relative;
   overflow: hidden;
-  min-height: 40vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1.5rem; /* Espace entre les widgets */
+  min-height: auto;
 }
 
-.hero-header h1 {
-  margin: 0 0 1rem 0;
-  font-size: 3rem;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  font-weight: 700;
-  animation: fadeIn 1s 0.2s ease-out forwards;
-  opacity: 0;
-  position: relative;
-  z-index: 2;
-}
-
-.hero-subtitle {
-  font-size: 1.3rem;
-  margin: 0 0 2rem 0;
-  font-weight: 300;
-  opacity: 0.9;
-  animation: fadeIn 1s 0.4s ease-out forwards;
-  position: relative;
-  z-index: 2;
+/* On masque le titre et le sous-titre */
+.hero-header h1, .hero-header .hero-subtitle {
+  display: none;
 }
 
 /* ===== Widgets Header (Météo + Horloges) ===== */
@@ -111,9 +96,9 @@ h3 { font-size: 1.3rem; margin-bottom: 1rem; }
   max-width: 350px;
   box-shadow: var(--shadow-soft);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  margin-bottom: 1rem;
   position: relative;
   z-index: 3;
+  order: 3; /* Météo en 3ème position */
 }
 
 .weather-content {
@@ -139,6 +124,8 @@ h3 { font-size: 1.3rem; margin-bottom: 1rem; }
   position: relative;
   z-index: 3;
   flex-wrap: wrap;
+  order: 1; /* Horloges en 1ère position */
+  width: 100%;
 }
 
 .clock-cockpit {
@@ -183,7 +170,7 @@ h3 { font-size: 1.3rem; margin-bottom: 1rem; }
 }
 
 .cockpit-time {
-  font-family: 'DS-Digital', 'Courier New', monospace;
+  font-family: 'Courier New', monospace;
   font-size: 1.8rem;
   font-weight: 700;
   color: #32ff7e;
@@ -198,9 +185,10 @@ h3 { font-size: 1.3rem; margin-bottom: 1rem; }
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 2rem;
   position: relative;
   z-index: 3;
+  order: 2; /* Navigation en 2ème position */
+  margin-top: 0;
 }
 
 .main-nav a {
