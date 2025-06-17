@@ -99,6 +99,7 @@ h3 { font-size: 1.3rem; margin-bottom: 1rem; }
   position: relative;
   z-index: 3;
   order: 3; /* Météo en 3ème position */
+   margin-top: 1.5rem;
 }
 
 .weather-content {
