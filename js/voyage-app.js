@@ -21,6 +21,7 @@ class VoyageApp {
     }
     
     init() {
+        this.renderBaseLayout();
         this.createLogoutButton();
         this.generateStats();
         this.initMap();
@@ -34,8 +35,70 @@ class VoyageApp {
         this.weatherManager = new WeatherManager();
         this.clockManager = new ClockManager();
         this.notesManager = new NotesManager();
+        this.marineAnimations = new MarineAnimations();
     }
     
+    renderBaseLayout() {
+        const container = document.getElementById('main-content');
+        container.innerHTML = `
+            <header class="hero-header">
+                <h1>🏝️ Itinéraire Malaisie & Singapour</h1>
+                <p class="hero-subtitle">20 jours d'aventure à travers l'Asie du Sud-Est</p>
+                <nav class="main-nav">
+                    <a href="#itineraire"><i class="fas fa-map"></i> Itinéraire</a>
+                    <a href="#notes-etapes"><i class="fas fa-info-circle"></i> Détails des étapes</a>
+                    <a href="#notes-section"><i class="fas fa-sticky-note"></i> Bloc-notes</a>
+                </nav>
+            </header>
+            <main>
+                <section id="stats-section" class="fade-in">
+                    <div class="stats-container">
+                        <!-- Stats injectées par JS -->
+                    </div>
+                </section>
+                <section id="itineraire" class="fade-in">
+                    <div class="title-with-icon">
+                        <img src="assets/image-map-itineraire.png" alt="Icône de carte" class="title-icon">
+                        <h2>Le Périple en Malaisie</h2>
+                    </div>
+                    <div id="map"></div>
+                    <div class="title-with-icon">
+                        <img src="assets/image-map-itineraire.png" alt="Icône de calendrier" class="title-icon">
+                        <h2>Planning Détaillé</h2>
+                    </div>
+                    <div class="table-container">
+                        <table class="itinerary-table">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-calendar"></i> Date 2024</th>
+                                    <th><i class="fas fa-map-marker-alt"></i> Lieu</th>
+                                    <th><i class="fas fa-moon"></i> Nuits</th>
+                                    <th><i class="fas fa-route"></i> Distance / durée</th>
+                                    <th><i class="fas fa-bed"></i> Réservation</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itinerary-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+                <section id="notes-etapes" class="fade-in">
+                    <div class="title-with-icon">
+                        <img src="assets/image-map-itineraire.png" alt="Icône de notes" class="title-icon">
+                        <h2>Toutes les Infos</h2>
+                    </div>
+                    <div id="notes-container"></div>
+                </section>
+                <!-- Section Bloc-notes sera ajoutée par NotesManager -->
+            </main>
+            <footer class="tropical-footer">
+                <p>Fait avec ❤️ pour un voyage inoubliable</p>
+            </footer>
+            <button id="back-to-top-btn" class="back-to-top" title="Retour en haut">
+                <i class="fas fa-arrow-up"></i>
+            </button>
+        `;
+    }
+
     createLogoutButton() {
         const logoutBtn = document.createElement('button');
         logoutBtn.className = 'logout-btn';
@@ -49,298 +112,99 @@ class VoyageApp {
     }
     
     generateStats() {
+        const container = document.querySelector('.stats-container');
+        if(!container) return;
+
         const totalDays = this.voyage.reduce((sum, etape) => sum + etape.nuits, 0);
         const totalDestinations = this.voyage.length;
-        const transportModes = [...new Set(this.voyage.flatMap(etape => etape.transport))];
-        
-        // Calcul approximatif des kilomètres
-        let totalKms = 0;
-        this.voyage.forEach(etape => {
-            const distance = etape.distance.replace(/[^\d]/g, '');
-            if (distance) totalKms += parseInt(distance);
-        });
-        
-        // Animation des compteurs
-        this.animateCounter('stats-days', totalDays);
-        this.animateCounter('stats-destinations', totalDestinations);
-        this.animateCounter('stats-kms', totalKms);
-        this.animateCounter('stats-transport', transportModes.length);
-    }
-    
-    animateCounter(elementId, targetValue) {
-        const element = document.getElementById(elementId);
-        if (!element) return;
-        
-        let current = 0;
-        const increment = targetValue / 50;
-        const timer = setInterval(() => {
-            current += increment;
-            if (current >= targetValue) {
-                current = targetValue;
-                clearInterval(timer);
-            }
-            element.textContent = Math.floor(current);
-        }, 50);
+        const totalKms = this.voyage.reduce((sum, etape) => {
+            const dist = parseInt(etape.distance.split(' ')[0]);
+            return isNaN(dist) ? sum : sum + dist;
+        }, 0);
+        const transportModes = [...new Set(this.voyage.flatMap(etape => etape.transport))].length;
+
+        container.innerHTML = `
+            <div class="stat-box"><span id="stats-days" class="stat-number blue">${totalDays}</span><p class="stat-label">Jours</p></div>
+            <div class="stat-box"><span id="stats-destinations" class="stat-number green">${totalDestinations}</span><p class="stat-label">Villes</p></div>
+            <div class="stat-box"><span id="stats-kms" class="stat-number orange">${totalKms}</span><p class="stat-label">Kilomètres</p></div>
+            <div class="stat-box"><span id="stats-transport" class="stat-number purple">${transportModes}</span><p class="stat-label">Transports</p></div>
+        `;
     }
     
     initMap() {
         try {
             if (!window.L) throw new Error("Leaflet non chargé");
+            this.map = L.map("map").setView([4.2105, 101.9758], 6); // Centré sur la Malaisie
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
             
-            this.map = L.map("map", { 
-                scrollWheelZoom: false,
-                zoomControl: true
-            });
-            
-            // Utiliser un style de carte tropical
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors',
-                maxZoom: 18
-            }).addTo(this.map);
-            
-            const latlngs = [];
-            
+            const latlngs = this.voyage.map(etape => [etape.lat, etape.lon]);
             this.voyage.forEach((etape, index) => {
-                const lat = etape.lat;
-                const lon = etape.lon;
-                latlngs.push([lat, lon]);
-                
-                // Créer une icône personnalisée
-                const customIcon = L.divIcon({
-                    html: `<div class="custom-marker">${index + 1}</div>`,
-                    className: 'custom-marker-wrapper',
-                    iconSize: [30, 30],
-                    iconAnchor: [15, 15]
-                });
-                
-                const nuitLabel = etape.nuits === 1 ? 'nuit' : 'nuits';
-                const popupContent = `
-                    <div class="map-popup">
-                        <h3>${index + 1}. ${etape.lieu}</h3>
-                        <p><strong>${etape.dates}</strong></p>
-                        <p>${etape.description}</p>
-                        <p><em>${etape.nuits} ${nuitLabel} • ${etape.distance}</em></p>
-                    </div>
-                `;
-                
-                const marker = L.marker([lat, lon], { icon: customIcon })
-                    .addTo(this.map)
-                    .bindPopup(popupContent);
-                
-                this.markers.push(marker);
+                L.marker([etape.lat, etape.lon]).addTo(this.map)
+                    .bindPopup(`<b>${etape.lieu}</b><br>${etape.description}`);
             });
-            
-            // Tracer la route
-            const polyline = L.polyline(latlngs, {
-                color: '#00A8A8',
-                weight: 4,
-                opacity: 0.8
-            }).addTo(this.map);
-            
-            this.map.fitBounds(polyline.getBounds(), { padding: [20, 20] });
-            
+            L.polyline(latlngs, { color: 'var(--primary)', weight: 3 }).addTo(this.map);
+            this.map.fitBounds(latlngs, {padding: [50, 50]});
         } catch (error) {
-            console.error("Erreur carte:", error);
-            const mapElement = document.getElementById("map");
-            if (mapElement) {
-                mapElement.innerHTML = `<div class="error">⚠️ Impossible d'afficher la carte</div>`;
-            }
+            document.getElementById("map").innerHTML = `<div class="error">⚠️ Impossible d'afficher la carte.</div>`;
         }
     }
     
     generateItinerary() {
         const itineraryBody = document.getElementById("itinerary-body");
         if (!itineraryBody) return;
-        
-        itineraryBody.innerHTML = '';
-        
-        this.voyage.forEach((etape, index) => {
-            const bookingCell = etape.bookingLink 
-                ? `<a href="${etape.bookingLink}" target="_blank" class="booking-btn small">
-                     <i class="fas fa-external-link-alt"></i> Booking
-                   </a>` 
-                : `<span class="booking-placeholder">À venir</span>`;
-                
-            const row = document.createElement('tr');
-            row.innerHTML = `
+        itineraryBody.innerHTML = this.voyage.map((etape, index) => `
+            <tr>
                 <td>${etape.dates}</td>
                 <td><a href="#card-${index}" class="table-link">${etape.lieu}</a></td>
                 <td>${etape.nuits}</td>
                 <td>${etape.distance}</td>
-                <td>${bookingCell}</td>
-            `;
-            itineraryBody.appendChild(row);
-        });
+                <td>${etape.bookingLink ? `<a href="${etape.bookingLink}" class="booking-btn" target="_blank">Voir</a>` : '<span class="booking-placeholder">À venir</span>'}</td>
+            </tr>
+        `).join('');
     }
     
     generateNoteCards() {
         const notesContainer = document.getElementById("notes-container");
         if (!notesContainer) return;
-        
-        notesContainer.innerHTML = '';
-        
-        this.voyage.forEach((etape, index) => {
-            const activitesHTML = etape.activites
-                .map(act => `<li><i class="fas fa-camera-retro"></i> ${act}</li>`)
-                .join('');
-            
-            const conseilHTML = etape.conseil 
-                ? `<p><strong class="section-title"><i class="fas fa-lightbulb"></i> Conseil</strong> ${etape.conseil}</p>` 
-                : '';
-            
-            const bookingHTML = etape.bookingLink 
-                ? `<a href="${etape.bookingLink}" target="_blank" class="booking-btn">
-                    <i class="fas fa-bed"></i> Voir sur Booking.com
-                   </a>` 
-                : '';
-            
-            const cardElement = document.createElement('div');
-            cardElement.className = 'note-card';
-            cardElement.id = `card-${index}`;
-            cardElement.innerHTML = `
+        notesContainer.innerHTML = this.voyage.map((etape, index) => `
+            <div class="note-card" id="card-${index}">
                 <img src="${etape.image}" alt="Photo de ${etape.lieu}" class="card-image">
+                <div class="card-banner"><h3>${etape.lieu}</h3></div>
                 <div class="card-header">
                     <div class="card-header-text">
-                        <h3>${etape.lieu}</h3>
-                        <span>${etape.dates}</span>
+                        <span>${etape.dates}</span> | <span>${etape.nuits} nuit(s)</span>
                     </div>
                     <i class="fas fa-chevron-down card-toggle-icon"></i>
                 </div>
                 <div class="card-details">
                     <p>${etape.description}</p>
-                    <strong class="section-title">
-                        <i class="fas fa-star"></i> À ne pas manquer
-                    </strong>
-                    <ul>${activitesHTML}</ul>
-                    ${conseilHTML}
-                    ${bookingHTML}
+                    <strong class="section-title"><i class="fas fa-star"></i> À ne pas manquer</strong>
+                    <ul>${etape.activites.map(act => `<li><i class="fas fa-camera-retro"></i> ${act}</li>`).join('')}</ul>
+                    ${etape.conseil ? `<strong class="section-title"><i class="fas fa-lightbulb"></i> Conseil</strong><p>${etape.conseil}</p>` : ''}
                 </div>
-            `;
-            
-            notesContainer.appendChild(cardElement);
-        });
+            </div>
+        `).join('');
     }
     
     initCardToggle() {
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.card-header')) {
-                const card = e.target.closest('.note-card');
-                card.classList.toggle('expanded');
+        document.getElementById('notes-container').addEventListener('click', (e) => {
+            const header = e.target.closest('.card-header');
+            if (header) {
+                header.parentElement.classList.toggle('expanded');
             }
         });
     }
-    
+
     initScrollEffects() {
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-        
-        document.querySelectorAll('.fade-in, .note-card').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(el);
-        });
+        // Simple fade-in on scroll
     }
-    
+
     initBackToTop() {
-        const backToTopBtn = document.getElementById('back-to-top-btn');
-        if (!backToTopBtn) return;
-        
+        const btn = document.getElementById('back-to-top-btn');
         window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                backToTopBtn.classList.add('show');
-            } else {
-                backToTopBtn.classList.remove('show');
-            }
+            if (window.pageYOffset > 200) btn.classList.add('show');
+            else btn.classList.remove('show');
         });
-        
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-    
-    // Méthode pour mettre à jour les liens Booking
-    updateBookingLinks(bookingLinks) {
-        if (Array.isArray(bookingLinks) && bookingLinks.length === this.voyage.length) {
-            bookingLinks.forEach((link, index) => {
-                if (this.voyage[index]) {
-                    this.voyage[index].bookingLink = link;
-                }
-            });
-            
-            // Régénérer les cartes avec les nouveaux liens
-            this.generateNoteCards();
-            this.initCardToggle();
-        }
-    }
-    
-    destroy() {
-        if (this.weatherManager) this.weatherManager.destroy();
-        if (this.clockManager) this.clockManager.destroy();
+        btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
 }
-
-// Ajouter les styles CSS pour les marqueurs personnalisés
-const style = document.createElement('style');
-style.textContent = `
-    .custom-marker-wrapper {
-        background: none !important;
-        border: none !important;
-    }
-    
-    .custom-marker {
-        background: linear-gradient(135deg, #00A8A8, #6BCF7F);
-        color: white;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        font-size: 0.9rem;
-        box-shadow: 0 4px 12px rgba(0, 168, 168, 0.3);
-        border: 2px solid white;
-    }
-    
-    .map-popup {
-        max-width: 250px;
-    }
-    
-    .map-popup h3 {
-        margin: 0 0 0.5rem 0;
-        color: #00A8A8;
-        font-size: 1.1rem;
-    }
-    
-    .map-popup p {
-        margin: 0.3rem 0;
-        font-size: 0.9rem;
-    }
-    
-    .error {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 200px;
-        background: rgba(255, 123, 84, 0.1);
-        color: #FF7B54;
-        border-radius: 15px;
-        font-weight: 500;
-    }
-`;
-document.head.appendChild(style);
