@@ -19,7 +19,6 @@ const CONFIG = {
         sessionKey: 'voyage_malaisie_auth',
         rememberKey: 'voyage_malaisie_remember',
         users: {
-            // Utilisateur de démonstration - à modifier
             'famille': 'voyage2024' 
         }
     },
@@ -28,22 +27,5 @@ const CONFIG = {
     notes: {
         storageKey: 'voyage_malaisie_notes',
         maxLength: 10000
-    },
-    
-    // Palette de couleurs tropical/minimaliste
-    colors: {
-        primary: '#00A8A8',      // Turquoise tropical
-        secondary: '#FF7B54',    // Corail
-        accent: '#F6E96B',       // Jaune soleil
-        success: '#6BCF7F',      // Vert tropical
-        dark: '#2C3E50',         // Bleu nuit
-        light: '#F8FFFE',        // Blanc crème
-        sand: '#F5F3F0',         // Sable
-        ocean: '#0077BE'         // Bleu océan
     }
 };
-
-// Export pour utilisation dans d'autres modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = CONFIG;
-}
