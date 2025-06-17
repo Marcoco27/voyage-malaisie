@@ -2,7 +2,7 @@
 const CONFIG = {
     // API Météo OpenWeatherMap (clé gratuite - à remplacer par votre clé)
     weather: {
-        apiKey: '4eee2057f69a6abd082700bc17010414', // À remplacer
+        apiKey: 'a1e80ab5644eba8f07d8920d13f9bf83', // À remplacer
         apiUrl: 'https://api.openweathermap.org/data/2.5/weather',
         defaultCity: 'Kuala Lumpur,MY',
         updateInterval: 300000 // 5 minutes
