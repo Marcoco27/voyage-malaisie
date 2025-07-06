@@ -45,3 +45,28 @@ class ClockManager {
         document.getElementById('kl-time').textContent = now.toLocaleTimeString('fr-FR', { ...timeOptions, timeZone: CONFIG.timezones.kualaLumpur });
     }
 }
+
+// Ajoute automatiquement les vis, repères et centre à chaque horloge cockpit-display
+function enhanceCockpitDisplays() {
+  const marks = Array.from({length: 12}, (_, i) => `<div class="cadran-mark m${i}"></div>`).join('');
+  const screws = `
+    <div class="cadran-screw s1"></div>
+    <div class="cadran-screw s2"></div>
+    <div class="cadran-screw s3"></div>
+    <div class="cadran-screw s4"></div>
+  `;
+  const center = '<div class="cadran-center"></div>';
+  document.querySelectorAll('.cockpit-display').forEach(el => {
+    // Évite de dupliquer si déjà présent
+    if (!el.classList.contains('cadran-enhanced')) {
+      el.insertAdjacentHTML('beforeend', screws + center + marks);
+      el.classList.add('cadran-enhanced');
+    }
+  });
+}
+// Lance l'amélioration après chargement du DOM
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', enhanceCockpitDisplays);
+} else {
+  enhanceCockpitDisplays();
+}

@@ -147,42 +147,30 @@ h3 { font-size: 1.3rem; margin-bottom: 1rem; }
   width: 120px;
   height: 120px;
   margin: 0 auto;
-  border-radius: 50%;
-  background: radial-gradient(circle at 60% 35%, #444 0%, #222 60%, #111 100%);
+  border-radius: 18px;
+  background: #181b1e;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  border: 5px solid #bfc5c7; /* Bordure métallique */
-  box-shadow: 0 2px 10px rgba(0,0,0,0.5), 0 0 0 6px #222, 0 0 0 10px #bfc5c7;
+  border: 4px solid #bfc5c7;
+  box-shadow: 0 2px 10px #000a, 0 0 0 6px #222, 0 0 0 10px #bfc5c7;
   overflow: visible;
 }
 
 .cockpit-display::before {
   content: '';
   position: absolute;
-  top: 8px; left: 8px; right: 8px; bottom: 8px;
-  border-radius: 50%;
+  top: 10px; left: 10px; right: 10px; bottom: 10px;
+  border-radius: 12px;
   border: 2px solid #222;
   box-shadow: 0 0 8px #000 inset;
   pointer-events: none;
 }
 
-.cockpit-display::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  border-radius: 50%;
-  pointer-events: none;
-  background:
-    repeating-conic-gradient(from 0deg, transparent 0deg 8deg, #bfc5c7 8deg 10deg),
-    repeating-conic-gradient(from 0deg, transparent 0deg 88deg, #bfc5c7 88deg 90deg);
-  opacity: 0.15;
-}
-
 .cockpit-display .cadran-screw {
   position: absolute;
-  width: 12px; height: 12px;
+  width: 13px; height: 13px;
   background: radial-gradient(circle, #eee 60%, #888 100%);
   border-radius: 50%;
   border: 1.5px solid #888;
@@ -190,19 +178,59 @@ h3 { font-size: 1.3rem; margin-bottom: 1rem; }
   z-index: 3;
 }
 
-.cockpit-display .cadran-screw.s1 { top: -6px; left: 50%; transform: translateX(-50%); }
-.cockpit-display .cadran-screw.s2 { bottom: -6px; left: 50%; transform: translateX(-50%); }
-.cockpit-display .cadran-screw.s3 { left: -6px; top: 50%; transform: translateY(-50%); }
-.cockpit-display .cadran-screw.s4 { right: -6px; top: 50%; transform: translateY(-50%); }
+.cockpit-display .cadran-screw.s1 { top: -7px; left: -7px; }
+.cockpit-display .cadran-screw.s2 { top: -7px; right: -7px; }
+.cockpit-display .cadran-screw.s3 { bottom: -7px; left: -7px; }
+.cockpit-display .cadran-screw.s4 { bottom: -7px; right: -7px; }
+
+.cockpit-display .cadran-center {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 18px; height: 18px;
+  background: #ffe066;
+  border-radius: 50%;
+  border: 2px solid #222;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  box-shadow: 0 0 6px #ffe06699;
+}
+
+.cockpit-display .cadran-mark {
+  position: absolute;
+  width: 4px; height: 18px;
+  background: #fff;
+  left: 50%; top: 50%;
+  transform-origin: 50% 90%;
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.cockpit-display .cadran-mark.m0 { transform: translate(-50%, -90%) rotate(0deg); }
+.cockpit-display .cadran-mark.m1 { transform: translate(-50%, -90%) rotate(30deg); }
+.cockpit-display .cadran-mark.m2 { transform: translate(-50%, -90%) rotate(60deg); }
+.cockpit-display .cadran-mark.m3 { transform: translate(-50%, -90%) rotate(90deg); }
+.cockpit-display .cadran-mark.m4 { transform: translate(-50%, -90%) rotate(120deg); }
+.cockpit-display .cadran-mark.m5 { transform: translate(-50%, -90%) rotate(150deg); }
+.cockpit-display .cadran-mark.m6 { transform: translate(-50%, -90%) rotate(180deg); }
+.cockpit-display .cadran-mark.m7 { transform: translate(-50%, -90%) rotate(210deg); }
+.cockpit-display .cadran-mark.m8 { transform: translate(-50%, -90%) rotate(240deg); }
+.cockpit-display .cadran-mark.m9 { transform: translate(-50%, -90%) rotate(270deg); }
+.cockpit-display .cadran-mark.m10 { transform: translate(-50%, -90%) rotate(300deg); }
+.cockpit-display .cadran-mark.m11 { transform: translate(-50%, -90%) rotate(330deg); }
 
 .cockpit-time {
-  font-family: 'Courier New', monospace;
-  font-size: 1.8rem;
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 1.7rem;
   font-weight: 700;
-  color: #32ff7e;
-  text-shadow: 0 0 5px #32ff7e, 0 0 10px #32ff7e, 0 0 2px #000;
+  color: #00ffe6;
+  text-shadow: 0 0 6px #00ffe6, 0 0 2px #000;
   z-index: 2;
   letter-spacing: 2px;
+  background: #101214;
+  border-radius: 6px;
+  padding: 2px 10px;
+  border: 1.5px solid #222;
+  box-shadow: 0 0 8px #00ffe633 inset;
 }
 
 /* ===== Navigation ===== */
