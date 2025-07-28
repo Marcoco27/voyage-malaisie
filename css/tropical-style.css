@@ -488,14 +488,12 @@ tbody tr:hover { background: #f8f8f8; }
 
 .card-details .card-description {
     font-style: italic;
-    color: var(--dark);
 }
 
 .card-details .card-transport,
 .card-details .card-distance {
     margin-left: 1rem;
     font-size: 0.9em;
-    color: var(--dark);
     opacity: 0.8;
 }
 
