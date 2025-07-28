@@ -446,6 +446,7 @@ tbody tr:hover { background: #f8f8f8; }
     overflow: hidden;
     transition: max-height 0.5s ease-out, padding 0.5s ease-out;
     padding: 0 1.5rem;
+    color: var(--dark);
 }
 
 /* Style pour le contenu détaillé des cards */
@@ -477,7 +478,6 @@ tbody tr:hover { background: #f8f8f8; }
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--dark);
 }
 
 .card-details .card-conseil,
@@ -485,7 +485,6 @@ tbody tr:hover { background: #f8f8f8; }
     margin-left: 1rem;
     margin-top: 0;
     margin-bottom: 0;
-    color: var(--dark);
 }
 
 .card-details .card-description {
