@@ -184,7 +184,7 @@ class VoyageApp {
                 end = `2024${m2.toString().padStart(2,'0')}${d2}T120000Z`;
             }
             const dates = (start && end) ? `&dates=${start}/${end}` : '';
-            const gcalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(etape.lieu)}&details=${details}${dates}`;
+            const gcalUrl = `https://calendar.google.com/calendar/u/0/r/eventedit?cid=NThmYjBjN2EzMjEyYzJlZTY5YWJlMDIwOTA1N2I2MDUyODUxZmIwZWY5MmM3OWM3ZGZkMDAzMDY1Y2JhZmQ4MUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&text=${encodeURIComponent(etape.lieu)}&details=${details}${dates}`;
             // Create card DOM
             const card = document.createElement('div');
             card.className = 'note-card';
