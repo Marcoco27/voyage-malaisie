@@ -201,7 +201,7 @@ class VoyageApp {
                     </div>
                     <i class="fas fa-chevron-down card-toggle-icon"></i>
                 </div>
-                <div class="card-details" aria-hidden="true" style="max-height:0;overflow:hidden;transition:max-height 0.5s ease-out,padding 0.5s ease-out;padding:0 1.5rem;">
+                <div class="card-details" aria-hidden="true">
                     <p>${etape.description || ''}</p>
                     <strong class="section-title"><i class="fas fa-star"></i> À ne pas manquer</strong>
                     <ul>${(etape.activites && etape.activites.length) ? etape.activites.map(act => `<li><i class='fas fa-camera-retro'></i> ${act}</li>`).join('') : ''}</ul>
@@ -224,11 +224,13 @@ class VoyageApp {
                 if (expanded) detailsDiv.focus && detailsDiv.focus();
             }
             header.addEventListener('click', () => {
+                console.log('toggleCard click', card.id);
                 toggleCard();
             });
             header.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
+                    console.log('toggleCard keydown', card.id);
                     toggleCard();
                 }
             });
