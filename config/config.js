@@ -26,6 +26,21 @@ const CONFIG = {
     // Configuration du bloc-notes
     notes: {
         storageKey: 'voyage_malaisie_notes',
-        maxLength: 10000
+        maxLength: 10000,
+        // Configuration pour jsonbin.io (solution simple sans compte)
+        jsonBinApiKey: '$2a$10$s31.F.O.1.i./.X.e.c.c.u.g.U.C.O.S.s.S.s.S.s.S.s.S.s', // Clé publique d'exemple
+        jsonBinBinId: '66a784e1e41b4d34e413a54b' // ID du bin de stockage
+    },
+
+    // Configuration Firebase (À REMPLIR AVEC VOS CLÉS)
+    // Suivez les instructions pour créer un projet web sur firebase.google.com
+    firebase: {
+        apiKey: "VOTRE_API_KEY",
+        authDomain: "VOTRE_PROJECT_ID.firebaseapp.com",
+        databaseURL: "https://VOTRE_PROJECT_ID-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "VOTRE_PROJECT_ID",
+        storageBucket: "VOTRE_PROJECT_ID.appspot.com",
+        messagingSenderId: "VOTRE_SENDER_ID",
+        appId: "VOTRE_APP_ID"
     }
 };
