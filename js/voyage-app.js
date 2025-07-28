@@ -234,6 +234,35 @@ class VoyageApp {
             });
             notesContainer.appendChild(card);
         });
+
+        // Gestion du hash pour ouvrir la card correspondante
+        setTimeout(() => {
+            if (window.location.hash && window.location.hash.startsWith('#card-')) {
+                const card = document.querySelector(window.location.hash);
+                if (card) {
+                    card.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    const header = card.querySelector('.card-header');
+                    if (header && !card.classList.contains('expanded')) {
+                        header.click();
+                        header.focus();
+                    }
+                }
+            }
+        }, 100);
+        // Réagit aussi aux changements de hash après navigation
+        window.addEventListener('hashchange', () => {
+            if (window.location.hash && window.location.hash.startsWith('#card-')) {
+                const card = document.querySelector(window.location.hash);
+                if (card) {
+                    card.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    const header = card.querySelector('.card-header');
+                    if (header && !card.classList.contains('expanded')) {
+                        header.click();
+                        header.focus();
+                    }
+                }
+            }
+        });
     }
     
     // Toggle handled in generateNoteCards for accessibility
