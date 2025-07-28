@@ -211,12 +211,7 @@ class VoyageApp {
                 </div>
             `;
             // Focus management for accessibility
-            card.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    card.querySelector('.card-header').focus();
-                }
-            });
+            // Suppression du focus automatique sur le header : le toggle se fait uniquement sur le header
             // Toggle details on header click or Enter/Space
             const header = card.querySelector('.card-header');
             const detailsDiv = card.querySelector('.card-details');
