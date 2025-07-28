@@ -36,6 +36,10 @@ class VoyageApp {
         this.clockManager = new ClockManager();
         this.notesManager = new NotesManager();
         this.marineAnimations = new MarineAnimations();
+
+        // Gestion du hash pour ouvrir la card correspondante
+        setTimeout(() => this.openCardFromHash(), 150);
+        window.addEventListener('hashchange', () => this.openCardFromHash());
     }
     
     renderBaseLayout() {
@@ -185,7 +189,7 @@ class VoyageApp {
             }
             const dates = (start && end) ? `&dates=${start}/${end}` : '';
             const gcalUrl = `https://calendar.google.com/calendar/u/0/r/eventedit?cid=NThmYjBjN2EzMjEyYzJlZTY5YWJlMDIwOTA1N2I2MDUyODUxZmIwZWY5MmM3OWM3ZGZkMDAzMDY1Y2JhZmQ4MUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&text=${encodeURIComponent(etape.lieu)}&details=${details}${dates}`;
-            // Create card DOM
+            
             const card = document.createElement('div');
             card.className = 'note-card';
             card.tabIndex = 0;
@@ -213,56 +217,58 @@ class VoyageApp {
                         ${etape.conseil ? `<strong class="section-title"><i class="fas fa-lightbulb"></i> Conseil</strong><p class="card-conseil">${etape.conseil}</p>` : ''}
                         ${(etape.transport && etape.transport.length) ? `<div class="card-transport"><strong><i class="fas fa-bus"></i> Transport :</strong> ${etape.transport.join(', ')}</div>` : ''}
                         ${etape.distance ? `<div class="card-distance"><strong><i class="fas fa-route"></i> Distance :</strong> ${etape.distance}</div>` : ''}
-                        ${etape.bookingLink ? `<a href="${etape.bookingLink}" class="booking-btn" target="_blank" style="margin-top:1em;display:inline-block;background:var(--primary);color:#fff;">Voir la réservation</a>` : ''}
-                        <a href="${gcalUrl}" class="booking-btn" target="_blank" style="margin-top:1em;display:inline-block;background:var(--accent);color:#222;">Exporter vers Google Agenda</a>
+                        ${etape.bookingLink ? `<a href="${etape.bookingLink}" class="booking-btn booking-link" target="_blank">Voir la réservation</a>` : ''}
+                        <a href="${gcalUrl}" class="booking-btn gcal-link" target="_blank">Exporter vers Google Agenda</a>
                     </div>
                 </div>
             `;
-            // Focus management for accessibility
-            // Suppression du focus automatique sur le header : le toggle se fait uniquement sur le header
-            // Toggle details on header click or Enter/Space
-            const header = card.querySelector('.card-header');
-            const detailsDiv = card.querySelector('.card-details');
-            function toggleCard(forceOpen) {
-                const isOpen = card.classList.contains('expanded');
-                const expanded = (forceOpen === true) ? true : (forceOpen === false ? false : !isOpen);
-                card.classList.toggle('expanded', expanded);
-                header.setAttribute('aria-expanded', expanded);
-                detailsDiv.setAttribute('aria-hidden', !expanded);
-                if (expanded) detailsDiv.focus && detailsDiv.focus();
-            }
-            header.addEventListener('click', () => {
-                console.log('toggleCard click', card.id);
-                toggleCard();
-            });
-            header.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    console.log('toggleCard keydown', card.id);
-                    toggleCard();
-                }
-            });
             notesContainer.appendChild(card);
-            // Permet d'ouvrir la card par hash navigation (utilisé plus bas)
-            card.toggleCard = toggleCard;
         });
-
-        // Gestion du hash pour ouvrir la card correspondante
-        function openCardFromHash() {
-            if (window.location.hash && window.location.hash.startsWith('#card-')) {
-                const card = document.querySelector(window.location.hash);
-                if (card && typeof card.toggleCard === 'function') {
-                    card.scrollIntoView({behavior: 'smooth', block: 'center'});
-                    card.toggleCard(true); // force ouverture
-                }
-            }
-        }
-        setTimeout(openCardFromHash, 100);
-        window.addEventListener('hashchange', openCardFromHash);
     }
     
-    // Toggle handled in generateNoteCards for accessibility
-    initCardToggle() {}
+    toggleCard(card, forceOpen = null) {
+        const header = card.querySelector('.card-header');
+        const detailsDiv = card.querySelector('.card-details');
+        if (!header || !detailsDiv) return;
+
+        const isOpen = card.classList.contains('expanded');
+        const expand = (forceOpen === true) ? true : (forceOpen === false ? false : !isOpen);
+        
+        card.classList.toggle('expanded', expand);
+        header.setAttribute('aria-expanded', String(expand));
+        detailsDiv.setAttribute('aria-hidden', String(!expand));
+    }
+
+    openCardFromHash() {
+        if (window.location.hash && window.location.hash.startsWith('#card-')) {
+            const card = document.querySelector(window.location.hash);
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                this.toggleCard(card, true); // force ouverture
+            }
+        }
+    }
+    
+    initCardToggle() {
+        const notesContainer = document.getElementById('notes-container');
+        if (!notesContainer) return;
+
+        notesContainer.addEventListener('click', (e) => {
+            const header = e.target.closest('.card-header');
+            if (header) {
+                const card = header.closest('.note-card');
+                if (card) this.toggleCard(card);
+            }
+        });
+
+        notesContainer.addEventListener('keydown', (e) => {
+            if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('card-header')) {
+                e.preventDefault();
+                const card = e.target.closest('.note-card');
+                if (card) this.toggleCard(card);
+            }
+        });
+    }
 
     initScrollEffects() {
         // Simple fade-in on scroll

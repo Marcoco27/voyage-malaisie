@@ -483,6 +483,21 @@ tbody tr:hover { background: #f8f8f8; }
     margin-right: 0.5rem; /* Espace entre les boutons */
 }
 
+/* Styles spécifiques pour les boutons de la card */
+.booking-btn.booking-link {
+    background: var(--primary);
+    color: #fff;
+    margin-top: 1em;
+    display: inline-block;
+}
+
+.booking-btn.gcal-link {
+    background: var(--accent);
+    color: #222;
+    margin-top: 1em;
+    display: inline-block;
+}
+
 .card-header:focus {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
