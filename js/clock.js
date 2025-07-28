@@ -1,4 +1,4 @@
-// Gestion simple des horloges sans habillage
+// Horloge simple affichée dans le header
 class ClockManager {
     constructor() {
         this.clockInterval = null;
@@ -6,48 +6,30 @@ class ClockManager {
     }
 
     init() {
-        this.createClockWidget();
-        this.updateClocks();
-        this.clockInterval = setInterval(() => this.updateClocks(), 1000);
+        this.createSimpleClock();
+        this.updateClock();
+        this.clockInterval = setInterval(() => this.updateClock(), 1000);
     }
 
-    createClockWidget() {
+    createSimpleClock() {
         const header = document.querySelector('.hero-header');
         if (!header) return;
-
-        const clockWidgetContainer = document.createElement('div');
-        clockWidgetContainer.className = 'clock-widget';
-        clockWidgetContainer.innerHTML = `
-            <div class="simple-clock">
-                <span id="france-time">--:--:--</span>
-                <span style="margin-left: 1rem;">France 🇫🇷</span>
-            </div>
-            <div class="simple-clock">
-                <span id="kl-time">--:--:--</span>
-                <span style="margin-left: 1rem;">Kuala Lumpur 🇲🇾</span>
-            </div>
-        `;
-
-        const nav = header.querySelector('.main-nav');
-        if(nav) {
-            header.insertBefore(clockWidgetContainer, nav);
-        } else {
-            header.appendChild(clockWidgetContainer);
-        }
+        // Supprimer toute ancienne horloge simple éventuelle
+        const oldClock = header.querySelector('.simple-clock');
+        if (oldClock) oldClock.remove();
+        // Créer l'élément horloge
+        const clock = document.createElement('div');
+        clock.className = 'simple-clock';
+        clock.innerHTML = '<span id="simple-clock-time">--:--:--</span> <span class="simple-clock-label">(Heure locale Malaisie)</span>';
+        // Ajouter l'horloge en haut du header
+        header.insertBefore(clock, header.firstChild);
     }
 
-    updateClocks() {
+    updateClock() {
         const now = new Date();
         const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-
-        document.getElementById('france-time').textContent = now.toLocaleTimeString('fr-FR', { ...timeOptions, timeZone: CONFIG.timezones.france });
-        document.getElementById('kl-time').textContent = now.toLocaleTimeString('fr-FR', { ...timeOptions, timeZone: CONFIG.timezones.kualaLumpur });
+        const timeString = now.toLocaleTimeString('fr-FR', { ...timeOptions, timeZone: CONFIG.timezones.kualaLumpur });
+        const timeElem = document.getElementById('simple-clock-time');
+        if (timeElem) timeElem.textContent = timeString;
     }
-}
-
-// Initialisation automatique
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new ClockManager());
-} else {
-    new ClockManager();
 }
