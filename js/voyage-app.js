@@ -134,7 +134,8 @@ class VoyageApp {
     initMap() {
         try {
             if (!window.L) throw new Error("Leaflet non chargé");
-            this.map = L.map("map").setView([4.2105, 101.9758], 6); // Centré sur la Malaisie
+            // Zoom plus proche sur la péninsule malaisienne
+            this.map = L.map("map").setView([4.5, 102.5], 7); // Centré et zoomé sur la péninsule
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
             
             const latlngs = this.voyage.map(etape => [etape.lat, etape.lon]);
@@ -143,7 +144,8 @@ class VoyageApp {
                     .bindPopup(`<b>${etape.lieu}</b><br>${etape.description}`);
             });
             L.polyline(latlngs, { color: 'var(--primary)', weight: 3 }).addTo(this.map);
-            this.map.fitBounds(latlngs, {padding: [50, 50]});
+            // Optionnel : ajuster les bounds pour ne pas trop dézoomer
+            // this.map.fitBounds(latlngs, {padding: [50, 50], maxZoom: 8});
         } catch (error) {
             document.getElementById("map").innerHTML = `<div class="error">⚠️ Impossible d'afficher la carte.</div>`;
         }
