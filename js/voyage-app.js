@@ -200,7 +200,7 @@ class VoyageApp {
                     </div>
                     <i class="fas fa-chevron-down card-toggle-icon"></i>
                 </div>
-                <div class="card-details" aria-hidden="true">
+                <div class="card-details" aria-hidden="true" style="max-height:0;overflow:hidden;transition:max-height 0.5s ease-out,padding 0.5s ease-out;padding:0 1.5rem;">
                     <p>${etape.description}</p>
                     <strong class="section-title"><i class="fas fa-star"></i> À ne pas manquer</strong>
                     <ul>${etape.activites.map(act => `<li><i class='fas fa-camera-retro'></i> ${act}</li>`).join('')}</ul>
