@@ -100,6 +100,26 @@ body {
     background: var(--gradient-cool);
     color: var(--darkmode-text);
   }
+
+  /* Correction pour la couleur du texte des cards en mode sombre */
+  .card-details .card-description,
+  .card-details .card-conseil,
+  .card-details .card-transport,
+  .card-details .card-distance,
+  .card-details .card-activites li {
+      color: var(--darkmode-text);
+      opacity: 0.9;
+  }
+  .card-details .section-title {
+      color: var(--darkmode-accent);
+  }
+  .card-details .card-activites li i {
+      color: var(--darkmode-accent);
+  }
+  .booking-btn.gcal-link {
+      background: var(--darkmode-accent);
+      color: #222;
+  }
 }
 
 h1, h2, h3, .main-nav a, strong { 
@@ -468,14 +488,15 @@ tbody tr:hover { background: #f8f8f8; }
 
 .card-details .card-description {
     font-style: italic;
-    color: #333;
+    color: var(--dark);
 }
 
 .card-details .card-transport,
 .card-details .card-distance {
     margin-left: 1rem;
     font-size: 0.9em;
-    color: #555;
+    color: var(--dark);
+    opacity: 0.8;
 }
 
 .card-details .booking-btn {
