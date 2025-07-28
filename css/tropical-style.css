@@ -119,23 +119,43 @@ h3 { font-size: 1.3rem; margin-bottom: 1rem; }
 .weather-details { font-size: 0.8rem; opacity: 0.8; }
 
 .simple-clock {
-  font-family: 'Courier New', monospace;
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: var(--primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2em;
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #fff;
   background: none;
   border-radius: 0;
   padding: 0.5rem 0;
   box-shadow: none;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-align: center;
 }
 
-.simple-clock-label {
-  font-size: 1rem;
-  font-weight: 400;
-  color: var(--primary-light, #666);
-  margin-left: 0.5em;
+.clock-label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #fff;
+  opacity: 0.85;
+  margin: 0 0.3em;
+}
+
+.clock-time {
+  font-family: 'Courier New', monospace;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0.2em;
+}
+
+.clock-sep {
+  font-size: 1.5rem;
+  color: #fff;
+  opacity: 0.7;
+  margin: 0 0.7em;
 }
 
 /* ===== Navigation ===== */
