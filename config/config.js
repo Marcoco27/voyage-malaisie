@@ -19,7 +19,7 @@ const CONFIG = {
         sessionKey: 'voyage_malaisie_auth',
         rememberKey: 'voyage_malaisie_remember',
         users: {
-            'famille': 'voyage2024' 
+            'malaisie': 'voyage2025' 
         }
     },
     
