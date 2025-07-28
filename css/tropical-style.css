@@ -1,3 +1,15 @@
+/* Animation et affichage des détails de card */
+.note-card .card-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+  padding: 0 1.5rem;
+}
+.note-card.expanded .card-details {
+  max-height: 1000px;
+  padding: 1.5rem;
+  overflow: visible;
+}
 /* ===== DESIGN TROPICAL MINIMALISTE ===== */
 
 /* Variables CSS pour palette tropical */
