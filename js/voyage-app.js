@@ -220,49 +220,40 @@ class VoyageApp {
             // Toggle details on header click or Enter/Space
             const header = card.querySelector('.card-header');
             const detailsDiv = card.querySelector('.card-details');
-            header.addEventListener('click', () => {
-                const expanded = card.classList.toggle('expanded');
+            function toggleCard(forceOpen) {
+                const isOpen = card.classList.contains('expanded');
+                const expanded = (forceOpen === true) ? true : (forceOpen === false ? false : !isOpen);
+                card.classList.toggle('expanded', expanded);
                 header.setAttribute('aria-expanded', expanded);
                 detailsDiv.setAttribute('aria-hidden', !expanded);
                 if (expanded) detailsDiv.focus && detailsDiv.focus();
+            }
+            header.addEventListener('click', () => {
+                toggleCard();
             });
             header.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    header.click();
+                    toggleCard();
                 }
             });
             notesContainer.appendChild(card);
+            // Permet d'ouvrir la card par hash navigation (utilisé plus bas)
+            card.toggleCard = toggleCard;
         });
 
         // Gestion du hash pour ouvrir la card correspondante
-        setTimeout(() => {
+        function openCardFromHash() {
             if (window.location.hash && window.location.hash.startsWith('#card-')) {
                 const card = document.querySelector(window.location.hash);
-                if (card) {
+                if (card && typeof card.toggleCard === 'function') {
                     card.scrollIntoView({behavior: 'smooth', block: 'center'});
-                    const header = card.querySelector('.card-header');
-                    if (header && !card.classList.contains('expanded')) {
-                        header.click();
-                        header.focus();
-                    }
+                    card.toggleCard(true); // force ouverture
                 }
             }
-        }, 100);
-        // Réagit aussi aux changements de hash après navigation
-        window.addEventListener('hashchange', () => {
-            if (window.location.hash && window.location.hash.startsWith('#card-')) {
-                const card = document.querySelector(window.location.hash);
-                if (card) {
-                    card.scrollIntoView({behavior: 'smooth', block: 'center'});
-                    const header = card.querySelector('.card-header');
-                    if (header && !card.classList.contains('expanded')) {
-                        header.click();
-                        header.focus();
-                    }
-                }
-            }
-        });
+        }
+        setTimeout(openCardFromHash, 100);
+        window.addEventListener('hashchange', openCardFromHash);
     }
     
     // Toggle handled in generateNoteCards for accessibility
