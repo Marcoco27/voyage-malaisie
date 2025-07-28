@@ -202,12 +202,20 @@ class VoyageApp {
                     <i class="fas fa-chevron-down card-toggle-icon"></i>
                 </div>
                 <div class="card-details" aria-hidden="true">
-                    <p>${etape.description || ''}</p>
-                    <strong class="section-title"><i class="fas fa-star"></i> À ne pas manquer</strong>
-                    <ul>${(etape.activites && etape.activites.length) ? etape.activites.map(act => `<li><i class='fas fa-camera-retro'></i> ${act}</li>`).join('') : ''}</ul>
-                    ${etape.conseil ? `<strong class="section-title"><i class="fas fa-lightbulb"></i> Conseil</strong><p>${etape.conseil}</p>` : ''}
-                    ${etape.bookingLink ? `<a href="${etape.bookingLink}" class="booking-btn" target="_blank" style="margin-top:1em;display:inline-block;background:var(--primary);color:#fff;">Voir la réservation</a>` : ''}
-                    <a href="${gcalUrl}" class="booking-btn" target="_blank" style="margin-top:1em;display:inline-block;background:var(--accent);color:#222;">Exporter vers Google Agenda</a>
+                    <div class="card-section">
+                        <p class="card-description">${etape.description || ''}</p>
+                        ${(etape.activites && etape.activites.length) ? `
+                        <strong class="section-title"><i class="fas fa-star"></i> À ne pas manquer</strong>
+                        <ul class="card-activites">
+                            ${etape.activites.map(act => `<li><i class='fas fa-camera-retro'></i> ${act}</li>`).join('')}
+                        </ul>
+                        ` : ''}
+                        ${etape.conseil ? `<strong class="section-title"><i class="fas fa-lightbulb"></i> Conseil</strong><p class="card-conseil">${etape.conseil}</p>` : ''}
+                        ${(etape.transport && etape.transport.length) ? `<div class="card-transport"><strong><i class="fas fa-bus"></i> Transport :</strong> ${etape.transport.join(', ')}</div>` : ''}
+                        ${etape.distance ? `<div class="card-distance"><strong><i class="fas fa-route"></i> Distance :</strong> ${etape.distance}</div>` : ''}
+                        ${etape.bookingLink ? `<a href="${etape.bookingLink}" class="booking-btn" target="_blank" style="margin-top:1em;display:inline-block;background:var(--primary);color:#fff;">Voir la réservation</a>` : ''}
+                        <a href="${gcalUrl}" class="booking-btn" target="_blank" style="margin-top:1em;display:inline-block;background:var(--accent);color:#222;">Exporter vers Google Agenda</a>
+                    </div>
                 </div>
             `;
             // Focus management for accessibility
