@@ -10,6 +10,14 @@
   --light: #F8FFFE;        /* Blanc crème */
   --sand: #F5F3F0;         /* Sable */
   --ocean: #0077BE;        /* Bleu océan */
+  --focus: #F6E96B;
+  --danger: #FF4D4F;
+  --darkmode-bg: #1a232a;
+  --darkmode-card: #232f3e;
+  --darkmode-text: #e6f0f3;
+  --darkmode-nav: #003c3c;
+  --darkmode-accent: #ffe066;
+  --darkmode-border: #2c3e50;
   
   /* Gradients tropicaux */
   --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--ocean) 100%);
@@ -36,6 +44,50 @@ body {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
   font-weight: 300; 
   overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* ===== Dark Mode Support ===== */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: var(--darkmode-bg);
+    color: var(--darkmode-text);
+  }
+  .hero-header, footer {
+    background: var(--gradient-main), var(--darkmode-nav);
+    color: var(--darkmode-text);
+  }
+  .main-nav {
+    background: rgba(0,60,60,0.97);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+  .main-nav a {
+    background: rgba(255,255,255,0.08);
+    color: var(--darkmode-accent);
+    border: 1px solid var(--darkmode-border);
+  }
+  .main-nav a:hover, .main-nav a:focus {
+    background: rgba(255,255,255,0.18);
+    color: var(--accent);
+  }
+  .stat-box, .notes-container, .note-card, .login-card, .table-container table, .weather-widget {
+    background: var(--darkmode-card);
+    color: var(--darkmode-text);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  }
+  .card-banner, thead {
+    background: var(--gradient-main), var(--darkmode-nav);
+    color: var(--darkmode-accent);
+  }
+  .notes-textarea {
+    background: #1a232a;
+    color: var(--darkmode-text);
+    border-color: var(--darkmode-border);
+  }
+  .notes-btn, .booking-btn, .logout-btn, .back-to-top {
+    background: var(--gradient-cool);
+    color: var(--darkmode-text);
+  }
 }
 
 h1, h2, h3, .main-nav a, strong { 
@@ -174,6 +226,15 @@ h3 { font-size: 1.3rem; margin-bottom: 1rem; }
   transition: background 0.3s, box-shadow 0.3s;
 }
 
+/* Focus style for nav links for keyboard navigation */
+.main-nav a:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  background: rgba(255,255,255,0.35);
+  color: var(--accent);
+  z-index: 2;
+}
+
 .main-nav a {
   background: rgba(255, 255, 255, 0.2);
   color: white;
@@ -185,12 +246,16 @@ h3 { font-size: 1.3rem; margin-bottom: 1rem; }
   backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  outline: none;
 }
 
 .main-nav a:hover, .main-nav a:focus {
   background: rgba(255, 255, 255, 0.3);
   transform: translateY(-2px) scale(1.04);
   box-shadow: 0 4px 16px rgba(0,168,168,0.13);
+  color: var(--accent);
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 @media (max-width: 700px) {
@@ -251,6 +316,7 @@ section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1.5rem;
+  width: 100%;
 }
 
 .stat-box {
@@ -260,11 +326,16 @@ section {
   text-align: center;
   box-shadow: var(--shadow-soft);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1.5px solid #f0f0f0;
+  outline: none;
 }
 
 .stat-box:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-medium);
+  border-color: var(--primary);
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 .stat-number {
@@ -343,6 +414,11 @@ tbody tr:hover { background: #f8f8f8; }
 .card-details li { padding: 0.2rem 0; display: flex; gap: 0.5rem; }
 .card-details li i { color: var(--secondary); }
 
+.card-header:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
 /* ===== Bloc-notes ===== */
 .notes-section {
     background: var(--sand);
@@ -371,6 +447,15 @@ tbody tr:hover { background: #f8f8f8; }
 .notes-textarea:focus { outline: none; border-color: var(--primary); }
 .notes-footer { margin-top: 1rem; font-size: 0.9rem; color: #777; }
 
+.notes-btn:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.notes-textarea:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
 /* ===== Boutons & Footer & Divers ===== */
 .booking-btn { display: inline-block; padding: 0.6rem 1.2rem; background: var(--gradient-warm); color: white; text-decoration: none; border-radius: 20px; transition: all 0.3s ease; }
 .booking-btn:hover { transform: scale(1.05); box-shadow: var(--shadow-medium); }
@@ -379,6 +464,11 @@ tbody tr:hover { background: #f8f8f8; }
 footer { background: var(--gradient-main); color: white; text-align: center; padding: 2rem 1rem; margin-top: 3rem; }
 .back-to-top { display: none; position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--primary); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 1000; }
 .back-to-top.show { display: block; }
+
+.booking-btn:focus, .logout-btn:focus, .back-to-top:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
 
 /* ===== Animations Marines ===== */
 .marine-animations { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 1; }
@@ -404,3 +494,15 @@ footer { background: var(--gradient-main); color: white; text-align: center; pad
 .login-btn { width: 100%; padding: 0.8rem; background: var(--gradient-cool); color: white; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.2s; font-size: 1rem; font-weight: 600; }
 .login-btn:hover { transform: translateY(-2px); }
 .error-message { color: var(--secondary); margin-top: 1rem; }
+
+/* ===== Accessibility: Visually Hidden Utility ===== */
+.visually-hidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}

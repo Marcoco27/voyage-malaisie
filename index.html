@@ -23,22 +23,29 @@
 </head>
 
 <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="visually-hidden" tabindex="0">Aller au contenu principal</a>
+
     <!-- Le contenu sera injecté selon l'état d'authentification -->
-    
+
     <!-- Configuration globale -->
-    <script src="config/config.js"></script>
-    
-    <!-- Modules -->
-    <script src="js/auth.js"></script>
-    <script src="js/weather.js"></script>
-    <script src="js/clock.js"></script>
-    <script src="js/notes.js"></script>
-    <script src="js/marine-animations.js"></script>
-    <script src="js/voyage-app.js"></script>
-    
-    <!-- Contenu principal (chargé après authentification) -->
-    <div id="main-content" style="display: none;">
+
+    <script src="config/config.js" defer></script>
+
+    <!-- Modules (chargement différé pour performance) -->
+    <script src="js/auth.js" defer></script>
+    <script src="js/weather.js" defer></script>
+    <script src="js/clock.js" defer></script>
+    <script src="js/notes.js" defer></script>
+    <script src="js/marine-animations.js" defer></script>
+    <script src="js/voyage-app.js" defer></script>
+
+    <!-- Structure sémantique modernisée -->
+    <nav class="main-nav" role="navigation" aria-label="Navigation principale">
+      <!-- Les liens de navigation seront générés dynamiquement par JS -->
+    </nav>
+    <main id="main-content" style="display: none;" tabindex="-1" aria-label="Contenu principal">
         <!-- Le contenu principal de l'application est généré par auth.js et voyage-app.js -->
-    </div>
+    </main>
 </body>
 </html>

@@ -168,15 +168,13 @@ class VoyageApp {
     generateNoteCards() {
         const notesContainer = document.getElementById("notes-container");
         if (!notesContainer) return;
-        notesContainer.innerHTML = this.voyage.map((etape, index) => {
+        notesContainer.innerHTML = '';
+        this.voyage.forEach((etape, index) => {
             // Préparation du lien Google Calendar
-            const title = encodeURIComponent(etape.lieu);
             const details = encodeURIComponent(etape.description + (etape.conseil ? '\nConseil : ' + etape.conseil : ''));
-            // Dates au format YYYYMMDD (Google Calendar)
             let start = '', end = '';
             const dateMatch = etape.dates.match(/(\d{1,2})\s*(\w+)\s*[–-]\s*(\d{1,2})\s*(\w+)/);
             if (dateMatch) {
-                // Ex: "03 et 04 août" ou "04 – 06 août"
                 const mois = {"janv":1,"févr":2,"mars":3,"avr":4,"mai":5,"juin":6,"juil":7,"août":8,"sept":9,"oct":10,"nov":11,"déc":12};
                 const d1 = dateMatch[1].padStart(2,'0');
                 const m1 = mois[dateMatch[2].slice(0,4)] || 1;
@@ -186,37 +184,58 @@ class VoyageApp {
                 end = `2024${m2.toString().padStart(2,'0')}${d2}T120000Z`;
             }
             const dates = (start && end) ? `&dates=${start}/${end}` : '';
-            const gcalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}${dates}`;
-            return `
-                <div class="note-card" id="card-${index}">
-                    <img src="${etape.image}" alt="Photo de ${etape.lieu}" class="card-image">
-                    <div class="card-banner"><h3>${etape.lieu}</h3></div>
-                    <div class="card-header">
-                        <div class="card-header-text">
-                            <span>${etape.dates}</span> | <span>${etape.nuits} nuit(s)</span>
-                        </div>
-                        <i class="fas fa-chevron-down card-toggle-icon"></i>
+            const gcalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(etape.lieu)}&details=${details}${dates}`;
+            // Create card DOM
+            const card = document.createElement('div');
+            card.className = 'note-card';
+            card.tabIndex = 0;
+            card.setAttribute('role', 'region');
+            card.setAttribute('aria-label', `Étape ${index + 1}: ${etape.lieu}`);
+            card.innerHTML = `
+                <img src="${etape.image}" alt="Photo de ${etape.lieu}" class="card-image" loading="lazy">
+                <div class="card-banner"><h3>${etape.lieu}</h3></div>
+                <div class="card-header" tabindex="0" role="button" aria-expanded="false">
+                    <div class="card-header-text">
+                        <span>${etape.dates}</span> | <span>${etape.nuits} nuit(s)</span>
                     </div>
-                    <div class="card-details">
-                        <p>${etape.description}</p>
-                        <strong class="section-title"><i class="fas fa-star"></i> À ne pas manquer</strong>
-                        <ul>${etape.activites.map(act => `<li><i class="fas fa-camera-retro"></i> ${act}</li>`).join('')}</ul>
-                        ${etape.conseil ? `<strong class="section-title"><i class="fas fa-lightbulb"></i> Conseil</strong><p>${etape.conseil}</p>` : ''}
-                        <a href="${gcalUrl}" class="booking-btn" target="_blank" style="margin-top:1em;display:inline-block;background:var(--accent);color:#222;">Exporter vers Google Agenda</a>
-                    </div>
+                    <i class="fas fa-chevron-down card-toggle-icon"></i>
+                </div>
+                <div class="card-details" aria-hidden="true">
+                    <p>${etape.description}</p>
+                    <strong class="section-title"><i class="fas fa-star"></i> À ne pas manquer</strong>
+                    <ul>${etape.activites.map(act => `<li><i class='fas fa-camera-retro'></i> ${act}</li>`).join('')}</ul>
+                    ${etape.conseil ? `<strong class="section-title"><i class="fas fa-lightbulb"></i> Conseil</strong><p>${etape.conseil}</p>` : ''}
+                    <a href="${gcalUrl}" class="booking-btn" target="_blank" style="margin-top:1em;display:inline-block;background:var(--accent);color:#222;">Exporter vers Google Agenda</a>
                 </div>
             `;
-        }).join('');
-    }
-    
-    initCardToggle() {
-        document.getElementById('notes-container').addEventListener('click', (e) => {
-            const header = e.target.closest('.card-header');
-            if (header) {
-                header.parentElement.classList.toggle('expanded');
-            }
+            // Focus management for accessibility
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    card.querySelector('.card-header').focus();
+                }
+            });
+            // Toggle details on header click or Enter/Space
+            const header = card.querySelector('.card-header');
+            const detailsDiv = card.querySelector('.card-details');
+            header.addEventListener('click', () => {
+                const expanded = card.classList.toggle('expanded');
+                header.setAttribute('aria-expanded', expanded);
+                detailsDiv.setAttribute('aria-hidden', !expanded);
+                if (expanded) detailsDiv.focus && detailsDiv.focus();
+            });
+            header.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    header.click();
+                }
+            });
+            notesContainer.appendChild(card);
         });
     }
+    
+    // Toggle handled in generateNoteCards for accessibility
+    initCardToggle() {}
 
     initScrollEffects() {
         // Simple fade-in on scroll
