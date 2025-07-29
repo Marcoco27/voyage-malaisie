@@ -163,22 +163,7 @@ class VoyageApp {
         if (!notesContainer) return;
         notesContainer.innerHTML = '';
         this.voyage.forEach((etape, index) => {
-            // Correction de la chaîne de caractères sur plusieurs lignes
-            const details = encodeURIComponent(etape.description + (etape.conseil ? '
-Conseil : ' + etape.conseil : ''));
-            let start = '', end = '';
-            const dateMatch = etape.dates.match(/(\d{1,2})\s*(\w+)\s*[–-]\s*(\d{1,2})\s*(\w+)/);
-            if (dateMatch) {
-                const mois = {"janv":1,"févr":2,"mars":3,"avr":4,"mai":5,"juin":6,"juil":7,"août":8,"sept":9,"oct":10,"nov":11,"déc":12};
-                const d1 = dateMatch[1].padStart(2,'0');
-                const m1 = mois[dateMatch[2].slice(0,4)] || 1;
-                const d2 = dateMatch[3].padStart(2,'0');
-                const m2 = mois[dateMatch[4].slice(0,4)] || m1;
-                start = `2024${m1.toString().padStart(2,'0')}${d1}T120000Z`;
-                end = `2024${m2.toString().padStart(2,'0')}${d2}T120000Z`;
-            }
-            const dates = (start && end) ? `&dates=${start}/${end}` : '';
-            const gcalUrl = `https://calendar.google.com/calendar/u/0/r/eventedit?cid=NThmYjBjN2EzMjEyYzJlZTY5YWJlMDIwOTA1N2I2MDUyODUxZmIwZWY5MmM3OWM3ZGZkMDAzMDY1Y2JhZmQ4MUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&text=${encodeURIComponent(etape.lieu)}&details=${details}${dates}`;
+            // Toute la logique de Google Calendar a été supprimée pour simplifier.
             
             const card = document.createElement('div');
             card.className = 'note-card';
@@ -208,7 +193,6 @@ Conseil : ' + etape.conseil : ''));
                         ${(etape.transport && etape.transport.length) ? `<div class="card-transport"><strong><i class="fas fa-bus"></i> Transport :</strong> ${etape.transport.join(', ')}</div>` : ''}
                         ${etape.distance ? `<div class="card-distance"><strong><i class="fas fa-route"></i> Distance :</strong> ${etape.distance}</div>` : ''}
                         ${etape.bookingLink ? `<a href="${etape.bookingLink}" class="booking-btn booking-link" target="_blank">Voir la réservation</a>` : ''}
-                        <a href="${gcalUrl}" class="booking-btn gcal-link" target="_blank">Exporter vers Google Agenda</a>
                     </div>
                 </div>
             `;
