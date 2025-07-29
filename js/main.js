@@ -1,6 +1,6 @@
 // js/main.js - Point d'entrée principal de l'application
 
-// CORRECTION : Importer les modules depuis les URL complètes du CDN de Firebase
+// Importer les modules depuis les URL complètes du CDN de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
@@ -20,7 +20,8 @@ const config = {
       storageBucket: "mgprofilbox.appspot.com",
       messagingSenderId: "663481645724",
       appId: "1:663481645724:web:f438035583a728200e0b59",
-      databaseURL: "https://mgprofilbox-default-rtdb.firebasedatabase.app"
+      // CORRECTION FINALE : Ajout de la région dans l'URL de la base de données
+      databaseURL: "https://mgprofilbox-default-rtdb.europe-west1.firebasedatabase.app"
     },
     weather: {
         apiKey: 'a1e80ab5644eba8f07d8920d13f9bf83',
