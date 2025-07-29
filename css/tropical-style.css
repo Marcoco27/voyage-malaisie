@@ -446,7 +446,6 @@ tbody tr:hover { background: #f8f8f8; }
     overflow: hidden;
     transition: max-height 0.5s ease-out, padding 0.5s ease-out;
     padding: 0 1.5rem;
-    color: var(--dark);
 }
 
 /* Style pour le contenu détaillé des cards */
