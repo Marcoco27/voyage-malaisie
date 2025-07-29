@@ -10,7 +10,6 @@ class VoyageApp {
     async init() {
         await this.loadItineraryData();
         this.renderBaseLayout();
-        // this.createLogoutButton(); // Le bouton de déconnexion n'est plus nécessaire
         this.generateStats();
         this.initMap();
         this.generateItinerary();
@@ -106,21 +105,6 @@ class VoyageApp {
             </button>
         `;
     }
-
-    // La fonction createLogoutButton n'est plus utilisée
-    /*
-    createLogoutButton() {
-        const logoutBtn = document.createElement('button');
-        logoutBtn.className = 'logout-btn';
-        logoutBtn.innerHTML = '🚪 Déconnexion';
-        logoutBtn.addEventListener('click', () => {
-            if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-                this.authManager.logout();
-            }
-        });
-        document.body.appendChild(logoutBtn);
-    }
-    */
     
     generateStats() {
         const container = document.querySelector('.stats-container');
@@ -179,6 +163,7 @@ class VoyageApp {
         if (!notesContainer) return;
         notesContainer.innerHTML = '';
         this.voyage.forEach((etape, index) => {
+            // Correction de la chaîne de caractères sur plusieurs lignes
             const details = encodeURIComponent(etape.description + (etape.conseil ? '
 Conseil : ' + etape.conseil : ''));
             let start = '', end = '';
