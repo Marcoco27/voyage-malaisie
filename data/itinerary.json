@@ -59,9 +59,9 @@
         "description": "Etape pratique et reposante avant d'embarquer pour le paradis.",
         "activites": ["Dîner de fruits de mer frais", "Préparer ses affaires pour les îles"],
         "conseil": "Confirmer l'heure du bateau pour le lendemain dès votre arrivée.",
-        "bookingLink": "",
-        "hotel": "",
-        "hotelAddress": ""
+        "bookingLink": "https://secure.booking.com/confirmation.fr.html?label=-DCpBIW3k2*WIo8XuzMdB9AS652796013276%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9056502%3Ali%3Adec%3Adm&sid=42572adeaeefbce6247112fddfc8686c&aid=2311236&auth_key=XRgdsKC9t3YmdkZr&source=mytrips",
+        "hotel": "Fairfield by Marriott Kuala Besut",
+        "hotelAddress": "Fairfield by Marriott Kuala Besut, 22200 Kampung Kuala Besut, Malaisie"
     },
     {
         "lieu": "Îles Perhentian",
@@ -75,9 +75,9 @@
         "description": "Le paradis sur terre. Des plages de sable blanc, une eau turquoise et une vie marine incroyable.",
         "activites": ["Nager avec les tortues à Turtle Point", "Snorkeling à Shark Point", "Kayak de mer"],
         "conseil": "Retirez de l'argent avant d'arriver, il n'y a pas de distributeur sur les îles.",
-        "bookingLink": "",
-        "hotel": "",
-        "hotelAddress": ""
+        "bookingLink": "https://secure.booking.com/confirmation.fr.html?label=-DCpBIW3k2*WIo8XuzMdB9AS652796013276%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9056502%3Ali%3Adec%3Adm&sid=42572adeaeefbce6247112fddfc8686c&aid=2311236&auth_key=hGl0pt86sdJIFXV6&source=mytrips",
+        "hotel": "Senja Bay Resort",
+        "hotelAddress": "Coral Bay Pulau Perhentian Kecil, 22300 Îles Perhentian, Malaisie"
     },
     {
         "lieu": "Cherating",
@@ -91,9 +91,9 @@
         "description": "Ambiance décontractée, plage immense et une rencontre émouvante avec les tortues.",
         "activites": ["Sanctuaire des tortues (lâcher de bébés le soir)", "Leçon de surf", "Kayak dans la mangrove"],
         "conseil": "Le lâcher des tortues dépend de la saison, vérifiez les horaires.",
-        "bookingLink": "",
-        "hotel": "",
-        "hotelAddress": ""
+        "bookingLink": "https://secure.booking.com/confirmation.fr.html?label=-DCpBIW3k2*WIo8XuzMdB9AS652796013276%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9056502%3Ali%3Adec%3Adm&sid=42572adeaeefbce6247112fddfc8686c&aid=2311236&auth_key=Dj1AVI8gnezfi4Y4&source=mytrips",
+        "hotel": "Royale Chulan Cherating Chalet",
+        "hotelAddress": "Jalan Kampung Cherating Lama, 26080 Cherating, Malaisie"
     },
     {
         "lieu": "Tioman Island",
@@ -107,9 +107,9 @@
         "description": "Une île plus sauvage et montagneuse, parfaite pour la plongée et la tranquillité.",
         "activites": ["Plongée sous-marine", "Randonnée vers les cascades d'Asah", "Détente sur la plage de Juara"],
         "conseil": "L'île est grande, louer un scooter peut être une bonne option.",
-        "bookingLink": "",
-        "hotel": "",
-        "hotelAddress": ""
+        "bookingLink": "https://secure.booking.com/confirmation.fr.html?label=-DCpBIW3k2*WIo8XuzMdB9AS652796013276%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9056502%3Ali%3Adec%3Adm&sid=42572adeaeefbce6247112fddfc8686c&aid=2311236&auth_key=4MvtZOKAPw7C1n6Y&source=mytrips",
+        "hotel": "1511 Coconut Grove",
+        "hotelAddress": "Kampung Juara Tioman Pahang, 26800 Île Tioman, Malaisie"
     },
     {
         "lieu": "Singapour",
@@ -123,9 +123,9 @@
         "description": "La cité-jardin futuriste. Une propreté impeccable et des attractions de classe mondiale.",
         "activites": ["Spectacle son et lumière à Gardens by the Bay", "Manger dans un 'Hawker Centre'", "Visiter Marina Bay Sands"],
         "conseil": "Le réseau de métro (MRT) est excellent. Achetez une carte 'EZ-Link'.",
-        "bookingLink": "",
-        "hotel": "",
-        "hotelAddress": ""
+        "bookingLink": "https://secure.booking.com/confirmation.fr.html?label=-DCpBIW3k2*WIo8XuzMdB9AS652796013276%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9056502%3Ali%3Adec%3Adm&sid=42572adeaeefbce6247112fddfc8686c&aid=2311236&auth_key=fRMAHsgmGPcRFayO&source=mytrips",
+        "hotel": "lyf Farrer Park Singapore",
+        "hotelAddress": "2 Perumal Road, Unit 01-01, Lavender, 218773 Singapour, Singapour"
     },
     {
         "lieu": "Melaka",
@@ -139,9 +139,9 @@
         "description": "Un joyau historique au charme colonial, classé à l'UNESCO.",
         "activites": ["Place hollandaise (Stadthuys)", "Marché nocturne de Jonker Walk", "Croisière sur la rivière Melaka"],
         "conseil": "Goûtez la 'Chicken Rice Ball', une spécialité locale.",
-        "bookingLink": "",
-        "hotel": "",
-        "hotelAddress": ""
+        "bookingLink": "https://secure.booking.com/confirmation.fr.html?label=-DCpBIW3k2*WIo8XuzMdB9AS652796013276%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9056502%3Ali%3Adec%3Adm&sid=42572adeaeefbce6247112fddfc8686c&aid=2311236&auth_key=8chbfTi3IqKclJKJ&source=mytrips",
+        "hotel": "Treasures Hotel and Suites",
+        "hotelAddress": "108, Jalan Bendahara,, 75100 Malacca, Malaisie"
     },
     {
         "lieu": "Kuala Selangor",
@@ -155,9 +155,9 @@
         "description": "Célèbre pour ses paysages et son spectacle naturel féerique.",
         "activites": ["Voir les lucioles en barque (vers 20h)", "Observer les singes 'Silver-leaf'"],
         "conseil": "Le spectacle des lucioles est meilleur par nuit sans lune.",
-        "bookingLink": "",
-        "hotel": "",
-        "hotelAddress": ""
+        "bookingLink": "https://secure.booking.com/confirmation.fr.html?label=-DCpBIW3k2*WIo8XuzMdB9AS652796013276%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9056502%3Ali%3Adec%3Adm&sid=42572adeaeefbce6247112fddfc8686c&aid=2311236&auth_key=9Ha14gtwcjysZM6u&source=mytrips",
+        "hotel": "101 Sky Mirror Homestay",
+        "hotelAddress": "1-01 Jalan Sultan Mahmud Villa Malawati Apartment, 45000 Kuala Selangor, Malaisie"
     },
     {
         "lieu": "Kuala Lumpur (fin de séjour)",
@@ -171,8 +171,8 @@
         "description": "Derniers moments pour le shopping, les visites ou simplement se détendre.",
         "activites": ["Shopping à Bukit Bintang", "Visite du Musée des arts islamiques", "Profiter de la piscine de l'hôtel"],
         "conseil": "Prévoyez large pour le transfert vers l'aéroport KLIA.",
-        "bookingLink": "",
-        "hotel": "",
-        "hotelAddress": ""
+        "bookingLink": "https://secure.booking.com/confirmation.fr.html?label=-DCpBIW3k2*WIo8XuzMdB9AS652796013276%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9056502%3Ali%3Adec%3Adm&sid=42572adeaeefbce6247112fddfc8686c&aid=2311236&auth_key=gbYbaeW2Y1K5CWV9&source=mytrips",
+        "hotel": "Queen Suites Tropicana The Residence Klcc Kuala Lumpur City Centre",
+        "hotelAddress": "121, Jalan Ampang, 50450 Kuala Lumpur, Malaisie"
     }
 ]
