@@ -227,7 +227,6 @@ class VoyageApp {
         if (!notesContainer) return;
 
         notesContainer.addEventListener('click', (e) => {
-            // CORRECTION: Le sélecteur était incorrect, il doit être '.card-header'
             const header = e.target.closest('.card-header');
             if (header) {
                 const card = header.closest('.note-card');
