@@ -1,15 +1,12 @@
 // Application principale de voyage en Malaisie
 
 export class VoyageApp {
-    // Le constructeur est maintenant simple, il ne fait que stocker les dépendances
-    constructor(dependencies) {
+    constructor() {
         this.voyage = [];
         this.map = null;
         this.markers = [];
-        // On ne fait rien d'autre ici, l'initialisation est gérée par main.js
     }
     
-    // La méthode init est maintenant appelée par main.js une fois que tout est prêt
     async init() {
         await this.loadItineraryData();
         this.renderBaseLayout();
@@ -73,6 +70,7 @@ export class VoyageApp {
                                     <th><i class="fas fa-calendar"></i> Date 2024</th>
                                     <th><i class="fas fa-map-marker-alt"></i> Lieu</th>
                                     <th><i class="fas fa-moon"></i> Nuits</th>
+                                    <th><i class="fas fa-hotel"></i> Hébergement</th>
                                     <th><i class="fas fa-route"></i> Distance / durée</th>
                                     <th><i class="fas fa-bed"></i> Réservation</th>
                                 </tr>
@@ -145,6 +143,9 @@ export class VoyageApp {
                 <td>${etape.dates}</td>
                 <td><a href="#card-${index}" class="table-link">${etape.lieu}</a></td>
                 <td>${etape.nuits}</td>
+                <td>
+                    ${etape.hotel ? `<strong>${etape.hotel}</strong><br><small>${etape.hotelAddress}</small>` : 'N/A'}
+                </td>
                 <td>${etape.distance}</td>
                 <td>${etape.bookingLink ? `<a href="${etape.bookingLink}" class="booking-btn" target="_blank">Voir</a>` : '<span class="booking-placeholder">À venir</span>'}</td>
             </tr>
