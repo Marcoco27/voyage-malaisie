@@ -4,7 +4,7 @@ class NotesManager {
         this.notesList = null;
         this.notesForm = null;
         this.db = null;
-        this.init();
+        // Le constructeur est maintenant vide, l'initialisation se fera via la méthode init()
     }
 
     init() {
@@ -21,10 +21,8 @@ class NotesManager {
 
     renderLayout() {
         const mainContainer = document.querySelector('main');
-        if (!mainContainer) return;
-
-        // On cherche le footer pour s'insérer avant lui
         const footer = document.querySelector('.tropical-footer');
+        if (!mainContainer || !footer) return;
 
         const section = document.createElement('section');
         section.id = 'notes-section';
@@ -45,12 +43,7 @@ class NotesManager {
             </div>
         `;
         
-        // CORRECTION : Insérer le bloc-notes avant le footer pour le bon ordre visuel.
-        if (footer) {
-            mainContainer.insertBefore(section, footer);
-        } else {
-            mainContainer.appendChild(section); // Fallback si le footer n'est pas trouvé
-        }
+        mainContainer.insertBefore(section, footer);
 
         this.notesList = document.getElementById('notes-list');
         this.notesForm = document.getElementById('notes-form');
