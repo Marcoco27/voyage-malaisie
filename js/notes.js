@@ -1,18 +1,17 @@
 // js/notes.js - Gestionnaire de bloc-notes avec Firebase v9
 
-// Importer les fonctions nécessaires de Firebase
-import { getDatabase, ref, onValue, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+import { ref, onValue, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-class NotesManager {
+export class NotesManager {
     constructor(database) {
         this.db = database;
         this.notesList = null;
         this.notesForm = null;
-        this.init();
+        // Le constructeur ne fait rien d'autre que de stocker la connexion à la DB.
     }
 
     init() {
-        // Le rendu et les écouteurs sont lancés une fois que le DOM est prêt
+        // C'est cette méthode, appelée par main.js, qui lance tout.
         this.renderLayout();
         this.setupEventListeners();
         this.loadNotes();
@@ -21,10 +20,10 @@ class NotesManager {
     renderLayout() {
         const mainContainer = document.querySelector('main');
         const footer = document.querySelector('.tropical-footer');
-        if (!mainContainer || !footer) {
-            console.error("Élément principal ou footer non trouvé.");
-            return;
-        }
+        if (!mainContainer || !footer) return;
+
+        // Empêcher la duplication si la section existe déjà
+        if (document.getElementById('notes-section')) return;
 
         const section = document.createElement('section');
         section.id = 'notes-section';
@@ -138,6 +137,3 @@ class NotesManager {
         return element.innerHTML;
     }
 }
-
-// Exporter la classe pour qu'elle puisse être utilisée dans main.js
-export { NotesManager };

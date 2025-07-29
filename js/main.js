@@ -20,8 +20,6 @@ const config = {
       storageBucket: "mgprofilbox.appspot.com",
       messagingSenderId: "663481645724",
       appId: "1:663481645724:web:f438035583a728200e0b59",
-      measurementId: "G-C20NJDMSRE",
-      // CORRECTION DÉFINITIVE : Ajout de l'URL de la base de données
       databaseURL: "https://mgprofilbox-default-rtdb.firebasedatabase.app"
     },
     weather: {
@@ -61,17 +59,24 @@ class MainApp {
 
     initApplication() {
         document.addEventListener('DOMContentLoaded', async () => {
+            // 1. Créer les instances de tous les modules
             const voyageApp = new VoyageApp();
-            await voyageApp.init(); 
+            const notesManager = new NotesManager(this.database);
+            const weatherManager = new WeatherManager(this.config.weather);
+            const clockManager = new ClockManager(this.config.timezones);
+            const marineAnimations = new MarineAnimations(this.config.marineAnimations);
 
-            // Créer et initialiser les modules APRÈS que la structure de base est prête
-            new NotesManager(this.database).init();
-            new WeatherManager(this.config.weather).init();
-            new ClockManager(this.config.timezones).init();
-            new MarineAnimations(this.config.marineAnimations).init();
+            // 2. Initialiser l'application principale pour construire le HTML de base
+            await voyageApp.init();
+
+            // 3. Initialiser les autres modules qui dépendent de ce HTML
+            notesManager.init();
+            weatherManager.init();
+            clockManager.init();
+            marineAnimations.init();
         });
     }
 }
 
-// Lancer l'application avec la configuration
+// Lancer l'application
 new MainApp(config);
