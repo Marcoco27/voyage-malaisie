@@ -1,13 +1,11 @@
 // Gestionnaire d'animations marines
-class MarineAnimations {
+export class MarineAnimations {
     constructor(animationsConfig) {
         this.config = animationsConfig;
-        if (this.config.enabled) {
-            this.init();
-        }
     }
 
     init() {
+        if (!this.config.enabled) return;
         const header = document.querySelector('.hero-header');
         if (!header) return;
 
@@ -40,4 +38,3 @@ class MarineAnimations {
         return creatures[Math.floor(Math.random() * creatures.length)];
     }
 }
-export { MarineAnimations };

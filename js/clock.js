@@ -1,8 +1,7 @@
 // Gestionnaire d'horloge
-class ClockManager {
+export class ClockManager {
     constructor(timezonesConfig) {
         this.config = timezonesConfig;
-        this.init();
     }
 
     init() {
@@ -30,4 +29,3 @@ class ClockManager {
         document.getElementById('clock-malaisie').innerHTML = `<span class="clock-label">Kuala Lumpur</span> <span class="clock-time">${malaysiaTime}</span>`;
     }
 }
-export { ClockManager };

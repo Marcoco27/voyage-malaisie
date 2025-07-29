@@ -49,7 +49,7 @@ class MainApp {
     constructor(config) {
         this.config = config;
         this.initFirebase();
-        this.initModules();
+        this.initApplication();
     }
 
     initFirebase() {
@@ -57,13 +57,21 @@ class MainApp {
         this.database = getDatabase(app);
     }
 
-    initModules() {
-        document.addEventListener('DOMContentLoaded', () => {
-            new NotesManager(this.database); 
-            new WeatherManager(this.config.weather);
-            new ClockManager(this.config.timezones);
-            new MarineAnimations(this.config.marineAnimations);
-            new VoyageApp();
+    initApplication() {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Créer les instances des modules
+            const notesManager = new NotesManager(this.database);
+            const weatherManager = new WeatherManager(this.config.weather);
+            const clockManager = new ClockManager(this.config.timezones);
+            const marineAnimations = new MarineAnimations(this.config.marineAnimations);
+            const voyageApp = new VoyageApp();
+
+            // Initialiser les modules dans le bon ordre
+            await voyageApp.init(); // Attendre que la structure de base soit en place
+            notesManager.init();
+            weatherManager.init();
+            clockManager.init();
+            marineAnimations.init();
         });
     }
 }

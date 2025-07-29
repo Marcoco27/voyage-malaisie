@@ -1,13 +1,15 @@
 // Application principale de voyage en Malaisie
 
-class VoyageApp {
-    constructor() { // Ne prend plus de paramètre
+export class VoyageApp {
+    // Le constructeur est maintenant simple, il ne fait que stocker les dépendances
+    constructor(dependencies) {
         this.voyage = [];
         this.map = null;
         this.markers = [];
-        this.init();
+        // On ne fait rien d'autre ici, l'initialisation est gérée par main.js
     }
     
+    // La méthode init est maintenant appelée par main.js une fois que tout est prêt
     async init() {
         await this.loadItineraryData();
         this.renderBaseLayout();
@@ -246,5 +248,3 @@ class VoyageApp {
         btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
 }
-
-export { VoyageApp };

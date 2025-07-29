@@ -1,14 +1,13 @@
 // Gestionnaire de météo
-class WeatherManager {
+export class WeatherManager {
     constructor(weatherConfig) {
         this.config = weatherConfig;
-        this.init();
     }
 
     async init() {
         const widget = this.createWeatherWidget();
         document.querySelector('.hero-header').appendChild(widget);
-        this.updateWeather();
+        await this.updateWeather();
         setInterval(() => this.updateWeather(), this.config.updateInterval);
     }
 
@@ -71,4 +70,3 @@ class WeatherManager {
         return 'fa-question-circle';
     }
 }
-export { WeatherManager };
