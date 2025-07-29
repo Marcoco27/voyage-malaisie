@@ -1,17 +1,16 @@
 // Application principale de voyage en Malaisie
 class VoyageApp {
-    constructor(authManager) { // Accepte authManager comme paramètre
+    constructor() { // Ne prend plus de paramètre
         this.voyage = [];
         this.map = null;
         this.markers = [];
-        this.authManager = authManager; // Stocke la référence
         this.init();
     }
     
     async init() {
         await this.loadItineraryData();
         this.renderBaseLayout();
-        this.createLogoutButton();
+        // this.createLogoutButton(); // Le bouton de déconnexion n'est plus nécessaire
         this.generateStats();
         this.initMap();
         this.generateItinerary();
@@ -40,7 +39,6 @@ class VoyageApp {
             this.voyage = await response.json();
         } catch (error) {
             console.error("Impossible de charger les données de l'itinéraire:", error);
-            // Afficher un message d'erreur à l'utilisateur
             const container = document.getElementById('main-content');
             if (container) {
                 container.innerHTML = `<div class="error">Impossible de charger les données du voyage. Veuillez réessayer plus tard.</div>`;
@@ -109,17 +107,20 @@ class VoyageApp {
         `;
     }
 
+    // La fonction createLogoutButton n'est plus utilisée
+    /*
     createLogoutButton() {
         const logoutBtn = document.createElement('button');
         logoutBtn.className = 'logout-btn';
         logoutBtn.innerHTML = '🚪 Déconnexion';
         logoutBtn.addEventListener('click', () => {
             if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-                this.authManager.logout(); // Utilise la référence stockée
+                this.authManager.logout();
             }
         });
         document.body.appendChild(logoutBtn);
     }
+    */
     
     generateStats() {
         const container = document.querySelector('.stats-container');
@@ -144,7 +145,6 @@ class VoyageApp {
     initMap() {
         try {
             if (!window.L) throw new Error("Leaflet non chargé");
-            // Générer tous les points de l'itinéraire
             this.map = L.map("map").setView([4.5, 102.5], 7);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
             
@@ -154,7 +154,6 @@ class VoyageApp {
                     .bindPopup(`<b>${etape.lieu}</b><br>${etape.description}`);
             });
             L.polyline(latlngs, { color: 'var(--primary)', weight: 3 }).addTo(this.map);
-            // Adapter la vue pour englober tout l'itinéraire
             this.map.fitBounds(latlngs, {padding: [50, 50], maxZoom: 9});
         } catch (error) {
             document.getElementById("map").innerHTML = `<div class="error">⚠️ Impossible d'afficher la carte.</div>`;
@@ -180,7 +179,6 @@ class VoyageApp {
         if (!notesContainer) return;
         notesContainer.innerHTML = '';
         this.voyage.forEach((etape, index) => {
-            // Préparation du lien Google Calendar
             const details = encodeURIComponent(etape.description + (etape.conseil ? '
 Conseil : ' + etape.conseil : ''));
             let start = '', end = '';
@@ -251,7 +249,7 @@ Conseil : ' + etape.conseil : ''));
             const card = document.querySelector(window.location.hash);
             if (card) {
                 card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                this.toggleCard(card, true); // force ouverture
+                this.toggleCard(card, true);
             }
         }
     }
