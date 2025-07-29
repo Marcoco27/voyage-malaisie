@@ -1,9 +1,10 @@
 // Application principale de voyage en Malaisie
 class VoyageApp {
-    constructor() {
+    constructor(authManager) { // Accepte authManager comme paramètre
         this.voyage = [];
         this.map = null;
         this.markers = [];
+        this.authManager = authManager; // Stocke la référence
         this.init();
     }
     
@@ -114,7 +115,7 @@ class VoyageApp {
         logoutBtn.innerHTML = '🚪 Déconnexion';
         logoutBtn.addEventListener('click', () => {
             if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-                window.authManager.logout();
+                this.authManager.logout(); // Utilise la référence stockée
             }
         });
         document.body.appendChild(logoutBtn);

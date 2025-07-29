@@ -100,10 +100,11 @@ class AuthManager {
         }
 
         if (typeof VoyageApp !== 'undefined' && !window.voyageApp) {
-            window.voyageApp = new VoyageApp();
+            // On passe 'this' (l'instance de AuthManager) au constructeur de VoyageApp
+            window.voyageApp = new VoyageApp(this);
         }
     }
 }
 
-// Assigner l'instance à une variable globale pour qu'elle soit accessible depuis d'autres scripts.
-window.authManager = new AuthManager();
+// L'instanciation se fait à la fin du script.
+new AuthManager();
