@@ -27,5 +27,17 @@ const CONFIG = {
     notes: {
         storageKey: 'voyage_malaisie_notes',
         maxLength: 10000
+    },
+
+    // Configuration des animations marines
+    marineAnimations: {
+        enabled: true,
+        creatureCount: 6, // Nombre total de créatures à animer
+        creatures: [
+            { type: 'turtle', minDuration: 20, maxDuration: 30 },
+            { type: 'shark', minDuration: 30, maxDuration: 40 },
+            { type: 'fish-group', minDuration: 15, maxDuration: 25 },
+            { type: 'single-fish', minDuration: 10, maxDuration: 20 }
+        ]
     }
 };

@@ -1,60 +1,52 @@
 // Module d'animations marines pour le header
 class MarineAnimations {
     constructor() {
+        if (!CONFIG.marineAnimations.enabled) return;
+        
         this.animationContainer = null;
         this.init();
     }
-    
+
     init() {
         this.createAnimationContainer();
-        this.startAnimations();
+        if (this.animationContainer) {
+            this.startAnimations();
+        }
     }
-    
+
     createAnimationContainer() {
         const header = document.querySelector('.hero-header');
         if (!header) return;
-        
+
         this.animationContainer = document.createElement('div');
         this.animationContainer.className = 'marine-animations';
         header.insertBefore(this.animationContainer, header.firstChild);
     }
-    
-    createCreature(type, delay) {
+
+    _createCreature() {
+        const creatureConfig = CONFIG.marineAnimations.creatures;
+        const randomCreatureType = creatureConfig[Math.floor(Math.random() * creatureConfig.length)];
+        
         const creature = document.createElement('div');
-        creature.className = `marine-creature ${type}`;
-        creature.style.top = `${Math.random() * 70 + 15}%`; // Position verticale aléatoire (15% à 85%)
-        creature.style.animationDelay = `${delay}s`;
-        creature.style.animationDuration = `${Math.random() * 15 + 20}s`; // Durée aléatoire
-        if (type === 'shark') {
-            creature.style.transform = 'scaleX(-1)'; // Le requin peut nager dans l'autre sens
+        creature.className = `marine-creature ${randomCreatureType.type}`;
+        
+        // Position et durée aléatoires
+        creature.style.top = `${Math.random() * 70 + 15}%`;
+        const duration = Math.random() * (randomCreatureType.maxDuration - randomCreatureType.minDuration) + randomCreatureType.minDuration;
+        creature.style.animationDuration = `${duration}s`;
+        creature.style.animationDelay = `${Math.random() * duration}s`;
+
+        // Inverser aléatoirement la direction
+        if (Math.random() > 0.5) {
+            creature.style.transform = 'scaleX(-1)';
         }
+
         this.animationContainer.appendChild(creature);
     }
 
     startAnimations() {
-        if (!this.animationContainer) return;
-        const creatures = [
-            { type: 'turtle', src: 'assets/turtle-silhouette.png' },
-            { type: 'shark', src: 'assets/shark-silhouette.png' },
-            { type: 'fish-group', src: 'assets/fish-group-silhouette.png' },
-            { type: 'single-fish', src: 'assets/single-fish-silhouette.png' }
-        ];
-
-        // Injecter les styles pour les images directement
-        const styleSheet = document.createElement("style");
-        let styles = '';
-        creatures.forEach(c => {
-            styles += `.marine-creature.${c.type} { background-image: url(${c.src}); }\n`;
-        });
-        styleSheet.innerText = styles;
-        document.head.appendChild(styleSheet);
-        
-        // Créer quelques créatures
-        this.createCreature('turtle', 0);
-        this.createCreature('fish-group', 5);
-        this.createCreature('shark', 12);
-        this.createCreature('single-fish', 2);
-        this.createCreature('single-fish', 8);
-        this.createCreature('turtle', 15);
+        for (let i = 0; i < CONFIG.marineAnimations.creatureCount; i++) {
+            this._createCreature();
+        }
     }
 }

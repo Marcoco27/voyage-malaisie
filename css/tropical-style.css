@@ -578,15 +578,61 @@ footer { background: var(--gradient-main); color: white; text-align: center; pad
 }
 
 /* ===== Animations Marines ===== */
-.marine-animations { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 1; }
-.marine-creature { position: absolute; background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.15; filter: brightness(0) invert(1); will-change: transform; }
-.marine-creature.turtle { width: 80px; height: 60px; animation: swim 25s linear infinite; }
-.marine-creature.shark { width: 120px; height: 50px; animation: swim 35s linear infinite; }
-.marine-creature.fish-group { width: 90px; height: 60px; animation: swim 18s linear infinite; }
-.marine-creature.single-fish { width: 40px; height: 35px; animation: swim 12s linear infinite; }
+.marine-animations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.marine-creature {
+  position: absolute;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.15;
+  filter: brightness(0) invert(1);
+  will-change: transform;
+  animation-name: swim;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.marine-creature.turtle {
+  width: 80px;
+  height: 60px;
+  background-image: url('../assets/turtle-silhouette.png');
+}
+
+.marine-creature.shark {
+  width: 120px;
+  height: 50px;
+  background-image: url('../assets/shark-silhouette.png');
+}
+
+.marine-creature.fish-group {
+  width: 90px;
+  height: 60px;
+  background-image: url('../assets/fish-group-silhouette.png');
+}
+
+.marine-creature.single-fish {
+  width: 40px;
+  height: 35px;
+  background-image: url('../assets/single-fish-silhouette.png');
+}
+
 @keyframes swim {
-  from { transform: translateX(-150px); }
-  to { transform: translateX(calc(100vw + 150px)); }
+  from {
+    transform: translateX(-150px);
+  }
+  to {
+    transform: translateX(calc(100vw + 150px));
+  }
 }
 
 /* ===== Formulaire de login ===== */
