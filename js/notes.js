@@ -1,7 +1,7 @@
 // js/notes.js - Gestionnaire de bloc-notes avec Firebase v9
 
-// Importer les fonctions nécessaires de Firebase depuis le SDK installé
-import { ref, onValue, push, serverTimestamp } from 'firebase/database';
+// CORRECTION : Importer les fonctions depuis les URL complètes du CDN de Firebase
+import { ref, onValue, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
 export class NotesManager {
     constructor(database) {

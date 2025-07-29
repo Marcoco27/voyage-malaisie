@@ -1,8 +1,8 @@
 // js/main.js - Point d'entrée principal de l'application
 
-// Importer les fonctions nécessaires de Firebase depuis le SDK installé
-import { initializeApp } from 'firebase/app';
-import { getDatabase } from 'firebase/database';
+// CORRECTION : Importer les modules depuis les URL complètes du CDN de Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
 // Importer les modules de l'application
 import { VoyageApp } from './voyage-app.js';
