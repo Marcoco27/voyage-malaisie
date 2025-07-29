@@ -1,15 +1,20 @@
 // js/main.js - Point d'entrée principal de l'application
 
-// Importer les modules depuis les URL complètes du CDN de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
-// Importer les modules de l'application
 import { VoyageApp } from './voyage-app.js';
 import { NotesManager } from './notes.js';
 import { WeatherManager } from './weather.js';
 import { ClockManager } from './clock.js';
 import { MarineAnimations } from './marine-animations.js';
+
+// --- Sécurité d'accès ---
+const sessionKey = 'voyage_access_granted';
+if (sessionStorage.getItem(sessionKey) !== 'true') {
+    // Si l'accès n'a pas été accordé, rediriger vers la page de connexion
+    window.location.href = 'index.html';
+}
 
 // --- Configuration Centralisée ---
 const config = {
@@ -20,7 +25,6 @@ const config = {
       storageBucket: "mgprofilbox.appspot.com",
       messagingSenderId: "663481645724",
       appId: "1:663481645724:web:f438035583a728200e0b59",
-      // CORRECTION FINALE : Ajout de la région dans l'URL de la base de données
       databaseURL: "https://mgprofilbox-default-rtdb.europe-west1.firebasedatabase.app"
     },
     weather: {
