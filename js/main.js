@@ -1,8 +1,8 @@
 // js/main.js - Point d'entrée principal de l'application
 
-// Importer les modules nécessaires de Firebase (syntaxe moderne v9)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+// Importer les fonctions nécessaires de Firebase depuis le SDK installé
+import { initializeApp } from 'firebase/app';
+import { getDatabase } from 'firebase/database';
 
 // Importer les modules de l'application
 import { VoyageApp } from './voyage-app.js';
@@ -26,7 +26,7 @@ const config = {
         apiKey: 'a1e80ab5644eba8f07d8920d13f9bf83',
         apiUrl: 'https://api.openweathermap.org/data/2.5/weather',
         defaultCity: 'Kuala Lumpur,MY',
-        updateInterval: 300000 // 5 minutes
+        updateInterval: 300000
     },
     timezones: {
         france: 'Europe/Paris',
@@ -59,24 +59,15 @@ class MainApp {
 
     initApplication() {
         document.addEventListener('DOMContentLoaded', async () => {
-            // 1. Créer les instances de tous les modules
             const voyageApp = new VoyageApp();
-            const notesManager = new NotesManager(this.database);
-            const weatherManager = new WeatherManager(this.config.weather);
-            const clockManager = new ClockManager(this.config.timezones);
-            const marineAnimations = new MarineAnimations(this.config.marineAnimations);
+            await voyageApp.init(); 
 
-            // 2. Initialiser l'application principale pour construire le HTML de base
-            await voyageApp.init();
-
-            // 3. Initialiser les autres modules qui dépendent de ce HTML
-            notesManager.init();
-            weatherManager.init();
-            clockManager.init();
-            marineAnimations.init();
+            new NotesManager(this.database).init();
+            new WeatherManager(this.config.weather).init();
+            new ClockManager(this.config.timezones).init();
+            new MarineAnimations(this.config.marineAnimations).init();
         });
     }
 }
 
-// Lancer l'application
 new MainApp(config);
