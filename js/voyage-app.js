@@ -21,11 +21,8 @@ class VoyageApp {
         // Initialiser les autres modules
         this.weatherManager = new WeatherManager();
         this.clockManager = new ClockManager();
-        // this.notesManager = new NotesManager(); // L'ancien gestionnaire est désactivé
+        this.notesManager = new NotesManager(); // Réactivation pour assurer le lancement
         this.marineAnimations = new MarineAnimations();
-
-        // Le nouveau NotesManager s'auto-initialise, il suffit que le script soit chargé.
-        // On s'assure juste que son script est inclus dans index.html.
 
         // Gestion du hash pour ouvrir la card correspondante
         setTimeout(() => this.openCardFromHash(), 150);
@@ -229,7 +226,7 @@ class VoyageApp {
         if (!notesContainer) return;
 
         notesContainer.addEventListener('click', (e) => {
-            const header = e.target.closest('.card-header');
+            const header = e.target.closest('.header');
             if (header) {
                 const card = header.closest('.note-card');
                 if (card) this.toggleCard(card);

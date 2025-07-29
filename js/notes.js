@@ -6,7 +6,10 @@ class NotesManager {
         this.notesForm = null;
         this.db = null;
 
-        this.init();
+        // Attendre que le DOM soit prêt pour ne pas interférer avec le reste de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            this.init();
+        });
     }
 
     init() {
@@ -18,12 +21,9 @@ class NotesManager {
         // Initialiser la référence à la base de données Firebase
         this.db = firebase.database();
         
-        // Attendre que le DOM soit complètement chargé pour créer l'interface
-        document.addEventListener('DOMContentLoaded', () => {
-            this.renderLayout();
-            this.setupEventListeners();
-            this.loadNotes();
-        });
+        this.renderLayout();
+        this.setupEventListeners();
+        this.loadNotes();
     }
 
     renderLayout() {
@@ -73,18 +73,18 @@ class NotesManager {
     addNote(content) {
         const newNote = {
             content: content,
-            timestamp: firebase.database.ServerValue.TIMESTAMP // Horodatage côté serveur
+            timestamp: firebase.database.ServerValue.TIMESTAMP
         };
 
-        // 'push' génère un ID unique pour chaque note
-        this.db.ref('notes/').push(newNote)
+        // CORRECTION : Utiliser le chemin 'blocnotes/' comme défini dans les règles Firebase
+        this.db.ref('blocnotes/').push(newNote)
             .catch(error => console.error("Erreur lors de l'ajout de la note:", error));
     }
 
     loadNotes() {
-        const notesRef = this.db.ref('notes/').orderByChild('timestamp');
+        // CORRECTION : Utiliser le chemin 'blocnotes/'
+        const notesRef = this.db.ref('blocnotes/').orderByChild('timestamp');
 
-        // Écouter les changements en temps réel
         notesRef.on('child_added', (snapshot) => {
             const note = snapshot.val();
             const noteId = snapshot.key;
@@ -113,14 +113,15 @@ class NotesManager {
             <span class="note-timestamp">${formattedDate}</span>
         `;
         
-        // Ajouter la nouvelle note en haut de la liste
         this.notesList.prepend(noteElement);
     }
     
-    // Fonction simple pour éviter l'injection de HTML
     sanitize(text) {
         const element = document.createElement('div');
         element.innerText = text;
         return element.innerHTML;
     }
 }
+
+// CORRECTION : Démarrer automatiquement le gestionnaire de notes
+new NotesManager();
