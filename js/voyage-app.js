@@ -21,8 +21,11 @@ class VoyageApp {
         // Initialiser les autres modules
         this.weatherManager = new WeatherManager();
         this.clockManager = new ClockManager();
-        this.notesManager = new NotesManager();
+        // this.notesManager = new NotesManager(); // L'ancien gestionnaire est désactivé
         this.marineAnimations = new MarineAnimations();
+
+        // Le nouveau NotesManager s'auto-initialise, il suffit que le script soit chargé.
+        // On s'assure juste que son script est inclus dans index.html.
 
         // Gestion du hash pour ouvrir la card correspondante
         setTimeout(() => this.openCardFromHash(), 150);
@@ -95,7 +98,7 @@ class VoyageApp {
                     </div>
                     <div id="notes-container"></div>
                 </section>
-                <!-- Section Bloc-notes sera ajoutée par NotesManager -->
+                <!-- La section Bloc-notes est maintenant générée par js/notes.js -->
             </main>
             <footer class="tropical-footer">
                 <p>Fait avec ❤️ pour un voyage inoubliable</p>
@@ -163,8 +166,6 @@ class VoyageApp {
         if (!notesContainer) return;
         notesContainer.innerHTML = '';
         this.voyage.forEach((etape, index) => {
-            // Toute la logique de Google Calendar a été supprimée pour simplifier.
-            
             const card = document.createElement('div');
             card.className = 'note-card';
             card.tabIndex = 0;

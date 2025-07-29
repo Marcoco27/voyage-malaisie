@@ -1,104 +1,126 @@
-// Module de gestion du bloc-notes
+// Gestionnaire de bloc-notes avec Firebase
 class NotesManager {
     constructor() {
-        this.notes = localStorage.getItem(CONFIG.notes.storageKey) || '';
-        this.autoSaveTimeout = null;
-        
-        // Éléments du DOM
-        this.notesSection = null;
-        this.textarea = null;
-        this.countSpan = null;
-        this.statusSpan = null;
-        
+        this.notesContainer = null;
+        this.notesList = null;
+        this.notesForm = null;
+        this.db = null;
+
         this.init();
     }
 
     init() {
-        this.createNotesSection();
-        this.setupEventListeners();
+        if (typeof firebase === 'undefined' || typeof firebase.database === 'undefined') {
+            console.error("Firebase Database n'est pas chargé. Le bloc-notes ne peut pas fonctionner.");
+            return;
+        }
+        
+        // Initialiser la référence à la base de données Firebase
+        this.db = firebase.database();
+        
+        // Attendre que le DOM soit complètement chargé pour créer l'interface
+        document.addEventListener('DOMContentLoaded', () => {
+            this.renderLayout();
+            this.setupEventListeners();
+            this.loadNotes();
+        });
     }
 
-    _renderNotesHTML() {
+    renderLayout() {
+        const mainContainer = document.querySelector('main');
+        if (!mainContainer) return;
+
         const section = document.createElement('section');
         section.id = 'notes-section';
-        section.className = 'notes-section';
+        section.className = 'fade-in';
         section.innerHTML = `
             <div class="title-with-icon">
-                <div class="title-icon">📝</div>
-                <h2>Bloc-notes Famille</h2>
+                <img src="assets/image-map-itineraire.png" alt="Icône de bloc-notes" class="title-icon">
+                <h2>Bloc-notes Partagé</h2>
             </div>
-            <div class="notes-container">
-                <div class="notes-header">
-                    <div class="notes-info">
-                        <span id="notes-count">${this.notes.length}</span> caractères
-                        <span id="notes-status" class="notes-status saved">Sauvegardé</span>
-                    </div>
-                    <div class="notes-actions">
-                        <button id="clear-notes" class="notes-btn">Effacer</button>
-                    </div>
+            <div class="notes-app-container">
+                <div id="notes-list" class="notes-list" role="log" aria-live="polite">
+                    <!-- Les notes chargées depuis Firebase apparaîtront ici -->
                 </div>
-                <textarea id="family-notes" class="notes-textarea" placeholder="Partagez vos notes, idées..."></textarea>
-                <div class="notes-footer">
-                    💡 Vos notes sont sauvegardées automatiquement dans le navigateur.
-                </div>
-            </div>`;
-        return section;
+                <form id="notes-form" class="notes-form">
+                    <textarea id="note-input" placeholder="Écrire une note ici..." required maxlength="500"></textarea>
+                    <button type="submit">Ajouter la note</button>
+                </form>
+            </div>
+        `;
+        mainContainer.appendChild(section);
+
+        this.notesContainer = section;
+        this.notesList = document.getElementById('notes-list');
+        this.notesForm = document.getElementById('notes-form');
     }
-
-    createNotesSection() {
-        const main = document.querySelector('main');
-        if (!main) return;
-
-        this.notesSection = this._renderNotesHTML();
-        main.appendChild(this.notesSection);
-        
-        // Mise en cache des éléments
-        this.textarea = document.getElementById('family-notes');
-        this.countSpan = document.getElementById('notes-count');
-        this.statusSpan = document.getElementById('notes-status');
-        
-        // Initialiser la valeur du textarea
-        this.textarea.value = this.notes;
-    }
-
+    
     setupEventListeners() {
-        if (!this.textarea) return;
+        if (!this.notesForm) return;
+
+        this.notesForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const noteInput = document.getElementById('note-input');
+            const content = noteInput.value.trim();
+
+            if (content) {
+                this.addNote(content);
+                noteInput.value = ''; // Réinitialiser le champ
+            }
+        });
+    }
+
+    addNote(content) {
+        const newNote = {
+            content: content,
+            timestamp: firebase.database.ServerValue.TIMESTAMP // Horodatage côté serveur
+        };
+
+        // 'push' génère un ID unique pour chaque note
+        this.db.ref('notes/').push(newNote)
+            .catch(error => console.error("Erreur lors de l'ajout de la note:", error));
+    }
+
+    loadNotes() {
+        const notesRef = this.db.ref('notes/').orderByChild('timestamp');
+
+        // Écouter les changements en temps réel
+        notesRef.on('child_added', (snapshot) => {
+            const note = snapshot.val();
+            const noteId = snapshot.key;
+            this.displayNote(note, noteId);
+        });
+    }
+    
+    displayNote(note, noteId) {
+        if (!this.notesList) return;
+
+        const noteElement = document.createElement('div');
+        noteElement.className = 'note-item';
+        noteElement.dataset.id = noteId;
+
+        const date = new Date(note.timestamp);
+        const formattedDate = date.toLocaleString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        noteElement.innerHTML = `
+            <p class="note-content">${this.sanitize(note.content)}</p>
+            <span class="note-timestamp">${formattedDate}</span>
+        `;
         
-        this.textarea.addEventListener('input', () => this.handleInput());
-        
-        const clearButton = document.getElementById('clear-notes');
-        if (clearButton) {
-            clearButton.addEventListener('click', () => this.clearNotes());
-        }
+        // Ajouter la nouvelle note en haut de la liste
+        this.notesList.prepend(noteElement);
     }
-
-    handleInput() {
-        this.notes = this.textarea.value;
-        this.countSpan.textContent = this.notes.length;
-        this.updateStatus('saving', 'Sauvegarde...');
-
-        clearTimeout(this.autoSaveTimeout);
-        this.autoSaveTimeout = setTimeout(() => this.saveNotes(), 1500);
-    }
-
-    saveNotes() {
-        localStorage.setItem(CONFIG.notes.storageKey, this.notes);
-        this.updateStatus('saved', 'Sauvegardé');
-    }
-
-    clearNotes() {
-        if (confirm('Voulez-vous vraiment effacer toutes les notes ?')) {
-            this.notes = '';
-            this.textarea.value = '';
-            this.saveNotes();
-            this.countSpan.textContent = 0;
-        }
-    }
-
-    updateStatus(className, text) {
-        if (this.statusSpan) {
-            this.statusSpan.className = `notes-status ${className}`;
-            this.statusSpan.textContent = text;
-        }
+    
+    // Fonction simple pour éviter l'injection de HTML
+    sanitize(text) {
+        const element = document.createElement('div');
+        element.innerText = text;
+        return element.innerHTML;
     }
 }
