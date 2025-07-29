@@ -1,60 +1,33 @@
-// Horloge double (KL + Paris) affichée dans le header, style simple, police visible, couleur blanche, centrée
+// Gestionnaire d'horloge
 class ClockManager {
-    constructor() {
-        this.clockInterval = null;
-        this.klElem = null;
-        this.parisElem = null;
+    constructor(timezonesConfig) {
+        this.config = timezonesConfig;
         this.init();
     }
 
     init() {
-        this.createSimpleClock();
-        if (this.klElem && this.parisElem) {
-            this.updateClock();
-            this.clockInterval = setInterval(() => this.updateClock(), 1000);
-        }
+        const clockContainer = this.createClockContainer();
+        document.querySelector('.hero-header').prepend(clockContainer); // Ajoute en premier
+        this.updateClocks();
+        setInterval(() => this.updateClocks(), 1000);
     }
 
-    createSimpleClock() {
-        const header = document.querySelector('.hero-header');
-        if (!header) return;
-        
-        // Supprimer toute ancienne horloge simple éventuelle
-        const oldClock = header.querySelector('.simple-clock');
-        if (oldClock) oldClock.remove();
-
-        const clock = document.createElement('div');
-        clock.className = 'simple-clock';
-        clock.innerHTML = `
-            <span class="clock-label">🇲🇾 Kuala Lumpur</span>
-            <span id="kl-time" class="clock-time">--:--:--</span>
-            <span class="clock-sep">|</span>
-            <span class="clock-label">🇫🇷 Paris</span>
-            <span id="paris-time" class="clock-time">--:--:--</span>
+    createClockContainer() {
+        const container = document.createElement('div');
+        container.className = 'clock-container';
+        container.innerHTML = `
+            <div id="clock-france" class="simple-clock"></div>
+            <div id="clock-malaisie" class="simple-clock"></div>
         `;
-        header.insertBefore(clock, header.firstChild);
-
-        this.klElem = document.getElementById('kl-time');
-        this.parisElem = document.getElementById('paris-time');
+        return container;
     }
 
-    updateClock() {
-        const now = new Date();
-        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+    updateClocks() {
+        const franceTime = new Date().toLocaleTimeString('fr-FR', { timeZone: this.config.france, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const malaysiaTime = new Date().toLocaleTimeString('en-GB', { timeZone: this.config.kualaLumpur, hour: '2-digit', minute: '2-digit', second: '2-digit' });
         
-        try {
-            const klTime = now.toLocaleTimeString('fr-FR', { ...timeOptions, timeZone: CONFIG.timezones.kualaLumpur });
-            const parisTime = now.toLocaleTimeString('fr-FR', { ...timeOptions, timeZone: CONFIG.timezones.france });
-
-            if (this.klElem) this.klElem.textContent = klTime;
-            if (this.parisElem) this.parisElem.textContent = parisTime;
-        } catch (error) {
-            console.error("Erreur lors de la mise à jour de l'horloge :", error);
-            // Optionnel : arrêter l'intervalle si les fuseaux horaires ne sont pas valides
-            if (this.clockInterval) {
-                clearInterval(this.clockInterval);
-                this.clockInterval = null;
-            }
-        }
+        document.getElementById('clock-france').innerHTML = `<span class="clock-label">Paris</span> <span class="clock-time">${franceTime}</span>`;
+        document.getElementById('clock-malaisie').innerHTML = `<span class="clock-label">Kuala Lumpur</span> <span class="clock-time">${malaysiaTime}</span>`;
     }
 }
+export { ClockManager };

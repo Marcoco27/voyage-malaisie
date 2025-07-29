@@ -1,52 +1,43 @@
-// Module d'animations marines pour le header
+// Gestionnaire d'animations marines
 class MarineAnimations {
-    constructor() {
-        if (!CONFIG.marineAnimations.enabled) return;
-        
-        this.animationContainer = null;
-        this.init();
+    constructor(animationsConfig) {
+        this.config = animationsConfig;
+        if (this.config.enabled) {
+            this.init();
+        }
     }
 
     init() {
-        this.createAnimationContainer();
-        if (this.animationContainer) {
-            this.startAnimations();
-        }
-    }
-
-    createAnimationContainer() {
         const header = document.querySelector('.hero-header');
         if (!header) return;
 
-        this.animationContainer = document.createElement('div');
-        this.animationContainer.className = 'marine-animations';
-        header.insertBefore(this.animationContainer, header.firstChild);
+        const container = document.createElement('div');
+        container.className = 'marine-animations';
+        header.prepend(container); // S'assurer qu'il est en arrière-plan
+
+        this.createCreatures(container, this.config.creatureCount);
     }
 
-    _createCreature() {
-        const creatureConfig = CONFIG.marineAnimations.creatures;
-        const randomCreatureType = creatureConfig[Math.floor(Math.random() * creatureConfig.length)];
-        
-        const creature = document.createElement('div');
-        creature.className = `marine-creature ${randomCreatureType.type}`;
-        
-        // Position et durée aléatoires
-        creature.style.top = `${Math.random() * 70 + 15}%`;
-        const duration = Math.random() * (randomCreatureType.maxDuration - randomCreatureType.minDuration) + randomCreatureType.minDuration;
-        creature.style.animationDuration = `${duration}s`;
-        creature.style.animationDelay = `${Math.random() * duration}s`;
+    createCreatures(container, count) {
+        for (let i = 0; i < count; i++) {
+            const creatureConfig = this.getRandomCreature();
+            const creature = document.createElement('div');
+            creature.className = `marine-creature ${creatureConfig.type}`;
+            
+            const duration = Math.random() * (creatureConfig.maxDuration - creatureConfig.minDuration) + creatureConfig.minDuration;
+            const delay = Math.random() * duration;
 
-        // Inverser aléatoirement la direction
-        if (Math.random() > 0.5) {
-            creature.style.transform = 'scaleX(-1)';
+            creature.style.animationDuration = `${duration}s`;
+            creature.style.animationDelay = `-${delay}s`; // Départs décalés
+            creature.style.top = `${Math.random() * 90}%`; // Position verticale aléatoire
+            
+            container.appendChild(creature);
         }
-
-        this.animationContainer.appendChild(creature);
     }
 
-    startAnimations() {
-        for (let i = 0; i < CONFIG.marineAnimations.creatureCount; i++) {
-            this._createCreature();
-        }
+    getRandomCreature() {
+        const creatures = this.config.creatures;
+        return creatures[Math.floor(Math.random() * creatures.length)];
     }
 }
+export { MarineAnimations };

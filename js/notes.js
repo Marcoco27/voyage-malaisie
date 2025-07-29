@@ -1,19 +1,18 @@
-// Gestionnaire de bloc-notes avec Firebase
+// js/notes.js - Gestionnaire de bloc-notes avec Firebase v9
+
+// Importer les fonctions nécessaires de Firebase
+import { getDatabase, ref, onValue, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
 class NotesManager {
-    constructor() {
+    constructor(database) {
+        this.db = database;
         this.notesList = null;
         this.notesForm = null;
-        this.db = null;
-        // Le constructeur est maintenant vide, l'initialisation se fera via la méthode init()
+        this.init();
     }
 
     init() {
-        if (typeof firebase === 'undefined' || typeof firebase.database === 'undefined') {
-            console.error("Firebase Database n'est pas chargé. Le bloc-notes ne peut pas fonctionner.");
-            return;
-        }
-        
-        this.db = firebase.database();
+        // Le rendu et les écouteurs sont lancés une fois que le DOM est prêt
         this.renderLayout();
         this.setupEventListeners();
         this.loadNotes();
@@ -22,7 +21,10 @@ class NotesManager {
     renderLayout() {
         const mainContainer = document.querySelector('main');
         const footer = document.querySelector('.tropical-footer');
-        if (!mainContainer || !footer) return;
+        if (!mainContainer || !footer) {
+            console.error("Élément principal ou footer non trouvé.");
+            return;
+        }
 
         const section = document.createElement('section');
         section.id = 'notes-section';
@@ -65,18 +67,17 @@ class NotesManager {
     }
 
     addNote(content) {
-        const newNote = {
+        const notesRef = ref(this.db, 'blocnotes/');
+        push(notesRef, {
             content: content,
-            timestamp: firebase.database.ServerValue.TIMESTAMP
-        };
-        this.db.ref('blocnotes/').push(newNote)
-            .catch(error => console.error("Erreur lors de l'ajout de la note:", error));
+            timestamp: serverTimestamp()
+        }).catch(error => console.error("Erreur lors de l'ajout de la note:", error));
     }
 
     loadNotes() {
-        const notesRef = this.db.ref('blocnotes/');
+        const notesRef = ref(this.db, 'blocnotes/');
 
-        notesRef.on('value', (snapshot) => {
+        onValue(notesRef, (snapshot) => {
             if (!this.notesList) return;
             this.notesList.innerHTML = ''; 
 
@@ -137,3 +138,6 @@ class NotesManager {
         return element.innerHTML;
     }
 }
+
+// Exporter la classe pour qu'elle puisse être utilisée dans main.js
+export { NotesManager };

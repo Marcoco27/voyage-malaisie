@@ -1,4 +1,5 @@
 // Application principale de voyage en Malaisie
+
 class VoyageApp {
     constructor() { // Ne prend plus de paramètre
         this.voyage = [];
@@ -17,17 +18,6 @@ class VoyageApp {
         this.initScrollEffects();
         this.initCardToggle();
         this.initBackToTop();
-        
-        // Initialiser les autres modules
-        this.weatherManager = new WeatherManager();
-        this.clockManager = new ClockManager();
-        this.notesManager = new NotesManager();
-        this.notesManager.init();
-        this.marineAnimations = new MarineAnimations();
-
-        // Gestion du hash pour ouvrir la card correspondante
-        setTimeout(() => this.openCardFromHash(), 150);
-        window.addEventListener('hashchange', () => this.openCardFromHash());
     }
 
     async loadItineraryData() {
@@ -256,3 +246,5 @@ class VoyageApp {
         btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
 }
+
+export { VoyageApp };

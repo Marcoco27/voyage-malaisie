@@ -1,96 +1,74 @@
-// Module de gestion de la météo
+// Gestionnaire de météo
 class WeatherManager {
-    constructor() {
-        this.widget = null;
+    constructor(weatherConfig) {
+        this.config = weatherConfig;
         this.init();
     }
 
-    init() {
-        this.createWeatherWidget();
-        if (this.widget) {
-            this.getCurrentCityWeather();
-            setInterval(() => this.getCurrentCityWeather(), CONFIG.weather.updateInterval);
-        }
+    async init() {
+        const widget = this.createWeatherWidget();
+        document.querySelector('.hero-header').appendChild(widget);
+        this.updateWeather();
+        setInterval(() => this.updateWeather(), this.config.updateInterval);
     }
 
     createWeatherWidget() {
-        const header = document.querySelector('.hero-header');
-        if (!header) return;
-
-        this.widget = document.createElement('div');
-        this.widget.id = 'weather-widget';
-        this.widget.className = 'weather-widget';
-        this.widget.innerHTML = '<!-- Contenu météo sera injecté ici -->';
-
-        const clockWidget = header.querySelector('.clock-widget');
-        if (clockWidget) {
-            header.insertBefore(this.widget, clockWidget);
-        } else {
-            header.appendChild(this.widget);
-        }
+        const widget = document.createElement('div');
+        widget.className = 'weather-widget';
+        widget.innerHTML = `
+            <div class="weather-content">
+                <i class="fas fa-spinner fa-spin weather-icon"></i>
+                <div class="weather-info">
+                    <div class="weather-temp">--°C</div>
+                    <div class="weather-city">Chargement...</div>
+                </div>
+            </div>
+            <div class="weather-details">--</div>
+        `;
+        return widget;
     }
 
-    async getCurrentCityWeather() {
-        if (!this.widget) return;
-
-        if (CONFIG.weather.apiKey === 'votre_cle_openweathermap') {
-            this.showWeatherError('Clé API non configurée');
-            return;
-        }
-
+    async updateWeather() {
         try {
-            const response = await fetch(`${CONFIG.weather.apiUrl}?q=${CONFIG.weather.defaultCity}&appid=${CONFIG.weather.apiKey}&units=metric&lang=fr`);
-            if (!response.ok) {
-                throw new Error(`Erreur réseau: ${response.statusText}`);
-            }
+            const city = this.config.defaultCity;
+            const apiKey = this.config.apiKey;
+            const url = `${this.config.apiUrl}?q=${city}&appid=${apiKey}&units=metric&lang=fr`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Réponse réseau incorrecte');
             const data = await response.json();
             this.displayWeather(data);
         } catch (error) {
-            console.error("Erreur de météo:", error);
-            this.showWeatherError('Météo indisponible');
+            console.error("Erreur de mise à jour météo:", error);
+            this.displayError();
         }
     }
 
-    _renderWeatherHTML(data) {
-        const icon = this._getWeatherIcon(data.weather[0].icon);
-        return `
-            <div class="weather-content">
-                <div class="weather-icon">${icon}</div>
-                <div class="weather-info">
-                    <div class="weather-temp">${Math.round(data.main.temp)}°C</div>
-                    <div class="weather-city">${data.name}</div>
-                </div>
-                <div class="weather-details">
-                    💧 ${data.main.humidity}%<br>
-                    💨 ${Math.round(data.wind.speed * 3.6)} km/h
-                </div>
-            </div>`;
-    }
-
-    _renderErrorHTML(message) {
-        return `<div class="weather-content"><div class="weather-icon">❌</div><div class="weather-info"><div class="weather-city">${message}</div></div></div>`;
-    }
-    
     displayWeather(data) {
-        if (this.widget) {
-            this.widget.innerHTML = this._renderWeatherHTML(data);
-        }
+        const widget = document.querySelector('.weather-widget');
+        if (!widget) return;
+        const iconClass = this.getWeatherIcon(data.weather[0].id);
+        widget.querySelector('.weather-icon').className = `fas ${iconClass} weather-icon`;
+        widget.querySelector('.weather-temp').textContent = `${Math.round(data.main.temp)}°C`;
+        widget.querySelector('.weather-city').textContent = data.name;
+        widget.querySelector('.weather-details').textContent = data.weather[0].description;
     }
 
-    showWeatherError(message) {
-        if (this.widget) {
-            this.widget.innerHTML = this._renderErrorHTML(message);
-        }
+    displayError() {
+        const widget = document.querySelector('.weather-widget');
+        if (!widget) return;
+        widget.querySelector('.weather-icon').className = `fas fa-exclamation-triangle weather-icon`;
+        widget.querySelector('.weather-city').textContent = 'Erreur météo';
     }
 
-    _getWeatherIcon(iconCode) {
-        const icons = {
-            '01d': '☀️', '01n': '🌙', '02d': '⛅', '02n': '☁️',
-            '03d': '☁️', '03n': '☁️', '04d': '☁️', '04n': '☁️',
-            '09d': '🌧️', '09n': '🌧️', '10d': '🌦️', '10n': '🌧️',
-            '11d': '⛈️', '11n': '⛈️', '13d': '❄️', '13n': '❄️',
-            '50d': '🌫️', '50n': '🌫️'
-        };
-        return icons[iconCode] || '🌤️';
+    getWeatherIcon(conditionId) {
+        if (conditionId >= 200 && conditionId < 300) return 'fa-bolt';
+        if (conditionId >= 300 && conditionId < 500) return 'fa-cloud-rain';
+        if (conditionId >= 500 && conditionId < 600) return 'fa-cloud-showers-heavy';
+        if (conditionId >= 600 && conditionId < 700) return 'fa-snowflake';
+        if (conditionId >= 700 && conditionId < 800) return 'fa-smog';
+        if (conditionId === 800) return 'fa-sun';
+        if (conditionId > 800) return 'fa-cloud';
+        return 'fa-question-circle';
     }
 }
+export { WeatherManager };
