@@ -4,8 +4,7 @@ class NotesManager {
         this.notesList = null;
         this.notesForm = null;
         this.db = null;
-
-        document.addEventListener('DOMContentLoaded', () => this.init());
+        this.init(); // Lancement direct de l'initialisation
     }
 
     init() {
@@ -15,6 +14,7 @@ class NotesManager {
         }
         
         this.db = firebase.database();
+        // Le rendu et les écouteurs sont déjà dans un `DOMContentLoaded` via voyage-app.js
         this.renderLayout();
         this.setupEventListeners();
         this.loadNotes();
@@ -27,7 +27,6 @@ class NotesManager {
         const section = document.createElement('section');
         section.id = 'notes-section';
         section.className = 'fade-in';
-        // Utilisation de <ul> pour la liste des notes, comme dans l'exemple
         section.innerHTML = `
             <div class="title-with-icon">
                 <img src="assets/image-map-itineraire.png" alt="Icône de bloc-notes" class="title-icon">
@@ -65,7 +64,6 @@ class NotesManager {
     }
 
     addNote(content) {
-        // Cette logique est correcte et correspond aux instructions
         const newNote = {
             content: content,
             timestamp: firebase.database.ServerValue.TIMESTAMP
@@ -77,7 +75,6 @@ class NotesManager {
     loadNotes() {
         const notesRef = this.db.ref('blocnotes/');
 
-        // MISE À JOUR : Utilisation de 'onValue' pour lire, trier et afficher
         notesRef.on('value', (snapshot) => {
             if (!this.notesList) return;
             this.notesList.innerHTML = ''; // Vider la liste actuelle
@@ -109,7 +106,7 @@ class NotesManager {
     }
     
     displayNote(noteData) {
-        const noteElement = document.createElement('li'); // Afficher comme un item de liste
+        const noteElement = document.createElement('li');
         noteElement.className = 'note-item';
 
         const date = new Date(noteData.timestamp);
@@ -126,7 +123,7 @@ class NotesManager {
             <span class="note-timestamp">${formattedDate}</span>
         `;
         
-        this.notesList.appendChild(noteElement); // Ajouter à la fin de la liste déjà triée
+        this.notesList.appendChild(noteElement);
     }
     
     sanitize(text) {
@@ -136,5 +133,5 @@ class NotesManager {
     }
 }
 
-// Démarrage automatique
-new NotesManager();
+// La ligne de démarrage automatique a été supprimée pour éviter la double initialisation.
+// L'initialisation est maintenant gérée par `voyage-app.js`.
