@@ -3,7 +3,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyD7JU2HJpEZFW4LSFH0LzRVivulTUgaBpc",
   authDomain: "mgprofilbox.firebaseapp.com",
   projectId: "mgprofilbox",
-  storageBucket: "mgprofilbox.appspot.com",
+  storageBucket: "mgprofilbox.firebasestorage.app",
   messagingSenderId: "663481645724",
   appId: "1:663481645724:web:f438035583a728200e0b59",
   measurementId: "G-C20NJDMSRE"
