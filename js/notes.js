@@ -23,6 +23,9 @@ class NotesManager {
         const mainContainer = document.querySelector('main');
         if (!mainContainer) return;
 
+        // On cherche le footer pour s'insérer avant lui
+        const footer = document.querySelector('.tropical-footer');
+
         const section = document.createElement('section');
         section.id = 'notes-section';
         section.className = 'fade-in';
@@ -41,7 +44,13 @@ class NotesManager {
                 </form>
             </div>
         `;
-        mainContainer.appendChild(section);
+        
+        // CORRECTION : Insérer le bloc-notes avant le footer pour le bon ordre visuel.
+        if (footer) {
+            mainContainer.insertBefore(section, footer);
+        } else {
+            mainContainer.appendChild(section); // Fallback si le footer n'est pas trouvé
+        }
 
         this.notesList = document.getElementById('notes-list');
         this.notesForm = document.getElementById('notes-form');
@@ -89,7 +98,6 @@ class NotesManager {
             notes.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
             if (notes.length === 0) {
-                // CORRECTION : Utilisation de guillemets doubles pour éviter le conflit
                 this.notesList.innerHTML = "<li>Aucune note pour l'instant. Soyez le premier !</li>";
             } else {
                 notes.forEach(noteData => {
