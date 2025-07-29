@@ -4,7 +4,7 @@ class NotesManager {
         this.notesList = null;
         this.notesForm = null;
         this.db = null;
-        this.init(); // Lancement direct de l'initialisation
+        this.init();
     }
 
     init() {
@@ -14,7 +14,6 @@ class NotesManager {
         }
         
         this.db = firebase.database();
-        // Le rendu et les écouteurs sont déjà dans un `DOMContentLoaded` via voyage-app.js
         this.renderLayout();
         this.setupEventListeners();
         this.loadNotes();
@@ -77,7 +76,7 @@ class NotesManager {
 
         notesRef.on('value', (snapshot) => {
             if (!this.notesList) return;
-            this.notesList.innerHTML = ''; // Vider la liste actuelle
+            this.notesList.innerHTML = ''; 
 
             const notes = [];
             snapshot.forEach((childSnapshot) => {
@@ -87,11 +86,11 @@ class NotesManager {
                 });
             });
 
-            // Trier les notes : les plus récentes en premier
-            notes.sort((a, b) => b.timestamp - a.timestamp);
+            notes.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
             if (notes.length === 0) {
-                this.notesList.innerHTML = '<li>Aucune note pour l'instant. Soyez le premier !</li>';
+                // CORRECTION : Utilisation de guillemets doubles pour éviter le conflit
+                this.notesList.innerHTML = "<li>Aucune note pour l'instant. Soyez le premier !</li>";
             } else {
                 notes.forEach(noteData => {
                     this.displayNote(noteData);
@@ -109,17 +108,22 @@ class NotesManager {
         const noteElement = document.createElement('li');
         noteElement.className = 'note-item';
 
-        const date = new Date(noteData.timestamp);
-        const formattedDate = date.toLocaleString('fr-FR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+        let formattedDate = "Date inconnue";
+        if (noteData.timestamp) {
+            const date = new Date(noteData.timestamp);
+            if (!isNaN(date.getTime())) {
+                formattedDate = date.toLocaleString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+        }
 
         noteElement.innerHTML = `
-            <p class="note-content">${this.sanitize(noteData.content)}</p>
+            <p class="note-content">${this.sanitize(noteData.content || 'Note vide')}</p>
             <span class="note-timestamp">${formattedDate}</span>
         `;
         
@@ -132,6 +136,3 @@ class NotesManager {
         return element.innerHTML;
     }
 }
-
-// La ligne de démarrage automatique a été supprimée pour éviter la double initialisation.
-// L'initialisation est maintenant gérée par `voyage-app.js`.
