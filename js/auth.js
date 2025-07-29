@@ -4,6 +4,12 @@ class AuthManager {
         this.isAuthenticated = false;
         this.loginContainer = null;
         this.mainContent = document.getElementById('main-content');
+        // La vérification de CONFIG se fait au moment de l'instanciation
+        if (typeof CONFIG === 'undefined') {
+            console.error("Le fichier de configuration (config/config.js) n'a pas pu être chargé ou est incorrect.");
+            document.body.innerHTML = '<div class="error" style="padding: 20px;">Erreur critique : Impossible de charger la configuration de l'application.</div>';
+            return;
+        }
         this.init();
     }
 
@@ -51,7 +57,7 @@ class AuthManager {
     showLoginForm() {
         if (this.loginContainer) return;
         this.loginContainer = this._renderLoginForm();
-        document.body.prepend(this.loginContainer); // Use prepend to avoid destroying scripts
+        document.body.prepend(this.loginContainer);
 
         const loginForm = document.getElementById('loginForm');
         const errorDiv = document.getElementById('loginError');
@@ -62,7 +68,6 @@ class AuthManager {
             const password = loginForm.password.value;
             const remember = loginForm.remember.checked;
 
-            // Use the credentials from CONFIG
             if (CONFIG.auth.users[username] === password) {
                 this.isAuthenticated = true;
                 sessionStorage.setItem(CONFIG.auth.sessionKey, 'true');
@@ -85,31 +90,21 @@ class AuthManager {
     }
 
     showMainContent() {
-        // Remove login form if it exists
         if (this.loginContainer) {
             this.loginContainer.remove();
             this.loginContainer = null;
         }
 
-        // Show main content from index.html, which was previously hidden
         if (this.mainContent) {
             this.mainContent.style.display = 'block';
         }
 
-        // Initialize the main app, checking if it hasn't been initialized before
         if (typeof VoyageApp !== 'undefined' && !window.voyageApp) {
             window.voyageApp = new VoyageApp();
         }
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    // This ensures config.js is loaded before AuthManager runs
-    if (typeof CONFIG !== 'undefined') {
-        window.authManager = new AuthManager();
-    } else {
-        console.error("Le fichier de configuration (config/config.js) n'a pas pu être chargé ou est incorrect.");
-        // Display an error message to the user
-        document.body.innerHTML = '<div class="error" style="padding: 20px;">Erreur critique : Impossible de charger la configuration de l'application.</div>';
-    }
-});
+// L'instanciation se fait directement, car les scripts sont maintenant
+// chargés de manière synchrone dans le bon ordre.
+new AuthManager();
