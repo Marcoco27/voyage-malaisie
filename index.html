@@ -20,32 +20,31 @@
 
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏝️</text></svg>">
+
 </head>
 
 <body>
-    <!-- Skip to main content for accessibility -->
-    <a href="#main-content" class="visually-hidden" tabindex="0">Aller au contenu principal</a>
 
-    <!-- Le contenu sera injecté selon l'état d'authentification -->
-
-    <!-- Configuration globale -->
-
-    <script src="config/config.js" defer></script>
-
-    <!-- Modules (chargement différé pour performance) -->
-    <script src="js/auth.js" defer></script>
-    <script src="js/weather.js" defer></script>
-    <script src="js/clock.js" defer></script>
-    <script src="js/notes.js" defer></script>
-    <script src="js/marine-animations.js" defer></script>
-    <script src="js/voyage-app.js" defer></script>
-
-    <!-- Structure sémantique modernisée -->
-    <nav class="main-nav" role="navigation" aria-label="Navigation principale">
-      <!-- Les liens de navigation seront générés dynamiquement par JS -->
-    </nav>
+    <!-- Structure HTML de base -->
     <main id="main-content" style="display: none;" tabindex="-1" aria-label="Contenu principal">
-        <!-- Le contenu principal de l'application est généré par auth.js et voyage-app.js -->
+        <!-- Le contenu principal sera généré par voyage-app.js -->
     </main>
+
+    <!-- Scripts -->
+    <!-- D'abord la configuration -->
+    <script src="config/config.js"></script>
+
+    <!-- Ensuite les modules dont VoyageApp dépend -->
+    <script src="js/weather.js"></script>
+    <script src="js/clock.js"></script>
+    <script src="js/notes.js"></script>
+    <script src="js/marine-animations.js"></script>
+    
+    <!-- L'application principale qui utilise les modules ci-dessus -->
+    <script src="js/voyage-app.js"></script>
+    
+    <!-- Et enfin le script d'authentification qui affiche ou cache le tout -->
+    <script src="js/auth.js"></script>
+
 </body>
 </html>
