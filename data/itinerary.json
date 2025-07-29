@@ -91,9 +91,9 @@
         "description": "Changement d'ambiance sur la petite île, plus festive et animée.",
         "activites": ["Profiter de Long Beach", "Randonnée jusqu'au moulin à vent", "Soirée sur la plage"],
         "conseil": "La petite île (Kecil) est plus adaptée pour les voyageurs cherchant de l'animation.",
-        "bookingLink": "",
-        "hotel": "",
-        "hotelAddress": ""
+        "bookingLink": "https://secure.booking.com/confirmation.fr.html?label=-DCpBIW3k2*WIo8XuzMdB9AS652796013276%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9056502%3Ali%3Adec%3Adm&sid=42572adeaeefbce6247112fddfc8686c&aid=2311236&auth_key=ZsTj8yW0tLPEuXX4&source=mytrips",
+        "hotel": "Perhentian Nemo Chalet",
+        "hotelAddress": "Rumah Rehat Pejabat Daerah, pulau perhentian kecil, , 22300 Îles Perhentian, Malaisie"
     },
     {
         "lieu": "Cherating",
