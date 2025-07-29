@@ -1,6 +1,5 @@
 // js/notes.js - Gestionnaire de bloc-notes avec Firebase v9
 
-// CORRECTION : Importer les fonctions depuis les URL complètes du CDN de Firebase
 import { ref, onValue, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
 export class NotesManager {
@@ -20,6 +19,7 @@ export class NotesManager {
         const mainContainer = document.querySelector('main');
         const footer = document.querySelector('.tropical-footer');
         if (!mainContainer || !footer) return;
+
         if (document.getElementById('notes-section')) return;
 
         const section = document.createElement('section');
@@ -35,6 +35,7 @@ export class NotesManager {
                     <li>Chargement des notes...</li>
                 </ul>
                 <form id="notes-form" class="notes-form">
+                    <label for="note-input" class="form-label">Laissez un message sur le carnet de voyage :</label>
                     <textarea id="note-input" placeholder="Écrire une note ici..." required maxlength="500"></textarea>
                     <button type="submit">Ajouter la note</button>
                 </form>
