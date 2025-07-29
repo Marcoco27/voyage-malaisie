@@ -4,10 +4,11 @@ class AuthManager {
         this.isAuthenticated = false;
         this.loginContainer = null;
         this.mainContent = document.getElementById('main-content');
-        // La vérification de CONFIG se fait au moment de l'instanciation
+        
         if (typeof CONFIG === 'undefined') {
             console.error("Le fichier de configuration (config/config.js) n'a pas pu être chargé ou est incorrect.");
-            document.body.innerHTML = '<div class="error" style="padding: 20px;">Erreur critique : Impossible de charger la configuration de l'application.</div>';
+            // Utilisation des backticks (`) pour éviter les conflits avec les apostrophes.
+            document.body.innerHTML = `<div class="error" style="padding: 20px;">Erreur critique : Impossible de charger la configuration de l'application.</div>`;
             return;
         }
         this.init();
@@ -28,6 +29,7 @@ class AuthManager {
     _renderLoginForm() {
         const container = document.createElement('div');
         container.className = 'login-container';
+        // Utilisation des backticks (`) pour le HTML multi-lignes.
         container.innerHTML = `
             <div class="login-card">
                 <div class="login-header">
@@ -76,7 +78,8 @@ class AuthManager {
                 }
                 this.showMainContent();
             } else {
-                errorDiv.textContent = 'Nom d'utilisateur ou mot de passe incorrect';
+                // Correction de la chaîne avec apostrophe.
+                errorDiv.textContent = "Nom d'utilisateur ou mot de passe incorrect";
                 errorDiv.style.display = 'block';
             }
         });
@@ -99,12 +102,12 @@ class AuthManager {
             this.mainContent.style.display = 'block';
         }
 
+        // S'assure que l'application principale est initialisée
         if (typeof VoyageApp !== 'undefined' && !window.voyageApp) {
             window.voyageApp = new VoyageApp();
         }
     }
 }
 
-// L'instanciation se fait directement, car les scripts sont maintenant
-// chargés de manière synchrone dans le bon ordre.
+// L'instanciation doit se faire une seule fois, après la définition de la classe.
 new AuthManager();
