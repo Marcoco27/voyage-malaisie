@@ -1,6 +1,7 @@
 // js/notes.js - Gestionnaire de bloc-notes avec Firebase v9
 
-import { ref, onValue, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+// Importer les fonctions nécessaires, y compris remove et update
+import { ref, onValue, push, serverTimestamp, remove, update } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
 export class NotesManager {
     constructor(database) {
@@ -19,7 +20,6 @@ export class NotesManager {
         const mainContainer = document.querySelector('main');
         const footer = document.querySelector('.tropical-footer');
         if (!mainContainer || !footer) return;
-
         if (document.getElementById('notes-section')) return;
 
         const section = document.createElement('section');
@@ -95,40 +95,65 @@ export class NotesManager {
                     this.displayNote(noteData);
                 });
             }
-        }, error => {
-            console.error("Erreur de lecture:", error);
-            if (this.notesList) {
-                this.notesList.innerHTML = '<li>Impossible de charger les notes.</li>';
-            }
         });
     }
     
     displayNote(noteData) {
         const noteElement = document.createElement('li');
         noteElement.className = 'note-item';
+        noteElement.dataset.key = noteData.key;
 
-        let formattedDate = "Date inconnue";
-        if (noteData.timestamp) {
-            const date = new Date(noteData.timestamp);
-            if (!isNaN(date.getTime())) {
-                formattedDate = date.toLocaleString('fr-FR', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-            }
-        }
+        const formattedDate = noteData.timestamp ? new Date(noteData.timestamp).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Date inconnue";
 
         noteElement.innerHTML = `
-            <p class="note-content">${this.sanitize(noteData.content || 'Note vide')}</p>
-            <span class="note-timestamp">${formattedDate}</span>
+            <div class="note-content-display">
+                <p class="note-content">${this.sanitize(noteData.content || 'Note vide')}</p>
+                <span class="note-timestamp">${formattedDate}</span>
+            </div>
+            <div class="note-content-edit">
+                <textarea class="edit-textarea">${noteData.content || ''}</textarea>
+                <button class="save-btn">Enregistrer</button>
+                <button class="cancel-btn">Annuler</button>
+            </div>
+            <div class="note-actions">
+                <button class="edit-btn" title="Modifier"><i class="fas fa-pencil-alt"></i></button>
+                <button class="delete-btn" title="Supprimer"><i class="fas fa-trash"></i></button>
+            </div>
         `;
         
         this.notesList.appendChild(noteElement);
+
+        // --- Ajout des écouteurs d'événements ---
+        noteElement.querySelector('.delete-btn').addEventListener('click', () => {
+            if (confirm("Êtes-vous sûr de vouloir supprimer cette note ?")) {
+                this.deleteNote(noteData.key);
+            }
+        });
+
+        noteElement.querySelector('.edit-btn').addEventListener('click', () => this.toggleEditMode(noteElement, true));
+        noteElement.querySelector('.cancel-btn').addEventListener('click', () => this.toggleEditMode(noteElement, false));
+        noteElement.querySelector('.save-btn').addEventListener('click', () => {
+            const newContent = noteElement.querySelector('.edit-textarea').value.trim();
+            this.updateNote(noteData.key, newContent);
+        });
     }
     
+    deleteNote(noteKey) {
+        const noteRef = ref(this.db, `blocnotes/${noteKey}`);
+        remove(noteRef).catch(error => console.error("Erreur de suppression:", error));
+    }
+
+    updateNote(noteKey, newContent) {
+        if (!newContent) return;
+        const noteRef = ref(this.db, `blocnotes/${noteKey}`);
+        update(noteRef, { content: newContent })
+            .catch(error => console.error("Erreur de mise à jour:", error));
+    }
+
+    toggleEditMode(noteElement, isEditing) {
+        noteElement.classList.toggle('editing', isEditing);
+    }
+
     sanitize(text) {
         const element = document.createElement('div');
         element.innerText = text;
