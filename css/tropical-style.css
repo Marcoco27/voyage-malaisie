@@ -1,3 +1,7 @@
+/* Couleur de police foncée pour le texte des cards (hors dark mode) */
+.card-details, .card-details .card-section, .card-details .card-description, .card-details .card-conseil, .card-details .card-activites, .card-details .card-activites li, .card-details .card-transport, .card-details .card-distance {
+    color: #333;
+}
 /* Animation et affichage des détails de card */
 .note-card .card-details {
   max-height: 0;
