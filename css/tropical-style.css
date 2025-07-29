@@ -464,103 +464,87 @@ tbody tr:hover { background: #f8f8f8; }
   outline-offset: 2px;
 }
 
-/* ===== Bloc-notes ===== */
-.notes-section {
-    background: var(--sand);
-    border-radius: 20px;
-    padding: 2rem;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 900px; /* Limite la largeur max */
-}
-
-.notes-container {
-    background: white;
+/* ===== Styles améliorés pour le bloc-notes ===== */
+.notes-app-container {
+    background: #ffffff;
     border-radius: 15px;
-    padding: 1.5rem;
+    padding: 2rem;
     box-shadow: var(--shadow-soft);
+    border: 1px solid #eef2f5;
+    margin-top: 1rem;
 }
 
-.notes-history {
-    height: 300px;
+.notes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    max-height: 400px;
     overflow-y: auto;
-    margin-bottom: 1rem;
-    border: 1px solid #eee;
-    border-radius: 10px;
+}
+
+.note-item {
     padding: 1rem;
+    border-bottom: 1px solid #eef2f5;
+}
+
+.note-item:last-child {
+    border-bottom: none;
+}
+
+.note-content {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.note-timestamp {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+#notes-form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.note-entry {
-    background: var(--sand);
-    padding: 0.75rem 1rem;
-    border-radius: 10px;
-    max-width: 90%;
-}
-
-.note-text {
-    margin: 0 0 0.25rem 0;
-    white-space: pre-wrap; /* Conserve les sauts de ligne */
-    word-wrap: break-word;
-}
-
-.note-timestamp {
-    font-size: 0.75rem;
-    color: #777;
-    text-align: right;
-    display: block;
-}
-
-.notes-input-area {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.notes-textarea {
-    flex-grow: 1;
-    min-height: 50px;
-    height: 50px;
-    padding: 0.75rem;
+#notes-form textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
     font-size: 1rem;
     resize: vertical;
     box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.notes-btn {
+#notes-form textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 168, 168, 0.15);
+}
+
+#notes-form button {
+    align-self: flex-end; /* Aligner le bouton à droite */
     background: var(--primary);
     color: white;
     border: none;
-    padding: 0.5rem 1.2rem;
+    padding: 0.8rem 1.5rem;
     border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s;
     font-weight: 500;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
 }
-.notes-btn:hover {
+
+#notes-form button:hover {
     background: var(--ocean);
-}
-
-.notes-textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-}
-.notes-footer {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: #777;
-}
-
-.notes-btn:focus {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
-.notes-textarea:focus {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
+    transform: translateY(-2px);
 }
 
 /* ===== Boutons & Footer & Divers ===== */
