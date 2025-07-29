@@ -21,11 +21,8 @@ class VoyageApp {
         // Initialiser les autres modules
         this.weatherManager = new WeatherManager();
         this.clockManager = new ClockManager();
-        
-        // CORRECTION: On crée l'instance PUIS on l'initialise explicitement
         this.notesManager = new NotesManager();
         this.notesManager.init();
-
         this.marineAnimations = new MarineAnimations();
 
         // Gestion du hash pour ouvrir la card correspondante
@@ -230,6 +227,7 @@ class VoyageApp {
         if (!notesContainer) return;
 
         notesContainer.addEventListener('click', (e) => {
+            // CORRECTION: Le sélecteur était incorrect, il doit être '.card-header'
             const header = e.target.closest('.card-header');
             if (header) {
                 const card = header.closest('.note-card');
