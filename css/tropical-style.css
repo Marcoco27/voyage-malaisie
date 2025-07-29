@@ -63,68 +63,6 @@ body {
   transition: background 0.3s, color 0.3s;
 }
 
-/* ===== Dark Mode Support ===== */
-@media (prefers-color-scheme: dark) {
-  body {
-    background: var(--darkmode-bg);
-    color: var(--darkmode-text);
-  }
-  .hero-header, footer {
-    background: var(--gradient-main), var(--darkmode-nav);
-    color: var(--darkmode-text);
-  }
-  .main-nav {
-    background: rgba(0,60,60,0.97);
-    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-  }
-  .main-nav a {
-    background: rgba(255,255,255,0.08);
-    color: var(--darkmode-accent);
-    border: 1px solid var(--darkmode-border);
-  }
-  .main-nav a:hover, .main-nav a:focus {
-    background: rgba(255,255,255,0.18);
-    color: var(--accent);
-  }
-  .stat-box, .notes-container, .note-card, .login-card, .table-container table, .weather-widget {
-    background: var(--darkmode-card);
-    color: var(--darkmode-text);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  }
-  .card-banner, thead {
-    background: var(--gradient-main), var(--darkmode-nav);
-    color: var(--darkmode-accent);
-  }
-  .notes-textarea {
-    background: #1a232a;
-    color: var(--darkmode-text);
-    border-color: var(--darkmode-border);
-  }
-  .notes-btn, .booking-btn, .logout-btn, .back-to-top {
-    background: var(--gradient-cool);
-    color: var(--darkmode-text);
-  }
-
-  /* Correction pour la couleur du texte des cards en mode sombre */
-  .card-details .card-description,
-  .card-details .card-conseil,
-  .card-details .card-transport,
-  .card-details .card-distance,
-  .card-details .card-activites li {
-      color: var(--darkmode-text);
-      opacity: 0.9;
-  }
-  .card-details .section-title {
-      color: var(--darkmode-accent);
-  }
-  .card-details .card-activites li i {
-      color: var(--darkmode-accent);
-  }
-  .booking-btn.gcal-link {
-      background: var(--darkmode-accent);
-      color: #222;
-  }
-}
 
 h1, h2, h3, .main-nav a, strong { 
   font-weight: 600; 
