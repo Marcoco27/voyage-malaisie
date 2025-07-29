@@ -1,26 +1,14 @@
 // Application principale de voyage en Malaisie
 class VoyageApp {
     constructor() {
-        this.voyage = [
-            { lieu: "Kuala Lumpur (arrivée)", dates: "31 juil – 03 août", nuits: 3, distance: "—", lat: 3.07823, lon: 101.60376, transport: ["avion", "voiture"], image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=2064&auto=format&fit=crop&ixlib=rb-4.1.0", description: "Premiers pas dans la fourmilière urbaine. Un mélange fascinant de modernité et de tradition.", activites: ["Admirer les tours Petronas", "Se perdre dans Jalan Alor"], conseil: "Utilisez 'Grab' (équivalent d'Uber) pour vous déplacer facilement.", bookingLink: "" },
-            { lieu: "Cameron Highlands", dates: "03 et 04 août", nuits: 1, distance: "220 km – 3 h 30", lat: 4.471, lon: 101.377, transport: ["voiture"], image: "https://images.unsplash.com/photo-1646977804023-a852f96fbdcd?w=600&auto=format&fit=crop&q=60", description: "Superbe ballade au milieu des plantations de thé. Un bol d'air frais et verdoyant.", activites: ["Visite des plantations de thé", "Randonnée dans la Mossy Forest"], conseil: "Prendre une petite laine, les nuits sont fraîches.", bookingLink: "" },
-            { lieu: "Taman Negara", dates: "04 – 06 août", nuits: 2, distance: "245 km – 4h à 4h30", lat: 4.37, lon: 102.4, transport: ["voiture", "pirogue"], image: "https://images.unsplash.com/photo-1633683935952-ad5b2d927a31?w=600&auto=format&fit=crop&q=60", description: "Aventure au cœur de la plus vieille forêt tropicale du monde !", activites: ["Pont suspendu (canopy walk)", "Excursion en pirogue", "Baignade à Lata Berkoh"], conseil: "Ne pas oublier l'anti-moustique et des chaussures de marche.", bookingLink: "" },
-            { lieu: "Kuala Besut", dates: "06 – 07 août", nuits: 1, distance: "275 km – 4 h", lat: 5.833, lon: 102.55, transport: ["voiture"], image: "https://images.unsplash.com/photo-1609511092514-b07ed4beddc6?w=600&auto=format&fit=crop&q=60", description: "Etape pratique et reposante avant d'embarquer pour le paradis.", activites: ["Dîner de fruits de mer frais", "Préparer ses affaires pour les îles"], conseil: "Confirmer l'heure du bateau pour le lendemain dès votre arrivée.", bookingLink: "" },
-            { lieu: "Îles Perhentian", dates: "07 – 09 août", nuits: 2, distance: "40 min de bateau", lat: 5.914, lon: 102.722, transport: ["bateau"], image: "https://images.unsplash.com/photo-1660574026735-04197dcf1f24?w=600&auto=format&fit=crop&q=60", description: "Le paradis sur terre. Des plages de sable blanc, une eau turquoise et une vie marine incroyable.", activites: ["Nager avec les tortues à Turtle Point", "Snorkeling à Shark Point", "Kayak de mer"], conseil: "Retirez de l'argent avant d'arriver, il n'y a pas de distributeur sur les îles.", bookingLink: "" },
-            { lieu: "Cherating", dates: "09 – 11 août", nuits: 2, distance: "220 km – 3 h 30", lat: 4.139, lon: 103.392, transport: ["voiture"], image: "https://images.unsplash.com/photo-1523340306477-76c135412b28?w=600&auto=format&fit=crop&q=60", description: "Ambiance décontractée, plage immense et une rencontre émouvante avec les tortues.", activites: ["Sanctuaire des tortues (lâcher de bébés le soir)", "Leçon de surf", "Kayak dans la mangrove"], conseil: "Le lâcher des tortues dépend de la saison, vérifiez les horaires.", bookingLink: "" },
-            { lieu: "Tioman Island", dates: "11 – 12 août", nuits: 1, distance: "155 km + 1h30 ferry", lat: 2.820, lon: 104.161, transport: ["voiture", "ferry"], image: "https://images.unsplash.com/flagged/photo-1576061798518-fb0500878ba7?w=600&auto=format&fit=crop&q=60", description: "Une île plus sauvage et montagneuse, parfaite pour la plongée et la tranquillité.", activites: ["Plongée sous-marine", "Randonnée vers les cascades d'Asah", "Détente sur la plage de Juara"], conseil: "L'île est grande, louer un scooter peut être une bonne option.", bookingLink: "" },
-            { lieu: "Singapour", dates: "12 – 15 août", nuits: 3, distance: "140 km + Frontière", lat: 1.3521, lon: 103.8198, transport: ["voiture"], image: "https://images.unsplash.com/photo-1472148439583-1f4cf81b80e0?w=600&auto=format&fit=crop&q=60", description: "La cité-jardin futuriste. Une propreté impeccable et des attractions de classe mondiale.", activites: ["Spectacle son et lumière à Gardens by the Bay", "Manger dans un 'Hawker Centre'", "Visiter Marina Bay Sands"], conseil: "Le réseau de métro (MRT) est excellent. Achetez une carte 'EZ-Link'.", bookingLink: "" },
-            { lieu: "Melaka", dates: "15 – 17 août", nuits: 2, distance: "240 km + Frontière", lat: 2.1896, lon: 102.2501, transport: ["voiture"], image: "https://plus.unsplash.com/premium_photo-1697730170911-9cf912ad3a22?w=600&auto=format&fit=crop&q=60", description: "Un joyau historique au charme colonial, classé à l'UNESCO.", activites: ["Place hollandaise (Stadthuys)", "Marché nocturne de Jonker Walk", "Croisière sur la rivière Melaka"], conseil: "Goûtez la 'Chicken Rice Ball', une spécialité locale.", bookingLink: "" },
-            { lieu: "Kuala Selangor", dates: "17 – 18 août", nuits: 1, distance: "160 km – 2 h 15", lat: 3.3467, lon: 101.2634, transport: ["voiture"], image: "https://images.unsplash.com/photo-1736863929622-97ebe7e2a428?w=600&auto=format&fit=crop&q=60", description: "Célèbre pour ses paysages et son spectacle naturel féerique.", activites: ["Voir les lucioles en barque (vers 20h)", "Observer les singes 'Silver-leaf'"], conseil: "Le spectacle des lucioles est meilleur par nuit sans lune.", bookingLink: "" },
-            { lieu: "Kuala Lumpur (fin de séjour)", dates: "18 – 20 août", nuits: 2, distance: "85 km – 1 h 15", lat: 3.139, lon: 101.687, transport: ["voiture"], image: "https://images.unsplash.com/photo-1598797246294-7620e33a632f?w=600&auto=format&fit=crop&q=60", description: "Derniers moments pour le shopping, les visites ou simplement se détendre.", activites: ["Shopping à Bukit Bintang", "Visite du Musée des arts islamiques", "Profiter de la piscine de l'hôtel"], conseil: "Prévoyez large pour le transfert vers l'aéroport KLIA.", bookingLink: "" }
-        ];
-        
+        this.voyage = [];
         this.map = null;
         this.markers = [];
         this.init();
     }
     
-    init() {
+    async init() {
+        await this.loadItineraryData();
         this.renderBaseLayout();
         this.createLogoutButton();
         this.generateStats();
@@ -40,6 +28,23 @@ class VoyageApp {
         // Gestion du hash pour ouvrir la card correspondante
         setTimeout(() => this.openCardFromHash(), 150);
         window.addEventListener('hashchange', () => this.openCardFromHash());
+    }
+
+    async loadItineraryData() {
+        try {
+            const response = await fetch('data/itinerary.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            this.voyage = await response.json();
+        } catch (error) {
+            console.error("Impossible de charger les données de l'itinéraire:", error);
+            // Afficher un message d'erreur à l'utilisateur
+            const container = document.getElementById('main-content');
+            if (container) {
+                container.innerHTML = `<div class="error">Impossible de charger les données du voyage. Veuillez réessayer plus tard.</div>`;
+            }
+        }
     }
     
     renderBaseLayout() {
@@ -151,7 +156,7 @@ class VoyageApp {
             // Adapter la vue pour englober tout l'itinéraire
             this.map.fitBounds(latlngs, {padding: [50, 50], maxZoom: 9});
         } catch (error) {
-            document.getElementById("map").innerHTML = `<div class=\"error\">⚠️ Impossible d'afficher la carte.</div>`;
+            document.getElementById("map").innerHTML = `<div class="error">⚠️ Impossible d'afficher la carte.</div>`;
         }
     }
     
@@ -175,7 +180,8 @@ class VoyageApp {
         notesContainer.innerHTML = '';
         this.voyage.forEach((etape, index) => {
             // Préparation du lien Google Calendar
-            const details = encodeURIComponent(etape.description + (etape.conseil ? '\nConseil : ' + etape.conseil : ''));
+            const details = encodeURIComponent(etape.description + (etape.conseil ? '
+Conseil : ' + etape.conseil : ''));
             let start = '', end = '';
             const dateMatch = etape.dates.match(/(\d{1,2})\s*(\w+)\s*[–-]\s*(\d{1,2})\s*(\w+)/);
             if (dateMatch) {
