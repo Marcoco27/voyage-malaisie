@@ -9,13 +9,6 @@ import { WeatherManager } from './weather.js';
 import { ClockManager } from './clock.js';
 import { MarineAnimations } from './marine-animations.js';
 
-// --- Sécurité d'accès ---
-const sessionKey = 'voyage_access_granted';
-if (sessionStorage.getItem(sessionKey) !== 'true') {
-    // Si l'accès n'a pas été accordé, rediriger vers la page de connexion
-    window.location.href = 'index.html';
-}
-
 // --- Configuration Centralisée ---
 const config = {
     firebase: {

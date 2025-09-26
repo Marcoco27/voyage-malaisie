@@ -72,7 +72,6 @@ export class VoyageApp {
                                     <th><i class="fas fa-moon"></i> Nuits</th>
                                     <th><i class="fas fa-hotel"></i> Hébergement</th>
                                     <th><i class="fas fa-route"></i> Distance / durée</th>
-                                    <th><i class="fas fa-bed"></i> Réservation</th>
                                 </tr>
                             </thead>
                             <tbody id="itinerary-body"></tbody>
@@ -147,7 +146,6 @@ export class VoyageApp {
                     ${etape.hotel ? `<strong>${etape.hotel}</strong><br><small>${etape.hotelAddress}</small>` : 'N/A'}
                 </td>
                 <td>${etape.distance}</td>
-                <td>${etape.bookingLink ? `<a href="${etape.bookingLink}" class="booking-btn" target="_blank">Voir</a>` : '<span class="booking-placeholder">À venir</span>'}</td>
             </tr>
         `).join('');
     }
@@ -184,7 +182,6 @@ export class VoyageApp {
                         ${etape.conseil ? `<strong class="section-title"><i class="fas fa-lightbulb"></i> Conseil</strong><p class="card-conseil">${etape.conseil}</p>` : ''}
                         ${(etape.transport && etape.transport.length) ? `<div class="card-transport"><strong><i class="fas fa-bus"></i> Transport :</strong> ${etape.transport.join(', ')}</div>` : ''}
                         ${etape.distance ? `<div class="card-distance"><strong><i class="fas fa-route"></i> Distance :</strong> ${etape.distance}</div>` : ''}
-                        ${etape.bookingLink ? `<a href="${etape.bookingLink}" class="booking-btn booking-link" target="_blank">Voir la réservation</a>` : ''}
                     </div>
                 </div>
             `;
@@ -222,7 +219,7 @@ export class VoyageApp {
         notesContainer.addEventListener('click', (e) => {
             const header = e.target.closest('.card-header');
             if (header) {
-                const card = header.closest('.note-card');
+                const card = header.closest('note-card');
                 if (card) this.toggleCard(card);
             }
         });
