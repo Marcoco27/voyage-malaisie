@@ -58,6 +58,15 @@ export class VoyageApp {
                         <h2>Le Périple en Malaisie</h2>
                     </div>
                     <div id="map"></div>
+                </section>
+                <section id="notes-etapes" class="fade-in">
+                    <div class="title-with-icon">
+                        <img src="assets/image-map-itineraire.png" alt="Icône de notes" class="title-icon">
+                        <h2>Toutes les Infos</h2>
+                    </div>
+                    <div id="notes-container"></div>
+                </section>
+                <section id="planning-detaille" class="fade-in">
                     <div class="title-with-icon">
                         <img src="assets/image-map-itineraire.png" alt="Icône de calendrier" class="title-icon">
                         <h2>Planning Détaillé</h2>
@@ -76,13 +85,6 @@ export class VoyageApp {
                             <tbody id="itinerary-body"></tbody>
                         </table>
                     </div>
-                </section>
-                <section id="notes-etapes" class="fade-in">
-                    <div class="title-with-icon">
-                        <img src="assets/image-map-itineraire.png" alt="Icône de notes" class="title-icon">
-                        <h2>Toutes les Infos</h2>
-                    </div>
-                    <div id="notes-container"></div>
                 </section>
             </main>
             <footer class="tropical-footer">
