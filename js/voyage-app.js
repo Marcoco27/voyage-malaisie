@@ -44,7 +44,6 @@ export class VoyageApp {
                 <nav class="main-nav">
                     <a href="#itineraire"><i class="fas fa-map"></i> Itinéraire</a>
                     <a href="#notes-etapes"><i class="fas fa-info-circle"></i> Détails des étapes</a>
-                    <a href="#notes-section"><i class="fas fa-sticky-note"></i> Bloc-notes</a>
                 </nav>
             </header>
             <main>
@@ -85,7 +84,6 @@ export class VoyageApp {
                     </div>
                     <div id="notes-container"></div>
                 </section>
-                <!-- La section Bloc-notes est maintenant générée par js/notes.js -->
             </main>
             <footer class="tropical-footer">
                 <p>Fait avec ❤️ pour un voyage inoubliable</p>

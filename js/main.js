@@ -4,7 +4,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebas
 import { getDatabase } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
 
 import { VoyageApp } from './voyage-app.js';
-import { NotesManager } from './notes.js';
 import { WeatherManager } from './weather.js';
 import { ClockManager } from './clock.js';
 import { MarineAnimations } from './marine-animations.js';
@@ -60,7 +59,6 @@ class MainApp {
             const voyageApp = new VoyageApp();
             await voyageApp.init(); 
 
-            new NotesManager(this.database).init();
             new WeatherManager(this.config.weather).init();
             new ClockManager(this.config.timezones).init();
             new MarineAnimations(this.config.marineAnimations).init();
