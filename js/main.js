@@ -1,8 +1,5 @@
 // js/main.js - Point d'entrée principal de l'application
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
-
 import { VoyageApp } from './voyage-app.js';
 import { WeatherManager } from './weather.js';
 import { ClockManager } from './clock.js';
@@ -10,15 +7,6 @@ import { MarineAnimations } from './marine-animations.js';
 
 // --- Configuration Centralisée ---
 const config = {
-    firebase: {
-      apiKey: "AIzaSyD7JU2HJpEZFW4LSFH0LzRVivulTUgaBpc",
-      authDomain: "mgprofilbox.firebaseapp.com",
-      projectId: "mgprofilbox",
-      storageBucket: "mgprofilbox.appspot.com",
-      messagingSenderId: "663481645724",
-      appId: "1:663481645724:web:f438035583a728200e0b59",
-      databaseURL: "https://mgprofilbox-default-rtdb.europe-west1.firebasedatabase.app"
-    },
     weather: {
         apiKey: 'a1e80ab5644eba8f07d8920d13f9bf83',
         apiUrl: 'https://api.openweathermap.org/data/2.5/weather',
@@ -45,13 +33,7 @@ const config = {
 class MainApp {
     constructor(config) {
         this.config = config;
-        this.initFirebase();
         this.initApplication();
-    }
-
-    initFirebase() {
-        const app = initializeApp(this.config.firebase);
-        this.database = getDatabase(app);
     }
 
     initApplication() {
