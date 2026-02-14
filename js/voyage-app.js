@@ -1,5 +1,7 @@
 // Application principale de voyage en Malaisie
 
+import { dataService } from './services/dataService.js';
+
 export class VoyageApp {
     constructor() {
         this.voyage = [];
@@ -21,11 +23,7 @@ export class VoyageApp {
 
     async loadItineraryData() {
         try {
-            const response = await fetch('data/itinerary.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            this.voyage = await response.json();
+            this.voyage = await dataService.fetchItinerary();
         } catch (error) {
             console.error("Impossible de charger les données de l'itinéraire:", error);
             const container = document.getElementById('main-content');

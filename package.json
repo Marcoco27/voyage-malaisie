@@ -1,5 +1,12 @@
 {
-  "dependencies": {
-    "firebase": "^12.0.0"
-  }
+  "name": "voyage-malaisie",
+  "version": "1.0.0",
+  "description": "Application web interactive - Itinéraire Malaisie & Singapour",
+  "scripts": {
+    "dev": "npx serve .",
+    "preview": "npx serve . -l 3000"
+  },
+  "devDependencies": {},
+  "keywords": ["voyage", "malaisie", "singapour", "leaflet"],
+  "license": "MIT"
 }
