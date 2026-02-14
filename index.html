@@ -1,37 +1,842 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>🏝️ Voyage Malaisie & Singapour - Application</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malaisie & Singapour — 20 jours au bout du monde</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   VARIABLES & RESET
+═══════════════════════════════════════ */
+:root {
+  --jungle:  #1a3a2a;
+  --palm:    #2d5a3d;
+  --sea:     #0a4a5e;
+  --lagoon:  #1b8a9a;
+  --sand:    #f0e8d8;
+  --ivory:   #faf7f2;
+  --cream:   #f5f0e8;
+  --gold:    #c9a84c;
+  --rust:    #b5451b;
+  --text:    #1e1e1e;
+  --muted:   #7a7a6e;
+  --light:   #ede8de;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: 'Outfit', sans-serif; background: var(--ivory); color: var(--text); overflow-x: hidden; line-height: 1.6; }
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
 
-    <!-- Polices & Icônes Externes -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+/* ═══════════════════════════════════════
+   NAV
+═══════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5vw; height: 64px; background: transparent;
+  transition: background 0.4s, backdrop-filter 0.4s;
+}
+nav.scrolled { background: rgba(26,58,42,0.97); backdrop-filter: blur(12px); }
+.nav-logo { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.2em; color: var(--sand); text-transform: uppercase; opacity: 0.85; }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a { font-size: 0.75rem; font-weight: 400; letter-spacing: 0.08em; color: rgba(240,232,216,0.7); text-transform: uppercase; transition: color 0.2s; }
+.nav-links a:hover { color: var(--gold); }
 
-    <!-- Leaflet (Carte) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  overflow: hidden; background: var(--jungle); padding-bottom: 80px;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 75% 35%, rgba(27,138,154,0.28) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 15% 85%, rgba(201,168,76,0.18) 0%, transparent 60%),
+    linear-gradient(155deg, #0d1f16 0%, #1a3a2a 45%, #0d2d3a 100%);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(201,168,76,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+.hero-deco { position: absolute; pointer-events: none; }
+.hero-deco-1 { top: -60px; right: -60px; width: 520px; opacity: 0.055; animation: floatSlow 24s ease-in-out infinite; }
+.hero-deco-2 { bottom: 40px; left: -80px; width: 380px; opacity: 0.045; animation: floatSlow 30s ease-in-out infinite reverse; }
+@keyframes floatSlow {
+  0%,100% { transform: translate(0,0) rotate(0deg); }
+  40% { transform: translate(14px,-20px) rotate(4deg); }
+  70% { transform: translate(-8px,12px) rotate(-2deg); }
+}
+.hero-content { position: relative; z-index: 2; padding: 0 8vw; max-width: 860px; }
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.28em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 28px;
+  display: flex; align-items: center; gap: 14px;
+  opacity: 0; animation: fadeUp 0.9s 0.2s forwards;
+}
+.hero-eyebrow::before { content: ''; display: block; width: 40px; height: 1px; background: var(--gold); opacity: 0.6; }
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.2rem, 8vw, 7rem); font-weight: 300; line-height: 1.0;
+  color: var(--sand); letter-spacing: -0.01em; margin-bottom: 32px;
+  opacity: 0; animation: fadeUp 1s 0.5s forwards;
+}
+.hero-title em { font-style: italic; color: rgba(240,232,216,0.55); display: block; font-size: 0.72em; }
+.hero-desc {
+  font-size: 1.05rem; font-weight: 300; color: rgba(240,232,216,0.65);
+  max-width: 520px; line-height: 1.8; margin-bottom: 48px;
+  opacity: 0; animation: fadeUp 1s 0.8s forwards;
+}
+.hero-stats { display: flex; gap: 40px; flex-wrap: wrap; opacity: 0; animation: fadeUp 1s 1.0s forwards; }
+.hero-stat { display: flex; flex-direction: column; gap: 4px; }
+.hero-stat-value { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 300; color: var(--sand); line-height: 1; }
+.hero-stat-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); opacity: 0.8; }
+.hero-stat + .hero-stat { padding-left: 40px; border-left: 1px solid rgba(201,168,76,0.2); }
+.hero-scroll {
+  position: absolute; bottom: 28px; right: 8vw;
+  font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.2em;
+  color: rgba(240,232,216,0.3); text-transform: uppercase; writing-mode: vertical-rl;
+  display: flex; align-items: center; gap: 12px; animation: fadeIn 2s 1.8s both;
+}
+.hero-scroll::after { content: ''; display: block; width: 1px; height: 48px; background: linear-gradient(to bottom, rgba(240,232,216,0.3), transparent); }
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="css/tropical-style.css">
+/* ═══════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════ */
+section { padding: 100px 0; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 5vw; }
+.container-wide { max-width: 1300px; margin: 0 auto; padding: 0 5vw; }
+.section-label {
+  font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--lagoon); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-label::before { content: ''; width: 28px; height: 1px; background: var(--lagoon); opacity: 0.7; }
+.section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 300; line-height: 1.15; color: var(--jungle); margin-bottom: 18px; }
+.section-title em { font-style: italic; color: var(--lagoon); }
+.section-intro { font-size: 1rem; font-weight: 300; color: var(--muted); max-width: 540px; line-height: 1.8; }
 
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏝️</text></svg>">
+/* ═══════════════════════════════════════
+   OVERVIEW — CHAPTERS
+═══════════════════════════════════════ */
+.overview { background: var(--ivory); }
+.chapters-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 60px; }
+.chapter-card { position: relative; overflow: hidden; min-height: 360px; display: flex; flex-direction: column; justify-content: flex-end; cursor: default; }
+.chapter-card-bg { position: absolute; inset: 0; transition: transform 0.7s cubic-bezier(0.25,0.1,0.25,1); }
+.chapter-card:hover .chapter-card-bg { transform: scale(1.05); }
+.chapter-card-bg-1 { background: linear-gradient(145deg, #1a2a3a 0%, #2a4560 100%); }
+.chapter-card-bg-2 { background: linear-gradient(145deg, #1a3a2a 0%, #0d2b1e 100%); }
+.chapter-card-bg-3 { background: linear-gradient(145deg, #0a3a4a 0%, #0d4560 100%); }
+.chapter-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.08) 65%); }
+.chapter-card:nth-child(1) .chapter-card-bg::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(201,168,76,0.1) 1px, transparent 1px); background-size: 24px 24px; }
+.chapter-card:nth-child(2) .chapter-card-bg::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(27,138,154,0.07) 10px, rgba(27,138,154,0.07) 11px); }
+.chapter-card:nth-child(3) .chapter-card-bg::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(45deg, rgba(201,168,76,0.06) 25%, transparent 25%, transparent 75%, rgba(201,168,76,0.06) 75%); background-size: 20px 20px; }
+.chapter-card-content { position: relative; z-index: 2; padding: 32px; }
+.chapter-number { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.2em; color: var(--gold); opacity: 0.8; margin-bottom: 8px; }
+.chapter-icon { font-size: 1.7rem; margin-bottom: 10px; display: block; }
+.chapter-title { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 400; color: var(--sand); line-height: 1.2; margin-bottom: 10px; }
+.chapter-desc { font-size: 0.8rem; font-weight: 300; color: rgba(240,232,216,0.6); line-height: 1.6; margin-bottom: 18px; }
+.chapter-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.chapter-tag { font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.1em; padding: 3px 9px; border: 1px solid rgba(201,168,76,0.3); color: rgba(240,232,216,0.55); border-radius: 2px; }
 
+/* ═══════════════════════════════════════
+   ÉTAPES
+═══════════════════════════════════════ */
+.etapes { background: var(--cream); }
+.etapes-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 56px; flex-wrap: wrap; gap: 24px; }
+.chapter-filter { display: flex; }
+.filter-btn { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 10px 18px; border: 1px solid var(--light); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.2s; margin-left: -1px; }
+.filter-btn.active, .filter-btn:hover { background: var(--jungle); color: var(--sand); border-color: var(--jungle); z-index: 1; }
+.destinations-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 2px; }
+.dest-card { background: white; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.dest-card:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(26,58,42,0.1); position: relative; z-index: 2; }
+.dest-photo { height: 200px; position: relative; overflow: hidden; }
+.dest-photo-inner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.7s ease; }
+.dest-card:hover .dest-photo-inner { transform: scale(1.06); }
+.dest-photo-kl       { background: linear-gradient(145deg, #1a2a4a 0%, #1a4a6a 100%); }
+.dest-photo-highland { background: linear-gradient(145deg, #1a3a1a 0%, #3a6a2a 100%); }
+.dest-photo-jungle   { background: linear-gradient(145deg, #0d2b1e 0%, #2a4a1a 100%); }
+.dest-photo-coast    { background: linear-gradient(145deg, #1a3a4a 0%, #1a5a6a 100%); }
+.dest-photo-island   { background: linear-gradient(145deg, #0a3a5a 0%, #0a6a8a 100%); }
+.dest-photo-city     { background: linear-gradient(145deg, #2a1a3a 0%, #1a2a5a 100%); }
+.dest-photo-colonial { background: linear-gradient(145deg, #3a2a1a 0%, #4a3a1a 100%); }
+.dest-photo-icon { font-size: 3.5rem; opacity: 0.2; }
+.dest-photo-label { position: absolute; bottom: 10px; left: 14px; right: 14px; font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.38); text-transform: uppercase; }
+.dest-meta { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--light); }
+.dest-dates { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--muted); letter-spacing: 0.07em; }
+.dest-nights { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 0.58rem; padding: 3px 8px; background: var(--light); color: var(--muted); border-radius: 2px; }
+.dest-body { padding: 18px; }
+.dest-name { font-family: 'Cormorant Garamond', serif; font-size: 1.42rem; font-weight: 400; color: var(--jungle); margin-bottom: 5px; line-height: 1.2; }
+.dest-tagline { font-size: 0.8rem; color: var(--lagoon); font-weight: 400; margin-bottom: 12px; font-style: italic; }
+.dest-text { font-size: 0.83rem; font-weight: 300; color: var(--muted); line-height: 1.72; margin-bottom: 16px; }
+.dest-tips { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--light); padding-top: 14px; }
+.dest-tip { display: flex; gap: 10px; align-items: flex-start; }
+.dest-tip-icon { font-size: 0.88rem; flex-shrink: 0; margin-top: 1px; }
+.dest-tip-text { font-size: 0.77rem; color: var(--text); font-weight: 400; line-height: 1.5; }
+.dest-tip-text strong { color: var(--jungle); font-weight: 500; }
+.dest-hotel { margin-top: 14px; padding: 11px 14px; background: var(--cream); border-left: 2px solid var(--gold); display: flex; gap: 10px; align-items: flex-start; }
+.dest-hotel-label { font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.12em; color: var(--gold); text-transform: uppercase; flex-shrink: 0; margin-top: 2px; }
+.dest-hotel-name { font-size: 0.78rem; font-weight: 400; color: var(--jungle); line-height: 1.4; }
+
+/* ═══════════════════════════════════════
+   INFOS PRATIQUES
+═══════════════════════════════════════ */
+.infos { background: var(--jungle); color: var(--sand); }
+.infos .section-label { color: var(--gold); }
+.infos .section-label::before { background: var(--gold); }
+.infos .section-title { color: var(--sand); }
+.infos .section-title em { color: rgba(27,138,154,0.95); }
+.infos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1px; margin-top: 56px; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.1); }
+.info-block { background: var(--jungle); padding: 36px 30px; transition: background 0.3s; }
+.info-block:hover { background: rgba(255,255,255,0.04); }
+.info-block-icon { font-size: 1.7rem; margin-bottom: 14px; display: block; }
+.info-block-title { font-family: 'Cormorant Garamond', serif; font-size: 1.28rem; font-weight: 400; color: var(--sand); margin-bottom: 16px; }
+.info-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.info-list li { font-size: 0.82rem; font-weight: 300; color: rgba(240,232,216,0.68); line-height: 1.6; padding-left: 16px; position: relative; }
+.info-list li::before { content: '—'; position: absolute; left: 0; color: var(--gold); opacity: 0.55; font-size: 0.7rem; }
+.info-list li strong { color: var(--sand); font-weight: 500; }
+.info-highlight { grid-column: 1 / -1; background: rgba(27,138,154,0.1); border: 1px solid rgba(27,138,154,0.2); padding: 32px; }
+.info-highlight-title { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; color: var(--lagoon); text-transform: uppercase; margin-bottom: 20px; }
+.budget-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px,1fr)); gap: 24px; }
+.budget-item-label { font-size: 0.74rem; color: rgba(240,232,216,0.45); margin-bottom: 4px; font-weight: 300; }
+.budget-item-value { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 300; color: var(--sand); line-height: 1; }
+.budget-item-sub { font-size: 0.7rem; color: rgba(240,232,216,0.38); font-weight: 300; margin-top: 3px; }
+
+/* ═══════════════════════════════════════
+   DÉCOUVERTES
+═══════════════════════════════════════ */
+.decouvertes { background: var(--ivory); }
+.decouvertes-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 20px; margin-top: 56px; }
+.decouverte-item { display: flex; gap: 18px; padding: 26px; border: 1px solid var(--light); background: white; transition: border-color 0.25s, transform 0.25s; }
+.decouverte-item:hover { border-color: var(--lagoon); transform: translateY(-2px); }
+.decouverte-emoji { font-size: 1.9rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+.decouverte-title { font-family: 'Cormorant Garamond', serif; font-size: 1.12rem; font-weight: 600; color: var(--jungle); margin-bottom: 6px; }
+.decouverte-text { font-size: 0.8rem; font-weight: 300; color: var(--muted); line-height: 1.65; }
+.decouverte-tag { display: inline-block; margin-top: 10px; font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.12em; padding: 3px 9px; border: 1px solid var(--lagoon); color: var(--lagoon); border-radius: 2px; text-transform: uppercase; }
+
+/* ═══════════════════════════════════════
+   PLANNING TABLE
+═══════════════════════════════════════ */
+.planning { background: var(--cream); }
+.planning-table-wrap { margin-top: 48px; overflow-x: auto; }
+.planning-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 680px; }
+.planning-table th { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); padding: 14px 14px; text-align: left; border-bottom: 2px solid var(--jungle); white-space: nowrap; }
+.planning-table td { padding: 13px 14px; border-bottom: 1px solid var(--light); vertical-align: top; line-height: 1.4; }
+.planning-table tr:last-child td { border-bottom: none; }
+.planning-table tr:hover td { background: rgba(26,58,42,0.03); }
+.td-dates { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); white-space: nowrap; }
+.td-lieu { font-weight: 500; color: var(--jungle); }
+.td-lieu small { display: block; font-size: 0.7rem; font-weight: 300; color: var(--muted); margin-top: 1px; }
+.td-nights { font-family: 'DM Mono', monospace; font-size: 0.72rem; text-align: center; color: var(--text); }
+.td-hotel { font-size: 0.79rem; font-weight: 400; color: var(--text); }
+.td-hotel small { display: block; color: var(--muted); font-size: 0.7rem; font-weight: 300; margin-top: 2px; }
+.td-distance { font-size: 0.77rem; color: var(--lagoon); white-space: nowrap; }
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer { background: var(--jungle); padding: 64px 5vw; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+.footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 2.1rem; font-weight: 300; color: var(--sand); letter-spacing: 0.04em; }
+.footer-sub { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; opacity: 0.7; }
+.footer-text { font-size: 0.82rem; color: rgba(240,232,216,0.38); font-weight: 300; max-width: 420px; line-height: 1.8; }
+.footer-line { width: 40px; height: 1px; background: rgba(201,168,76,0.3); }
+.scroll-top { position: fixed; bottom: 26px; right: 26px; width: 44px; height: 44px; background: var(--jungle); border: 1px solid rgba(201,168,76,0.35); color: var(--gold); font-size: 1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 50; opacity: 0; transform: translateY(14px); transition: all 0.3s; }
+.scroll-top.visible { opacity: 1; transform: translateY(0); }
+.scroll-top:hover { background: var(--palm); }
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════ */
+@keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s ease, transform 0.7s ease; }
+.reveal.in-view { opacity:1; transform:translateY(0); }
+.d1 { transition-delay:0.1s; }
+.d2 { transition-delay:0.22s; }
+.d3 { transition-delay:0.36s; }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width: 900px) {
+  .chapters-grid { grid-template-columns:1fr; }
+  .chapter-card { min-height:220px; }
+  .nav-links { display:none; }
+  .hero-stat + .hero-stat { padding-left:24px; }
+}
+@media (max-width: 600px) {
+  section { padding:72px 0; }
+  .hero-stat-value { font-size:1.9rem; }
+  .filter-btn { padding:8px 12px; font-size:0.58rem; }
+  .dest-nights { display:none; }
+}
+</style>
 </head>
-
 <body>
 
-    <!-- Contenu principal -->
-    <main id="main-content" tabindex="-1" aria-label="Contenu principal">
-        <!-- Le contenu sera généré par voyage-app.js -->
-    </main>
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo">MY &amp; SG · Août 2024</div>
+  <ul class="nav-links">
+    <li><a href="#overview">Parcours</a></li>
+    <li><a href="#etapes">Étapes</a></li>
+    <li><a href="#infos">Infos pratiques</a></li>
+    <li><a href="#decouvertes">Découvertes</a></li>
+    <li><a href="#planning">Planning</a></li>
+  </ul>
+</nav>
 
-    <!-- Point d'entrée unique pour l'application moderne -->
-    <script type="module" src="js/main.js"></script>
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-deco hero-deco-1">
+    <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+      <path d="M200 0 C200 0 390 100 375 250 C360 400 200 500 200 500 C200 500 10 400 25 250 C40 100 200 0 200 0Z" fill="rgba(27,138,154,1)" opacity="0.5"/>
+      <path d="M200 60 C200 60 320 140 308 240 C296 340 200 440 200 440 C200 440 104 340 92 240 C80 140 200 60 200 60Z" fill="rgba(27,138,154,1)" opacity="0.35"/>
+      <line x1="200" y1="20" x2="200" y2="480" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="hero-deco hero-deco-2">
+    <svg viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="150" cy="190" rx="110" ry="170" fill="none" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+      <ellipse cx="150" cy="190" rx="70" ry="110" fill="none" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+      <circle cx="150" cy="190" r="5" fill="rgba(201,168,76,0.2)"/>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Carnet de voyage · Août 2024</div>
+    <h1 class="hero-title">
+      Malaisie<br>
+      <em>&amp; Singapour</em>
+    </h1>
+    <p class="hero-desc">De la skyline de Kuala Lumpur aux eaux turquoise des Perhentian, en passant par la jungle primaire de Taman Negara — un itinéraire de 20 jours pensé pour voir le vrai visage de la péninsule.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-value">20</span><span class="hero-stat-label">Jours</span></div>
+      <div class="hero-stat"><span class="hero-stat-value">12</span><span class="hero-stat-label">Étapes</span></div>
+      <div class="hero-stat"><span class="hero-stat-value">1780</span><span class="hero-stat-label">Kilomètres</span></div>
+      <div class="hero-stat"><span class="hero-stat-value">5</span><span class="hero-stat-label">Transports</span></div>
+    </div>
+  </div>
+  <div class="hero-scroll">Défiler</div>
+</section>
 
+<!-- ═══ OVERVIEW ═══ -->
+<section class="overview" id="overview">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Le parcours</div>
+      <h2 class="section-title">Un voyage en <em>trois chapitres</em></h2>
+      <p class="section-intro">La péninsule malaise se découvre par couches. Voici comment se structure les 20 jours — trois ambiances bien distinctes, un rythme qui s'accélère vers le sud.</p>
+    </div>
+    <div class="chapters-grid">
+      <div class="chapter-card reveal d1">
+        <div class="chapter-card-bg chapter-card-bg-1"></div>
+        <div class="chapter-card-overlay"></div>
+        <div class="chapter-card-content">
+          <div class="chapter-number">Chapitre 01</div>
+          <span class="chapter-icon">🌆</span>
+          <div class="chapter-title">La ville &amp; les hauteurs</div>
+          <div class="chapter-desc">Des tours Petronas à la brume des Cameron Highlands, la Malaisie qui surprend d'entrée avec ses contrastes saisissants.</div>
+          <div class="chapter-tags"><span class="chapter-tag">Kuala Lumpur</span><span class="chapter-tag">Cameron Highlands</span><span class="chapter-tag">Kuala Selangor</span></div>
+        </div>
+      </div>
+      <div class="chapter-card reveal d2">
+        <div class="chapter-card-bg chapter-card-bg-2"></div>
+        <div class="chapter-card-overlay"></div>
+        <div class="chapter-card-content">
+          <div class="chapter-number">Chapitre 02</div>
+          <span class="chapter-icon">🌿</span>
+          <div class="chapter-title">La jungle &amp; la côte Est</div>
+          <div class="chapter-desc">La Malaisie sauvage et authentique. Forêt primaire de 130 millions d'années, bord de mer discret, premiers contacts avec les îles.</div>
+          <div class="chapter-tags"><span class="chapter-tag">Taman Negara</span><span class="chapter-tag">Kuala Besut</span><span class="chapter-tag">Cherating</span></div>
+        </div>
+      </div>
+      <div class="chapter-card reveal d3">
+        <div class="chapter-card-bg chapter-card-bg-3"></div>
+        <div class="chapter-card-overlay"></div>
+        <div class="chapter-card-content">
+          <div class="chapter-number">Chapitre 03</div>
+          <span class="chapter-icon">🏝️</span>
+          <div class="chapter-title">Les îles &amp; la cité-État</div>
+          <div class="chapter-desc">Les Perhentian turquoise, Tioman sauvage, puis la descente vers Singapour et le retour historique par Melaka.</div>
+          <div class="chapter-tags"><span class="chapter-tag">Perhentian</span><span class="chapter-tag">Tioman</span><span class="chapter-tag">Singapour</span><span class="chapter-tag">Melaka</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ÉTAPES ═══ -->
+<section class="etapes" id="etapes">
+  <div class="container-wide">
+    <div class="etapes-header reveal">
+      <div>
+        <div class="section-label">Les étapes</div>
+        <h2 class="section-title">Destination <em>par destination</em></h2>
+      </div>
+      <div class="chapter-filter">
+        <button class="filter-btn active" data-filter="all">Toutes</button>
+        <button class="filter-btn" data-filter="ch1">Ch.&nbsp;01</button>
+        <button class="filter-btn" data-filter="ch2">Ch.&nbsp;02</button>
+        <button class="filter-btn" data-filter="ch3">Ch.&nbsp;03</button>
+      </div>
+    </div>
+    <div class="destinations-grid" id="dest-grid">
+
+      <!-- KL ARRIVÉE -->
+      <div class="dest-card" data-chapter="ch1">
+        <div class="dest-photo"><div class="dest-photo-inner dest-photo-kl"><div class="dest-photo-icon">🏙️</div></div><div class="dest-photo-label">→ Votre photo ici</div></div>
+        <div class="dest-meta"><span class="dest-dates">31 juil — 03 août</span><span class="dest-nights">3 nuits</span></div>
+        <div class="dest-body">
+          <div class="dest-name">Kuala Lumpur</div>
+          <div class="dest-tagline">La porte d'entrée qui redéfinit l'Asie du Sud-Est</div>
+          <p class="dest-text">KL est une ville qui ne ressemble à rien d'autre. 3 jours sont le minimum pour absorber le contraste entre les tours Petronas, le chaos savoureux de Chinatown et la sérénité des mosquées. Commencer par le KLCC, terminer par Jalan Alor la nuit.</p>
+          <div class="dest-tips">
+            <div class="dest-tip"><span class="dest-tip-icon">🚇</span><span class="dest-tip-text"><strong>Touch 'n Go :</strong> La carte indispensable — métro, bus, parfois l'aéroport. Achetez-la dès l'arrivée à KLIA.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">🌡️</span><span class="dest-tip-text"><strong>Chaleur :</strong> 32-36°C avec humidité. Planifiez musées et centres commerciaux entre 12h et 15h.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">💡</span><span class="dest-tip-text"><strong>Petronas :</strong> Billets à réserver en ligne — le Sky Bridge est inclus dans le billet standard, ouvert matin et soir.</span></div>
+          </div>
+          <div class="dest-hotel"><span class="dest-hotel-label">Séjour</span><div class="dest-hotel-name">Crown Suites Tropicana KLCC — bon emplacement face aux tours.</div></div>
+        </div>
+      </div>
+
+      <!-- CAMERON -->
+      <div class="dest-card" data-chapter="ch1">
+        <div class="dest-photo"><div class="dest-photo-inner dest-photo-highland"><div class="dest-photo-icon">🍃</div></div><div class="dest-photo-label">→ Votre photo ici</div></div>
+        <div class="dest-meta"><span class="dest-dates">03 — 04 août</span><span class="dest-nights">1 nuit</span></div>
+        <div class="dest-body">
+          <div class="dest-name">Cameron Highlands</div>
+          <div class="dest-tagline">La fraîcheur inattendue à 1 500 m d'altitude</div>
+          <p class="dest-text">Choc thermique garanti : après KL, vous montez dans les plantations de thé et la température chute de 15°C. Une nuit n'est pas de trop pour les BOH Tea Plantations au lever du soleil — spectaculaire dans la brume matinale.</p>
+          <div class="dest-tips">
+            <div class="dest-tip"><span class="dest-tip-icon">🍵</span><span class="dest-tip-text"><strong>BOH Tea Factory :</strong> Visite gratuite, vue imprenable sur les terrasses de thé, dégustation sur place.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">🚗</span><span class="dest-tip-text"><strong>Route :</strong> 220 km depuis KL, 3h30. La route de nuit permet d'arriver frais le matin pour explorer.</span></div>
+          </div>
+          <div class="dest-hotel"><span class="dest-hotel-label">Séjour</span><div class="dest-hotel-name">The Lakehouse Cameron Highlands — charme colonial, vaut l'investissement.</div></div>
+        </div>
+      </div>
+
+      <!-- TAMAN NEGARA -->
+      <div class="dest-card" data-chapter="ch2">
+        <div class="dest-photo"><div class="dest-photo-inner dest-photo-jungle"><div class="dest-photo-icon">🌳</div></div><div class="dest-photo-label">→ Votre photo ici</div></div>
+        <div class="dest-meta"><span class="dest-dates">04 — 06 août</span><span class="dest-nights">2 nuits</span></div>
+        <div class="dest-body">
+          <div class="dest-name">Taman Negara</div>
+          <div class="dest-tagline">130 millions d'années de forêt primaire</div>
+          <p class="dest-text">L'une des forêts les plus anciennes du monde. Deux nuits pour le canopy walk (passerelle à 45 m de hauteur), la balade nocturne avec guide et une sortie en bateau sur la Sungai Tembeling. L'endroit où la Malaisie révèle son visage sauvage.</p>
+          <div class="dest-tips">
+            <div class="dest-tip"><span class="dest-tip-icon">🚤</span><span class="dest-tip-text"><strong>Accès :</strong> Pirogue depuis Kuala Tahan (2h) — l'arrivée en jungle fluviale vaut à elle seule le détour.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">🦟</span><span class="dest-tip-text"><strong>Équipement :</strong> Répulsif DEET 50% obligatoire. Réservez le canopy walk le matin — complet avant midi.</span></div>
+          </div>
+          <div class="dest-hotel"><span class="dest-hotel-label">Séjour</span><div class="dest-hotel-name">Mutiara Taman Negara — seul resort dans le parc, pratique et bien équipé.</div></div>
+        </div>
+      </div>
+
+      <!-- KUALA BESUT -->
+      <div class="dest-card" data-chapter="ch2">
+        <div class="dest-photo"><div class="dest-photo-inner dest-photo-coast"><div class="dest-photo-icon">⛵</div></div><div class="dest-photo-label">→ Votre photo ici</div></div>
+        <div class="dest-meta"><span class="dest-dates">06 — 07 août</span><span class="dest-nights">1 nuit</span></div>
+        <div class="dest-body">
+          <div class="dest-name">Kuala Besut</div>
+          <div class="dest-tagline">Le port d'embarquement vers les Perhentian</div>
+          <p class="dest-text">Kuala Besut n'est qu'une étape — le port de départ pour les Perhentian. Mais le coucher de soleil sur les barques de pêcheurs est l'une des images les plus authentiques du voyage. Une nuit suffit, le temps de se poser avant les îles.</p>
+          <div class="dest-tips">
+            <div class="dest-tip"><span class="dest-tip-icon">🚢</span><span class="dest-tip-text"><strong>Bateaux :</strong> Départs entre 8h et 17h pour les Perhentian. Premier bateau recommandé pour profiter de l'arrivée.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">💰</span><span class="dest-tip-text"><strong>Cash :</strong> Retirez au DAB ici — peu d'options sur les îles et commissions élevées.</span></div>
+          </div>
+          <div class="dest-hotel"><span class="dest-hotel-label">Séjour</span><div class="dest-hotel-name">Samadera Hotel — basique mais propre, idéal pour une nuit de transit.</div></div>
+        </div>
+      </div>
+
+      <!-- PERHENTIAN -->
+      <div class="dest-card" data-chapter="ch3">
+        <div class="dest-photo"><div class="dest-photo-inner dest-photo-island"><div class="dest-photo-icon">🐢</div></div><div class="dest-photo-label">→ Votre photo ici</div></div>
+        <div class="dest-meta"><span class="dest-dates">07 — 09 août</span><span class="dest-nights">2 nuits</span></div>
+        <div class="dest-body">
+          <div class="dest-name">Îles Perhentian</div>
+          <div class="dest-tagline">Les meilleures eaux de plongée de Malaisie</div>
+          <p class="dest-text">Besar (grande île, plus calme) ou Kecil (petite, plus festive) ? La plongée et le snorkeling sont exceptionnels — les tortues de mer sont quasi-garanties depuis la plage. L'endroit qui justifie à lui seul de traverser la planète.</p>
+          <div class="dest-tips">
+            <div class="dest-tip"><span class="dest-tip-icon">🤿</span><span class="dest-tip-text"><strong>Plongée :</strong> 90-120 RM pour 2 plongées équipement inclus. Turtle Point et Sugar Wreck sont les meilleurs sites.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">🚫</span><span class="dest-tip-text"><strong>Alcool :</strong> État à majorité musulmane — alcool dans quelques établissements uniquement. Respectez les règles locales.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">📡</span><span class="dest-tip-text"><strong>Connectivité :</strong> Wi-Fi très limité, 4G aléatoire. C'est voulu — profitez-en pour décrocher vraiment.</span></div>
+          </div>
+          <div class="dest-hotel"><span class="dest-hotel-label">Séjour</span><div class="dest-hotel-name">Perhentian Island Resort (J1) + Nemo Chalet (J2) — deux îles, deux ambiances.</div></div>
+        </div>
+      </div>
+
+      <!-- CHERATING -->
+      <div class="dest-card" data-chapter="ch2">
+        <div class="dest-photo"><div class="dest-photo-inner dest-photo-coast"><div class="dest-photo-icon">🐠</div></div><div class="dest-photo-label">→ Votre photo ici</div></div>
+        <div class="dest-meta"><span class="dest-dates">09 — 11 août</span><span class="dest-nights">2 nuits</span></div>
+        <div class="dest-body">
+          <div class="dest-name">Cherating</div>
+          <div class="dest-tagline">Village de surf, tortues et couchers de soleil</div>
+          <p class="dest-text">Petit village côtier méconnu, Cherating est l'endroit parfait pour ralentir après les Perhentian. Site de ponte des tortues luth en saison, plage peu fréquentée. Le Royale Chulan est entouré de forêt dense — on y croise des macaques au petit-déjeuner.</p>
+          <div class="dest-tips">
+            <div class="dest-tip"><span class="dest-tip-icon">🐢</span><span class="dest-tip-text"><strong>Tortues :</strong> Juillet-août est la haute saison de ponte. Inscrivez-vous à l'excursion nocturne dès l'arrivée.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">🏄</span><span class="dest-tip-text"><strong>Surf :</strong> Bon spot débutant en nov.-mars. En août, mer calme — idéal pour le kayak de mer.</span></div>
+          </div>
+          <div class="dest-hotel"><span class="dest-hotel-label">Séjour</span><div class="dest-hotel-name">Royale Chulan Cherating Chalet — chalets en bord de mer, cadre exceptionnel.</div></div>
+        </div>
+      </div>
+
+      <!-- TIOMAN -->
+      <div class="dest-card" data-chapter="ch3">
+        <div class="dest-photo"><div class="dest-photo-inner dest-photo-island"><div class="dest-photo-icon">🦈</div></div><div class="dest-photo-label">→ Votre photo ici</div></div>
+        <div class="dest-meta"><span class="dest-dates">11 — 12 août</span><span class="dest-nights">1 nuit</span></div>
+        <div class="dest-body">
+          <div class="dest-name">Tioman Island</div>
+          <div class="dest-tagline">L'île la plus sauvage, la moins touristique</div>
+          <p class="dest-text">Plus grande et moins fréquentée que les Perhentian, Tioman a une végétation plus dense et des plages plus isolées. La randonnée jungle jusqu'à la cascade Asah (2h A/R) est un classique. L'île abrite des requins-baleines en saison.</p>
+          <div class="dest-tips">
+            <div class="dest-tip"><span class="dest-tip-icon">⛴️</span><span class="dest-tip-text"><strong>Ferry :</strong> Depuis Mersing (1h30) ou Tanjung Gemok, plus proche de Cherating (1h de traversée).</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">💡</span><span class="dest-tip-text"><strong>Villages :</strong> Chaque village est accessible par boat-taxi. Salang (animé) ou Juara (isolé, sauvage) selon l'envie.</span></div>
+          </div>
+          <div class="dest-hotel"><span class="dest-hotel-label">Séjour</span><div class="dest-hotel-name">1511 Coconut Grove — bungalows sur pilotis, cadre idyllique.</div></div>
+        </div>
+      </div>
+
+      <!-- SINGAPOUR -->
+      <div class="dest-card" data-chapter="ch3">
+        <div class="dest-photo"><div class="dest-photo-inner dest-photo-city"><div class="dest-photo-icon">🌃</div></div><div class="dest-photo-label">→ Votre photo ici</div></div>
+        <div class="dest-meta"><span class="dest-dates">12 — 15 août</span><span class="dest-nights">3 nuits</span></div>
+        <div class="dest-body">
+          <div class="dest-name">Singapour</div>
+          <div class="dest-tagline">La cité-État qui réinvente l'urbanisme</div>
+          <p class="dest-text">3 jours pour les essentiels : Gardens by the Bay le soir (Supertrees illuminés), Chinatown à l'aube, Little India pour les épices, Lau Pa Sat pour manger. Singapour est une décompression douce après la jungle — mais le budget explose.</p>
+          <div class="dest-tips">
+            <div class="dest-tip"><span class="dest-tip-icon">💳</span><span class="dest-tip-text"><strong>Budget :</strong> Comptez 3× le coût malaisien. Hawker centres (Maxwell, Lau Pa Sat) : repas complet pour moins de 10 SGD.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">🌿</span><span class="dest-tip-text"><strong>Gardens by the Bay :</strong> Le light show "Garden Rhapsody" à 19h45 et 20h45 est entièrement gratuit depuis l'extérieur.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">🚇</span><span class="dest-tip-text"><strong>MRT :</strong> Impeccable et couvre toute la ville. Carte EZ-Link dès l'arrivée. Évitez les taxis aux heures de pointe.</span></div>
+          </div>
+          <div class="dest-hotel"><span class="dest-hotel-label">Séjour</span><div class="dest-hotel-name">Hotel Gin Bugis — quartier animé, bon rapport qualité/prix pour Singapour.</div></div>
+        </div>
+      </div>
+
+      <!-- MELAKA -->
+      <div class="dest-card" data-chapter="ch3">
+        <div class="dest-photo"><div class="dest-photo-inner dest-photo-colonial"><div class="dest-photo-icon">🕌</div></div><div class="dest-photo-label">→ Votre photo ici</div></div>
+        <div class="dest-meta"><span class="dest-dates">15 — 17 août</span><span class="dest-nights">2 nuits</span></div>
+        <div class="dest-body">
+          <div class="dest-name">Melaka</div>
+          <div class="dest-tagline">Cinq siècles d'histoire au bout d'une ruelle</div>
+          <p class="dest-text">Patrimoine UNESCO, Melaka est une ville hors du temps. Le quartier Jonker Walk le soir est une explosion de couleurs, de street food et de culture Peranakan. Prévoir 2 jours — une journée seule ne rend pas justice à la profondeur historique de la ville.</p>
+          <div class="dest-tips">
+            <div class="dest-tip"><span class="dest-tip-icon">🍜</span><span class="dest-tip-text"><strong>Cuisine Nyonya :</strong> Le laksa de Melaka et les "chicken rice balls" sont uniques à cette ville — ne les manquez pas.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">🚲</span><span class="dest-tip-text"><strong>Exploration :</strong> Louez un vélo ou un scooter — la ville ancienne est dense mais petite, parfaite pour les deux roues.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">⏰</span><span class="dest-tip-text"><strong>Jonker Street :</strong> Le marché nocturne n'existe que le vendredi et samedi soir. Planifiez en conséquence.</span></div>
+          </div>
+          <div class="dest-hotel"><span class="dest-hotel-label">Séjour</span><div class="dest-hotel-name">The Majestic Malacca Hotel — colonial, magnifique, en plein cœur historique.</div></div>
+        </div>
+      </div>
+
+      <!-- KUALA SELANGOR -->
+      <div class="dest-card" data-chapter="ch1">
+        <div class="dest-photo"><div class="dest-photo-inner dest-photo-jungle"><div class="dest-photo-icon">✨</div></div><div class="dest-photo-label">→ Votre photo ici</div></div>
+        <div class="dest-meta"><span class="dest-dates">17 — 18 août</span><span class="dest-nights">1 nuit</span></div>
+        <div class="dest-body">
+          <div class="dest-name">Kuala Selangor</div>
+          <div class="dest-tagline">Le secret des lucioles de la rivière Selangor</div>
+          <p class="dest-text">Kuala Selangor est souvent oubliée des circuits classiques — c'est exactement ce qui en fait un secret à préserver. La balade en barque au crépuscule sur la rivière Selangor pour voir les lucioles synchronisées est l'une des expériences les plus surréalistes du voyage.</p>
+          <div class="dest-tips">
+            <div class="dest-tip"><span class="dest-tip-icon">🌟</span><span class="dest-tip-text"><strong>Lucioles :</strong> Tour en barque depuis Kampung Kuantan. À réserver le matin de votre arrivée — disponible toute l'année.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">🦀</span><span class="dest-tip-text"><strong>Bonus :</strong> Restaurants de fruits de mer sur pilotis au bord de la rivière — excellents et très abordables.</span></div>
+          </div>
+          <div class="dest-hotel"><span class="dest-hotel-label">Séjour</span><div class="dest-hotel-name">Villa Malawati — vue sur la rivière, calme absolu, atmosphère unique.</div></div>
+        </div>
+      </div>
+
+      <!-- KL FIN -->
+      <div class="dest-card" data-chapter="ch1">
+        <div class="dest-photo"><div class="dest-photo-inner dest-photo-kl"><div class="dest-photo-icon">🌆</div></div><div class="dest-photo-label">→ Votre photo ici</div></div>
+        <div class="dest-meta"><span class="dest-dates">18 — 20 août</span><span class="dest-nights">2 nuits</span></div>
+        <div class="dest-body">
+          <div class="dest-name">Kuala Lumpur</div>
+          <div class="dest-tagline">Retour à la skyline, les yeux différents</div>
+          <p class="dest-text">Revenir à KL en fin de séjour, c'est voir la ville autrement. Après 18 jours dans la jungle, sur les îles et dans les villages historiques — la ville fait sens différemment. Idéal pour les derniers achats, un dernier repas de qualité et le vol retour.</p>
+          <div class="dest-tips">
+            <div class="dest-tip"><span class="dest-tip-icon">🛍️</span><span class="dest-tip-text"><strong>Shopping :</strong> Central Market pour l'artisanat (prix fixes). Pavilion pour les marques locales et les souvenirs de qualité.</span></div>
+            <div class="dest-tip"><span class="dest-tip-icon">✈️</span><span class="dest-tip-text"><strong>Aéroport :</strong> KLIA est à 60 km du centre. Prévoir 2h à l'avance minimum, 3h en heure de pointe.</span></div>
+          </div>
+          <div class="dest-hotel"><span class="dest-hotel-label">Séjour</span><div class="dest-hotel-name">Queen Suites Tropicana The Residence KLCC — même adresse qu'à l'arrivée, la boucle est bouclée.</div></div>
+        </div>
+      </div>
+
+    </div><!-- /dest-grid -->
+  </div>
+</section>
+
+<!-- ═══ INFOS PRATIQUES ═══ -->
+<section class="infos" id="infos">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Avant de partir</div>
+      <h2 class="section-title">Infos <em>pratiques</em></h2>
+      <p class="section-intro" style="color:rgba(240,232,216,0.58)">Ce qu'il faut savoir avant de boucler les valises — condensé en points clés issus de l'expérience terrain.</p>
+    </div>
+    <div class="infos-grid">
+
+      <div class="info-block reveal d1">
+        <span class="info-block-icon">📅</span>
+        <div class="info-block-title">Quand partir</div>
+        <ul class="info-list">
+          <li><strong>Côte Est</strong> (Perhentian, Tioman, Cherating) : Mars à octobre uniquement — la mousson ferme tout de nov. à fév.</li>
+          <li><strong>Côte Ouest</strong> (KL, Cameron, Melaka) : Accessible toute l'année, averses en fin d'après-midi.</li>
+          <li><strong>Juillet-août</strong> : Haute saison côte Est — météo fiable mais plus de monde et tarifs plus élevés.</li>
+          <li><strong>Singapour</strong> : Toute l'année. Légèrement moins chaud en nov.-janv.</li>
+        </ul>
+      </div>
+
+      <div class="info-block reveal d2">
+        <span class="info-block-icon">🚌</span>
+        <div class="info-block-title">Se déplacer</div>
+        <ul class="info-list">
+          <li><strong>Bus longue distance :</strong> Transnasional et Aeroline — confortables, ponctuels, moins chers que le train.</li>
+          <li><strong>Train ETS :</strong> Rapide sur l'axe KL–Penang. Réserver sur ktmb.com.my.</li>
+          <li><strong>Grab :</strong> L'Uber local, indispensable en ville. Toujours moins cher qu'un taxi traditionnel négocié.</li>
+          <li><strong>Ferry :</strong> Billet en arrivant au port — inutile de réserver sauf en haute saison stricte.</li>
+          <li><strong>Location voiture :</strong> Recommandée pour les Cameron Highlands et le circuit côte Est. Conduite à gauche.</li>
+        </ul>
+      </div>
+
+      <div class="info-block reveal d3">
+        <span class="info-block-icon">💊</span>
+        <div class="info-block-title">Santé &amp; sécurité</div>
+        <ul class="info-list">
+          <li><strong>Vaccins conseillés :</strong> Hépatites A et B, typhoïde, DTP à jour. Consultez un médecin 6 semaines avant.</li>
+          <li><strong>Paludisme :</strong> Risque faible en zones touristiques, existant en jungle profonde (Taman Negara). Demandez conseil.</li>
+          <li><strong>Eau :</strong> Ne pas boire l'eau du robinet. Bouteilles ou gourde filtrante.</li>
+          <li><strong>Assurance :</strong> Vérifiez la couverture plongée — beaucoup d'assurances standard excluent les sports nautiques.</li>
+        </ul>
+      </div>
+
+      <div class="info-block reveal">
+        <span class="info-block-icon">📱</span>
+        <div class="info-block-title">Connectivité &amp; argent</div>
+        <ul class="info-list">
+          <li><strong>SIM :</strong> Celcom ou Maxis à l'aéroport — forfait data 15 jours pour ~25 RM. Couvre bien la péninsule.</li>
+          <li><strong>Ringgit (RM) :</strong> 1€ ≈ 5 RM. Les DAB acceptent généralement Visa et Mastercard.</li>
+          <li><strong>Cash :</strong> Indispensable sur les îles et dans les marchés de rue.</li>
+          <li><strong>Singapour :</strong> Dollar SGD (1 SGD ≈ 0,68€). Paiement sans contact quasi-universel.</li>
+        </ul>
+      </div>
+
+      <div class="info-block reveal d1">
+        <span class="info-block-icon">👗</span>
+        <div class="info-block-title">Culture &amp; codes</div>
+        <ul class="info-list">
+          <li><strong>Mosquées et temples :</strong> Couvrir épaules et genoux — un sarong suffit, souvent prêté à l'entrée.</li>
+          <li><strong>Ramadan :</strong> Évitez de manger/boire en public en journée dans les zones à majorité musulmane.</li>
+          <li><strong>Pourboires :</strong> Non obligatoires, mais 10% est généreusement perçu dans les restaurants de qualité.</li>
+          <li><strong>Marchandage :</strong> Acceptable dans les marchés, jamais dans les restaurants et commerces fixes.</li>
+        </ul>
+      </div>
+
+      <div class="info-block reveal d2">
+        <span class="info-block-icon">🎒</span>
+        <div class="info-block-title">Dans les bagages</div>
+        <ul class="info-list">
+          <li><strong>Répulsif DEET 50%</strong> — difficile à trouver en format efficace en pharmacie locale.</li>
+          <li><strong>Crème solaire SPF50+</strong> — formule non-grasse pour une application toutes les 2h.</li>
+          <li><strong>Chaussures aquatiques</strong> — pour les récifs coralliens et les plages rocailleuses.</li>
+          <li><strong>Poncho léger</strong> — les orages tropicaux arrivent sans prévenir.</li>
+          <li><strong>Sac étanche</strong> — indispensable pour les transferts en bateau.</li>
+        </ul>
+      </div>
+
+      <div class="info-highlight reveal">
+        <div class="info-highlight-title">Budget indicatif · 20 jours · 2 personnes</div>
+        <div class="budget-grid">
+          <div class="budget-item"><div class="budget-item-label">Vols Paris ↔ KL</div><div class="budget-item-value">1 200€</div><div class="budget-item-sub">par personne A/R</div></div>
+          <div class="budget-item"><div class="budget-item-label">Hébergements</div><div class="budget-item-value">1 800€</div><div class="budget-item-sub">les 2 · moyenne</div></div>
+          <div class="budget-item"><div class="budget-item-label">Transports locaux</div><div class="budget-item-value">400€</div><div class="budget-item-sub">bus, ferries, Grab</div></div>
+          <div class="budget-item"><div class="budget-item-label">Restos &amp; activités</div><div class="budget-item-value">900€</div><div class="budget-item-sub">les 2 · tout inclus</div></div>
+          <div class="budget-item"><div class="budget-item-label">Total estimé</div><div class="budget-item-value">4 300€</div><div class="budget-item-sub">pour 2 personnes</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DÉCOUVERTES ═══ -->
+<section class="decouvertes" id="decouvertes">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">À ne pas manquer</div>
+      <h2 class="section-title">Découvertes <em>incontournables</em></h2>
+      <p class="section-intro">Au-delà de l'itinéraire — les expériences, plats et moments qui définissent vraiment la Malaisie et Singapour.</p>
+    </div>
+    <div class="decouvertes-list">
+
+      <div class="decouverte-item reveal">
+        <div class="decouverte-emoji">🍜</div>
+        <div class="decouverte-content">
+          <div class="decouverte-title">Le Nasi Lemak, partout et toujours</div>
+          <div class="decouverte-text">Le plat national : riz cuit dans du lait de coco, sambal, œuf dur, anchois frits et cacahuètes. En feuille de bananier au petit-déjeuner pour 2 RM, c'est l'un des meilleurs repas du voyage. L'essentiel de la cuisine de rue est meilleur que 90% des restaurants.</div>
+          <span class="decouverte-tag">Gastronomie</span>
+        </div>
+      </div>
+
+      <div class="decouverte-item reveal d1">
+        <div class="decouverte-emoji">🦅</div>
+        <div class="decouverte-content">
+          <div class="decouverte-title">Batu Caves — à 30 min de KL</div>
+          <div class="decouverte-text">Temple hindou taillé dans un massif calcaire, 272 marches peintes en arc-en-ciel, des singes omniprésents. Incontournable depuis KL, accessible en 30 min par le KTM. Arrivez avant 9h pour éviter les foules — le silence du matin dans la grotte est saisissant.</div>
+          <span class="decouverte-tag">Excursion KL</span>
+        </div>
+      </div>
+
+      <div class="decouverte-item reveal d2">
+        <div class="decouverte-emoji">🌊</div>
+        <div class="decouverte-content">
+          <div class="decouverte-title">Snorkeling sauvage aux Perhentian</div>
+          <div class="decouverte-text">Pas besoin de sortie organisée — avec un masque et des palmes depuis la plage, vous nagez vers le corail. Mérous, poissons-papillons, et avec de la chance, une tortue de mer à 5 mètres de profondeur. Le meilleur snorkeling gratuit d'Asie du Sud-Est.</div>
+          <span class="decouverte-tag">Nature</span>
+        </div>
+      </div>
+
+      <div class="decouverte-item reveal">
+        <div class="decouverte-emoji">🌃</div>
+        <div class="decouverte-content">
+          <div class="decouverte-title">Gardens by the Bay le soir</div>
+          <div class="decouverte-text">Le show lumineux "Garden Rhapsody" sur les Supertrees à 19h45 et 20h45 est l'un des spectacles gratuits les plus impressionnants au monde. Venez 30 min avant, installez-vous sur la pelouse, regardez vers le ciel. La Flower Dome est payante mais vaut chaque centime.</div>
+          <span class="decouverte-tag">Singapour</span>
+        </div>
+      </div>
+
+      <div class="decouverte-item reveal d1">
+        <div class="decouverte-emoji">☕</div>
+        <div class="decouverte-content">
+          <div class="decouverte-title">Le Kopitiam — café traditionnel du matin</div>
+          <div class="decouverte-text">Rien ne vaut le premier café dans un kopitiam (café traditionnel chinois). Kopi (café local sucré au lait concentré), toast kaya (confiture de coco et pandan), œufs mollets. Moins de 5 RM, inchangé depuis des décennies — une institution dans chaque ville du pays.</div>
+          <span class="decouverte-tag">Culture locale</span>
+        </div>
+      </div>
+
+      <div class="decouverte-item reveal d2">
+        <div class="decouverte-emoji">🌙</div>
+        <div class="decouverte-content">
+          <div class="decouverte-title">Balade nocturne en forêt primaire</div>
+          <div class="decouverte-text">À Taman Negara, la jungle de nuit est un autre monde. Avec un guide local (obligatoire), partez 2h après le dîner. Serpents enroulés sur les branches, grenouilles phosphorescentes, cigales assourdissantes. Une expérience qui redimensionne le rapport à la nature.</div>
+          <span class="decouverte-tag">Aventure</span>
+        </div>
+      </div>
+
+      <div class="decouverte-item reveal">
+        <div class="decouverte-emoji">🏛️</div>
+        <div class="decouverte-content">
+          <div class="decouverte-title">La culture Peranakan à Melaka et Singapour</div>
+          <div class="decouverte-text">Descendants des premiers marchands chinois en Malaisie, les Peranakan ont créé une culture hybride unique — shophouses colorées, cuisine Nyonya, batik. Le Peranakan Museum de Singapour et le Baba & Nyonya Heritage Museum de Melaka sont les meilleures portes d'entrée.</div>
+          <span class="decouverte-tag">Histoire</span>
+        </div>
+      </div>
+
+      <div class="decouverte-item reveal d1">
+        <div class="decouverte-emoji">🦟</div>
+        <div class="decouverte-content">
+          <div class="decouverte-title">Les lucioles de Kuala Selangor</div>
+          <div class="decouverte-text">La balade en barque nocturne sur la rivière Selangor pour observer des milliers de lucioles synchronisées sur les palétuviers est l'une des expériences les plus surréalistes du voyage. Elle n'est pas dans tous les guides — et c'est tant mieux.</div>
+          <span class="decouverte-tag">Nature rare</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PLANNING ═══ -->
+<section class="planning" id="planning">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Récapitulatif</div>
+      <h2 class="section-title">Planning <em>complet</em></h2>
+      <p class="section-intro">L'itinéraire jour par jour avec hébergements et distances — pour ceux qui aiment les données brutes.</p>
+    </div>
+    <div class="planning-table-wrap reveal">
+      <table class="planning-table">
+        <thead>
+          <tr>
+            <th>Dates 2024</th>
+            <th>Destination</th>
+            <th>Nuits</th>
+            <th>Hébergement</th>
+            <th>Distance / Durée</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-dates">31 juil – 03 août</td><td class="td-lieu">Kuala Lumpur <small>arrivée</small></td><td class="td-nights">3</td><td class="td-hotel">Crown Suites Tropicana KLCC<small>No.121, Jln Ampang, 50450 Kuala Lumpur</small></td><td class="td-distance">—</td></tr>
+          <tr><td class="td-dates">03 – 04 août</td><td class="td-lieu">Cameron Highlands</td><td class="td-nights">1</td><td class="td-hotel">The Lakehouse Cameron Highlands<small>30th Mile Ringlet, 39200 Ringlet</small></td><td class="td-distance">220 km · 3h30</td></tr>
+          <tr><td class="td-dates">04 – 06 août</td><td class="td-lieu">Taman Negara</td><td class="td-nights">2</td><td class="td-hotel">Mutiara Taman Negara<small>Kuala Tahan, 27000 Kuala Tahan</small></td><td class="td-distance">245 km · 4h–4h30</td></tr>
+          <tr><td class="td-dates">06 – 07 août</td><td class="td-lieu">Kuala Besut</td><td class="td-nights">1</td><td class="td-hotel">Samadera Hotel<small>Kuala Besut Jetty, 22200 Kuala Besut</small></td><td class="td-distance">275 km · 4h</td></tr>
+          <tr><td class="td-dates">07 – 08 août</td><td class="td-lieu">Îles Perhentian</td><td class="td-nights">1</td><td class="td-hotel">Perhentian Island Resort<small>Pulau Perhentian Besar, 22200</small></td><td class="td-distance">40 min bateau</td></tr>
+          <tr><td class="td-dates">08 – 09 août</td><td class="td-lieu">Îles Perhentian</td><td class="td-nights">1</td><td class="td-hotel">Perhentian Nemo Chalet<small>Pulau Perhentian Kecil, 22300</small></td><td class="td-distance">Transfert bateau</td></tr>
+          <tr><td class="td-dates">09 – 11 août</td><td class="td-lieu">Cherating</td><td class="td-nights">2</td><td class="td-hotel">Royale Chulan Cherating Chalet<small>Jalan Kampung Cherating Lama, 26080</small></td><td class="td-distance">220 km · 3h30</td></tr>
+          <tr><td class="td-dates">11 – 12 août</td><td class="td-lieu">Tioman Island</td><td class="td-nights">1</td><td class="td-hotel">1511 Coconut Grove<small>Kampung Juara Tioman, 26800</small></td><td class="td-distance">155 km + 1h30 ferry</td></tr>
+          <tr><td class="td-dates">12 – 15 août</td><td class="td-lieu">Singapour</td><td class="td-nights">3</td><td class="td-hotel">Hotel Gin Bugis Singapore<small>223 Middle Road, Bencoolen, 188975</small></td><td class="td-distance">140 km + frontière</td></tr>
+          <tr><td class="td-dates">15 – 17 août</td><td class="td-lieu">Melaka</td><td class="td-nights">2</td><td class="td-hotel">The Majestic Malacca Hotel<small>188 Jalan Bunga Raya, 75100 Melaka</small></td><td class="td-distance">240 km + frontière</td></tr>
+          <tr><td class="td-dates">17 – 18 août</td><td class="td-lieu">Kuala Selangor</td><td class="td-nights">1</td><td class="td-hotel">Villa Malawati<small>1-01 Jalan Sultan Mahmud, 45000 Kuala Selangor</small></td><td class="td-distance">160 km · 2h15</td></tr>
+          <tr><td class="td-dates">18 – 20 août</td><td class="td-lieu">Kuala Lumpur <small>fin de séjour</small></td><td class="td-nights">2</td><td class="td-hotel">Queen Suites Tropicana The Residence KLCC<small>121, Jalan Ampang, 50450 Kuala Lumpur</small></td><td class="td-distance">85 km · 1h15</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-line"></div>
+  <div class="footer-logo">Malaisie &amp; Singapour</div>
+  <div class="footer-sub">Août 2024 · 20 jours · 1 780 km</div>
+  <p class="footer-text">Un carnet de route pour ceux qui veulent aller au-delà des circuits classiques. La Malaisie se mérite — et elle le rend au centuple.</p>
+  <div class="footer-line"></div>
+</footer>
+
+<button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Retour en haut">↑</button>
+
+<script>
+// NAV
+const nav = document.getElementById('main-nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+  document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 500);
+});
+
+// FILTER
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.dest-card').forEach((card, i) => {
+      const show = f === 'all' || card.dataset.chapter === f;
+      card.style.display = show ? 'block' : 'none';
+      if (show) {
+        card.style.opacity = '0'; card.style.transform = 'translateY(16px)';
+        setTimeout(() => {
+          card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          card.style.opacity = '1'; card.style.transform = 'translateY(0)';
+        }, i * 40);
+      }
+    });
+  });
+});
+
+// Initially show all cards
+document.querySelectorAll('.dest-card').forEach(c => c.style.display = 'block');
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); observer.unobserve(e.target); }});
+}, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
